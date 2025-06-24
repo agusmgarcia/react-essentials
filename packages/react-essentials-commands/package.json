@@ -1,0 +1,120 @@
+{
+  "name": "@agusmgarcia/react-essentials-commands",
+  "core": "lib",
+  "version": "0.0.0",
+  "private": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/_out/*.d.ts",
+      "default": "./dist/_out/*.js"
+    }
+  },
+  "author": "Agus Garcia",
+  "description": "Set of opinionated commands for NextJS applications, libraries and Azure functions",
+  "bin": {
+    "react-essentials-commands-build": "bin/build.js",
+    "react-essentials-commands-check": "bin/check.js",
+    "react-essentials-commands-deploy": "bin/deploy.js",
+    "react-essentials-commands-format": "bin/format.js",
+    "react-essentials-commands-postpack": "bin/postpack.js",
+    "react-essentials-commands-prepack": "bin/prepack.js",
+    "react-essentials-commands-regenerate": "bin/regenerate.js",
+    "react-essentials-commands-start": "bin/start.js",
+    "react-essentials-commands-test": "bin/test.js"
+  },
+  "scripts": {
+    "build": "tsx src/_bin/build.ts",
+    "check": "tsx src/_bin/check.ts",
+    "deploy": "tsx src/_bin/deploy.ts",
+    "format": "tsx src/_bin/format.ts",
+    "postbuild": "chmod +x bin/*.js",
+    "postpack": "tsx src/_bin/postpack.ts",
+    "prebuild": "npm i --ignore-scripts --no-audit",
+    "prepack": "tsx src/_bin/prepack.ts",
+    "regenerate": "tsx src/_bin/regenerate.ts",
+    "start": "tsx src/_bin/start.ts",
+    "test": "tsx src/_bin/test.ts"
+  },
+  "peerDependencies": {
+    "@next/env": "^15.3.4",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.1.8",
+    "azure-functions-core-tools": "^4.0.7317",
+    "concurrently": "^9.2.0",
+    "cpy-cli": "^5.0.0",
+    "css-loader": "^7.1.2",
+    "del-cli": "^6.0.0",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.3.4",
+    "eslint-plugin-sort": "^4.0.0",
+    "jest": "^30.0.3",
+    "jest-environment-jsdom": "^30.0.2",
+    "mini-css-extract-plugin": "^2.9.2",
+    "next": "^15.3.4",
+    "postcss-loader": "^8.1.1",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.13",
+    "semver": "^7.7.2",
+    "style-loader": "^4.0.0",
+    "tailwindcss": "^4.1.11",
+    "ts-loader": "^9.5.2",
+    "ts-transform-paths": "^3.0.0",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1",
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "@next/env": "^15.3.4",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/jest": "^30.0.0",
+    "@types/node": "~18.18.0",
+    "@types/react": "^19.1.8",
+    "@types/semver": "^7.7.0",
+    "azure-functions-core-tools": "^4.0.7317",
+    "concurrently": "^9.2.0",
+    "cpy-cli": "^5.0.0",
+    "css-loader": "^7.1.2",
+    "del-cli": "^6.0.0",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.3.4",
+    "eslint-plugin-sort": "^4.0.0",
+    "jest": "^30.0.3",
+    "jest-environment-jsdom": "^30.0.2",
+    "mini-css-extract-plugin": "^2.9.2",
+    "next": "^15.3.4",
+    "postcss-loader": "^8.1.1",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.13",
+    "semver": "^7.7.2",
+    "style-loader": "^4.0.0",
+    "tailwindcss": "^4.1.11",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "ts-transform-paths": "^3.0.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1",
+    "yaml": "^2.8.0"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agusmgarcia/react-essentials.git"
+  }
+}
