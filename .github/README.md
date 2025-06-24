@@ -1,8 +1,9 @@
 # React Essentials
 
-Set of opinionated commands for NextJS applications, libraries and Azure functions.
+Set of opinionated commands and utilities for NextJS applications, libraries and Azure functions.
 
 - [Commands](/packages/react-essentials-commands/.github/README.md)
+- [Utilities](/packages/react-essentials-utils/.github/README.md)
 
 ## Getting started
 
