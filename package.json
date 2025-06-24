@@ -1,0 +1,23 @@
+{
+  "name": "@agusmgarcia/react-essentials",
+  "private": true,
+  "author": "Agus Garcia",
+  "description": "Monorepo for react-essentials",
+  "scripts": {
+    "build": "turbo run build",
+    "check": "turbo run check",
+    "deploy": "turbo run deploy",
+    "format": "turbo run format",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4"
+  },
+  "engines": {
+    "node": "22.16.0"
+  },
+  "packageManager": "npm@10.9.2",
+  "workspaces": [
+    "packages/*"
+  ]
+}

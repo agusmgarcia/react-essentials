@@ -1,0 +1,92 @@
+name: Release
+permissions: write-all
+
+on:
+  push:
+    tags:
+      - "**@?v[0-9]+.[0-9]+.[0-9]+"
+
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+
+jobs:
+  publish-lib:
+    name: Publish lib
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if the type is 'tag'
+        if: ${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' }}
+        run: |
+          echo "::error::Workflow needs to be dispatched from a tag"
+          exit 1
+        shell: bash
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: 22.16
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN ||secrets.GITHUB_TOKEN }}
+
+      - name: Get scope from tag
+        id: get-scope-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: $1
+          string: ${{ github.ref_name }}
+
+      - name: Get package location
+        if: ${{ steps.get-scope-from-tag.outputs.replaced }}
+        id: get-package-location
+        run: |
+          value=$(npm query .workspace | jq -r --arg pkg_name '${{steps.get-scope-from-tag.outputs.replaced }}' '.[] | select(.name == $pkg_name) | .location')
+          echo "value=${value}" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Get version from tag
+        id: get-version-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: $2.$3.$4
+          string: ${{ github.ref_name }}
+
+      - name: Extract version from package
+        id: extract-version-from-package
+        run: |
+          value=$(jq .version package.json -r)
+          echo "value=${value}" >> "$GITHUB_OUTPUT"
+        shell: bash
+        working-directory: ${{ steps.get-package-location.outputs.value }}
+
+      - name: Verify versions match
+        if: ${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
+        run: |
+          echo "::error::Version in the package.json (${{ steps.extract-version-from-package.outputs.value }}) and tag (${{ steps.get-version-from-tag.outputs.replaced }}) don't match"
+          exit 1
+        shell: bash
+
+      - name: Check
+        run: npm run check -- --filter=${{steps.get-scope-from-tag.outputs.replaced }}
+        shell: bash
+
+      - name: Test
+        run: npm test -- --filter=${{steps.get-scope-from-tag.outputs.replaced }}
+        shell: bash
+
+      - name: Publish
+        run: npm publish
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN || secrets.GITHUB_TOKEN }}
+        working-directory: ${{ steps.get-package-location.outputs.value }}
