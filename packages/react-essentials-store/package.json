@@ -1,0 +1,51 @@
+{
+  "name": "@agusmgarcia/react-essentials-store",
+  "core": "lib",
+  "version": "0.0.0",
+  "private": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "author": "Agus Garcia",
+  "description": "Set of opinionated state manager for NextJS applications, libraries and Azure functions",
+  "scripts": {
+    "build": "react-essentials-commands-build",
+    "check": "react-essentials-commands-check",
+    "deploy": "react-essentials-commands-deploy",
+    "format": "react-essentials-commands-format",
+    "postpack": "react-essentials-commands-postpack",
+    "prebuild": "npm i --no-scripts --no-audit",
+    "prepack": "react-essentials-commands-prepack",
+    "regenerate": "react-essentials-commands-regenerate",
+    "start": "react-essentials-commands-start",
+    "test": "react-essentials-commands-test"
+  },
+  "peerDependencies": {
+    "@agusmgarcia/react-essentials-utils": "^0.1.0",
+    "react": "^19.1.0",
+    "zustand": "^5.0.6"
+  },
+  "devDependencies": {
+    "@agusmgarcia/react-essentials-commands": "*",
+    "@agusmgarcia/react-essentials-utils": "*",
+    "react": "^19.1.0",
+    "zustand": "^5.0.6"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agusmgarcia/react-essentials.git"
+  }
+}
