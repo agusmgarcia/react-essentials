@@ -6,7 +6,7 @@
   "scripts": {
     "build": "turbo run build",
     "check": "turbo run check",
-    "deploy": "turbo run deploy",
+    "deploy": "turbo run deploy --concurrency 1",
     "format": "turbo run format",
     "test": "turbo run test"
   },
