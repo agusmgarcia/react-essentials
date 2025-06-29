@@ -9,12 +9,13 @@ import { type Input, type Output } from "./createNextConfig.types";
  *               Supported values typically include "app", "lib", or others.
  * @returns A function that takes the current Next.js build phase and returns a configuration object.
  */
-export default function createNextConfig(..._input: Input): Output {
+export default function createNextConfig(...[_core, configs]: Input): Output {
   return (phase) => ({
     basePath: process.env.NEXT_PUBLIC_BASE_PATH,
     devIndicators: false,
     distDir: "dist",
     output: phase === PHASE_PRODUCTION_BUILD ? "export" : undefined,
     reactStrictMode: true,
+    ...(typeof configs === "function" ? configs(phase) : configs),
   });
 }
