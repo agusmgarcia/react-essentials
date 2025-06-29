@@ -11,10 +11,10 @@ export default createMiddleware<string[]>({
 
 function getTemplate(context: Context): string[] {
   return context.core === "app"
-    ? [".env*.local", "dist", "node_modules"]
+    ? [".env*.local", ".next", "dist", "node_modules"]
     : context.core === "azure-func"
-      ? ["dist", "local.settings.json", "node_modules"]
+      ? [".next", "dist", "local.settings.json", "node_modules"]
       : context.core === "lib"
-        ? ["bin", "dist", "node_modules", "*.tgz"]
-        : [".env*.local", "dist", "node_modules"];
+        ? [".next", "bin", "dist", "node_modules", "*.tgz"]
+        : [".env*.local", ".next", "dist", "node_modules"];
 }
