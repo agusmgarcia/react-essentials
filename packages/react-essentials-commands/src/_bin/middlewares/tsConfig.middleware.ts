@@ -50,7 +50,7 @@ function getTemplate(context: Context): Record<string, any> {
             "#src/*": ["src/*"],
           },
         },
-        exclude: ["dist", "node_modules"],
+        exclude: [".next", "dist", "node_modules"],
         include: ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
       }
     : context.core === "azure-func"
@@ -65,7 +65,7 @@ function getTemplate(context: Context): Record<string, any> {
             },
             rootDir: "./src",
           },
-          exclude: ["dist", "node_modules"],
+          exclude: [".next", "dist", "node_modules"],
           include: ["**/*.ts"],
         }
       : context.core === "lib"
@@ -80,8 +80,8 @@ function getTemplate(context: Context): Record<string, any> {
               rootDir: "./src",
             },
             exclude: context.essentialsCommands
-              ? ["bin", "dist", "node_modules", "webpack.config.ts"]
-              : ["bin", "dist", "node_modules"],
+              ? [".next", "bin", "dist", "node_modules", "webpack.config.ts"]
+              : [".next", "bin", "dist", "node_modules"],
             include: ["**/*.ts", "**/*.tsx"],
             "ts-node": context.essentialsCommands
               ? { compilerOptions: { module: "commonjs" } }
@@ -98,7 +98,7 @@ function getTemplate(context: Context): Record<string, any> {
               },
               rootDir: "./src",
             },
-            exclude: ["dist", "node_modules"],
+            exclude: [".next", "dist", "node_modules"],
             include: ["**/*.ts"],
           };
 }

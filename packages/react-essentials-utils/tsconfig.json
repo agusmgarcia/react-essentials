@@ -29,6 +29,6 @@
     "target": "es2017",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
   },
-  "exclude": ["bin", "dist", "node_modules"],
+  "exclude": [".next", "bin", "dist", "node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]
 }
