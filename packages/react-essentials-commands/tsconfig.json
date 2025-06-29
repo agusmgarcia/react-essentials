@@ -29,7 +29,7 @@
     "target": "es2017",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
   },
-  "exclude": ["bin", "dist", "node_modules", "webpack.config.ts"],
+  "exclude": [".next", "bin", "dist", "node_modules", "webpack.config.ts"],
   "include": ["**/*.ts", "**/*.tsx"],
   "ts-node": {
     "compilerOptions": {
