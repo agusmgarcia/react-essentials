@@ -71,7 +71,7 @@ function getTemplate(context: Context): Record<string, any> {
     {
       env: {
         NODE_AUTH_TOKEN:
-          "${{ secrets.NODE_AUTH_TOKEN ||secrets.GITHUB_TOKEN }}",
+          "${{ secrets.NODE_AUTH_TOKEN || secrets.GITHUB_TOKEN }}",
       },
       name: "Install dependencies",
       run: "npm ci --ignore-scripts",
