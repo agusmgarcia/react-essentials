@@ -79,21 +79,65 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
     npm.getVersion("react-dom@19").then((v) => `^${v}`),
   ]);
 
-  return {
+  const newPackageJSON = {
     ...packageJSON,
     author: packageJSON.author || repositoryDetails?.owner || "",
     core: context.core,
+    dependencies: toUndefinedIfEmptyDependencies(
+      context.core === "app" ||
+        context.core === "azure-func" ||
+        context.core === "node"
+        ? aggregateDependencies(
+            packageJSON.peerDependencies,
+            packageJSON.dependencies,
+            {
+              [context.essentialsCommandsName]: undefined,
+            },
+            context.core === "app"
+              ? {
+                  "@azure/functions": undefined,
+                  next: nextVersion,
+                  react: reactVersion,
+                  "react-dom": reactDomVersion,
+                }
+              : context.core === "azure-func"
+                ? {
+                    "@azure/functions": functionsVersion,
+                    next: undefined,
+                    react: undefined,
+                    "react-dom": undefined,
+                  }
+                : {
+                    "@azure/functions": undefined,
+                    next: undefined,
+                    react: undefined,
+                    "react-dom": undefined,
+                  },
+          )
+        : undefined,
+    ),
     description: packageJSON.description || "",
-    devDependencies: toUndefinedIfEmpty({
-      ...packageJSON.devDependencies,
-      [context.essentialsCommandsName]: essentialsCommandsVersion,
-      "@azure/functions": undefined,
-      next: undefined,
-      react: undefined,
-      "react-dom": undefined,
-    }),
     name: context.name,
     optionalDependencies: packageJSON.optionalDependencies,
+    peerDependencies: toUndefinedIfEmptyDependencies(
+      context.core === "app" ||
+        context.core === "azure-func" ||
+        context.core === "node"
+        ? undefined
+        : aggregateDependencies(
+            packageJSON.dependencies,
+            packageJSON.peerDependencies,
+            {
+              [context.essentialsCommandsName]: undefined,
+              "@azure/functions": undefined,
+              next: context.essentialsCommands ? nextVersion : undefined,
+              react: context.essentialsCommands ? undefined : reactVersion,
+              "react-dom": context.essentialsCommands
+                ? undefined
+                : reactDomVersion,
+            },
+          ),
+    ),
     scripts: context.essentialsCommands
       ? {
           ...packageJSON.scripts,
@@ -124,15 +168,6 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
     ...(context.core === "app"
       ? {
           bin: undefined,
-          dependencies: {
-            ...packageJSON.peerDependencies,
-            ...packageJSON.dependencies,
-            [context.essentialsCommandsName]: undefined,
-            "@azure/functions": undefined,
-            next: nextVersion,
-            react: reactVersion,
-            "react-dom": reactDomVersion,
-          },
           engines: {
             ...packageJSON.engines,
             node: "22.16.0",
@@ -140,7 +175,6 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
           exports: undefined,
           files: undefined,
           main: undefined,
-          peerDependencies: undefined,
           private: true,
           publishConfig: undefined,
           repository: undefined,
@@ -149,15 +183,6 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
       : context.core === "azure-func"
         ? {
             bin: undefined,
-            dependencies: {
-              ...packageJSON.peerDependencies,
-              ...packageJSON.dependencies,
-              [context.essentialsCommandsName]: undefined,
-              "@azure/functions": functionsVersion,
-              next: undefined,
-              react: undefined,
-              "react-dom": undefined,
-            },
             engines: {
               ...packageJSON.engines,
               node: "22.16.0",
@@ -165,7 +190,6 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
             exports: undefined,
             files: undefined,
             main: "dist/{index.js,functions/*.js}",
-            peerDependencies: undefined,
             private: true,
             publishConfig: undefined,
             repository: undefined,
@@ -174,7 +198,6 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
         : context.core === "lib"
           ? {
               bin: packageJSON.bin,
-              dependencies: undefined,
               engines: {
                 ...packageJSON.engines,
                 node:
@@ -197,17 +220,6 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
               },
               files: ["bin", "dist"],
               main: undefined,
-              peerDependencies: {
-                ...packageJSON.dependencies,
-                ...packageJSON.peerDependencies,
-                [context.essentialsCommandsName]: undefined,
-                "@azure/functions": undefined,
-                next: context.essentialsCommands ? nextVersion : undefined,
-                react: context.essentialsCommands ? undefined : reactVersion,
-                "react-dom": context.essentialsCommands
-                  ? undefined
-                  : reactDomVersion,
-              },
               private: false,
               publishConfig: {
                 ...packageJSON.publishConfig,
@@ -222,15 +234,6 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
             }
           : {
               bin: undefined,
-              dependencies: toUndefinedIfEmpty({
-                ...packageJSON.peerDependencies,
-                ...packageJSON.dependencies,
-                [context.essentialsCommandsName]: undefined,
-                "@azure/functions": undefined,
-                next: undefined,
-                react: undefined,
-                "react-dom": undefined,
-              }),
               engines: {
                 ...packageJSON.engines,
                 node: "22.16.0",
@@ -238,22 +241,63 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
               exports: undefined,
               files: undefined,
               main: undefined,
-              peerDependencies: undefined,
               private: true,
               publishConfig: undefined,
               repository: undefined,
               types: undefined,
             }),
   };
+
+  newPackageJSON.devDependencies = toUndefinedIfEmptyDependencies(
+    context.core === "app" ||
+      context.core === "azure-func" ||
+      context.core === "node"
+      ? aggregateDependencies(
+          substractDependencies(
+            packageJSON.devDependencies,
+            packageJSON.peerDependencies,
+            packageJSON.dependencies,
+          ),
+          { [context.essentialsCommandsName]: essentialsCommandsVersion },
+        )
+      : aggregateDependencies(
+          packageJSON.dependencies,
+          packageJSON.devDependencies,
+          packageJSON.peerDependencies,
+        ),
+  );
+
+  return newPackageJSON;
 }
 
-function toUndefinedIfEmpty<TRecord extends Record<string, any>>(
-  entry: TRecord,
-): TRecord | undefined {
-  const keys = Object.keys(entry).filter(
-    (k) => typeof entry[k] !== "undefined",
+function toUndefinedIfEmptyDependencies(
+  dependencies: Record<string, string | undefined> | undefined,
+): Record<string, string> | undefined {
+  if (!dependencies) return undefined;
+
+  const keys = Object.keys(dependencies).filter(
+    (k) => typeof dependencies[k] !== "undefined",
   );
 
   if (!keys.length) return undefined;
-  return entry;
+  return dependencies as Record<string, string>;
+}
+
+function aggregateDependencies(
+  ...dependenciesList: (Record<string, string | undefined> | undefined)[]
+): Record<string, string | undefined> {
+  let result = {};
+  for (const dependencies of dependenciesList)
+    result = { ...result, ...dependencies };
+  return result;
+}
+
+function substractDependencies(
+  dependencies: Record<string, string | undefined> | undefined,
+  ...dependenciesList: (Record<string, string | undefined> | undefined)[]
+) {
+  const result = { ...dependencies };
+  for (const dependencies of dependenciesList)
+    Object.keys(dependencies || {}).forEach((key) => delete result[key]);
+  return result;
 }
