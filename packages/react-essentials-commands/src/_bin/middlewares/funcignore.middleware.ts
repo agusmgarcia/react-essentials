@@ -11,16 +11,17 @@ export default createMiddleware<string[]>({
 
 function getTemplate(): string[] {
   return [
+    "**/.*",
+    ".eslintrc.js",
+    ".next",
     "__azurite_db*__.json",
     "__blobstorage__",
     "__queuestorage__",
-    "**/.*",
-    "src",
-    ".eslintrc.js",
     "jest.config.js",
     "local.settings.json",
     "package-lock.json",
     "prettier.config.js",
+    "src",
     "tsconfig.json",
     "webpack.config.js",
   ];
