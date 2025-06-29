@@ -1,4 +1,5 @@
 *.tgz
+.next
 bin
 dist
 node_modules
