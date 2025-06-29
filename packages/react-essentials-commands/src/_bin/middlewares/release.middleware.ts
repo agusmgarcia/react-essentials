@@ -168,10 +168,8 @@ function getTemplate(context: Context): Record<string, any> {
                 name: "Upload build artifact",
                 uses: "actions/upload-pages-artifact@v3",
                 with: {
-                  path: "dist",
+                  path: "${{ steps.get-package-location.outputs.value || '.' }}/dist",
                 },
-                "working-directory":
-                  "${{ steps.get-package-location.outputs.value }}",
               },
               {
                 name: "Deploy to GitHub Pages",
@@ -250,8 +248,6 @@ function getTemplate(context: Context): Record<string, any> {
                     "app-name": "${{ vars.AZURE_APP_NAME }}",
                     "respect-funcignore": true,
                   },
-                  "working-directory":
-                    "${{ steps.get-package-location.outputs.value }}",
                 },
                 {
                   if: "${{ always() && steps.azure-login.conclusion == 'success' }}",
