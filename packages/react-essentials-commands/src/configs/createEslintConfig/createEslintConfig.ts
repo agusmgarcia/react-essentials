@@ -15,7 +15,13 @@ export default function createEslintConfig(...[core]: Input): Output {
       "next/core-web-vitals",
       "next/typescript",
     ],
-    ignorePatterns: ["**/bin", "**/dist", "**/node_modules", "**/*.d.ts"],
+    ignorePatterns: [
+      "**/.next",
+      "**/bin",
+      "**/dist",
+      "**/node_modules",
+      "**/*.d.ts",
+    ],
     plugins: ["sort"],
     rules: {
       // @next
