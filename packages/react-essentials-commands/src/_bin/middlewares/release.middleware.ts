@@ -49,6 +49,8 @@ export default async function releaseMiddleware(
 }
 
 function getTemplate(context: Context): Record<string, any> {
+  // TODO: the release is created assuming you may use TurboRepo for handling monorepo project.
+  // This is not compatible with Nx nor NPM packages.
   const baseSteps = [
     {
       if: "${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' }}",
@@ -241,6 +243,7 @@ function getTemplate(context: Context): Record<string, any> {
                   run: "npm ci --ignore-scripts --omit=dev",
                   shell: "bash",
                 },
+                // TODO: test if this actions finds the azure function even if it is under a monorepo
                 {
                   name: "Deploy function",
                   uses: "azure/functions-action@v1",
