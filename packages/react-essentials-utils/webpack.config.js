@@ -2,4 +2,4 @@ const {
   createWebpackConfig,
 } = require("@agusmgarcia/react-essentials-commands");
 
-module.exports = createWebpackConfig("lib", { omit: "node" });
+module.exports = createWebpackConfig("lib");
