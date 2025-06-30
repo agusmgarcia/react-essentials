@@ -2,11 +2,11 @@ import fs from "fs";
 
 import hasProperty from "./hasProperty";
 
-export async function readFile(path: string): Promise<string | undefined> {
+export async function readFile(path: string): Promise<string> {
   try {
     return await readRequiredFile(path);
   } catch (error) {
-    if (hasProperty(error, "code") && error.code === "ENOENT") return undefined;
+    if (hasProperty(error, "code") && error.code === "ENOENT") return "";
     throw error;
   }
 }
