@@ -172,6 +172,17 @@ array.find(finds.single); // => throws error
 array.find(finds.singleOrDefault); // => undefined
 ```
 
+## Folders
+
+```typescript
+import { folders } from "@agusmgarcia/react-essentials-utils";
+
+folders.readFolder("src"); // => a list of files
+folders.removeFolder("src"); // => delete a folder
+folders.removeFolderIfEmpty("src"); // => delete a folder if empty
+folders.upsertFolder("src"); // => create a folder if it doesn't exist
+```
+
 ## Func
 
 ```typescript
