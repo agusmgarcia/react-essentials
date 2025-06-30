@@ -1,11 +1,10 @@
-import { type StateCreator } from "zustand";
-
 import {
   type AddArgumentToObject,
   type Func,
   type OmitFuncs,
   type OmitProperty,
 } from "@agusmgarcia/react-essentials-utils";
+import { type StateCreator } from "zustand";
 
 /**
  * Represents a slice of the global state with a specific name and state type.
