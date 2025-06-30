@@ -33,7 +33,7 @@
     "format": "tsx src/_bin/format.ts",
     "postbuild": "chmod +x bin/*.js",
     "postpack": "tsx src/_bin/postpack.ts",
-    "prebuild": "npm i --ignore-scripts --no-audit",
+    "prebuild": "npm i --no-audit",
     "prepack": "tsx src/_bin/prepack.ts",
     "regenerate": "tsx src/_bin/regenerate.ts",
     "start": "tsx src/_bin/start.ts",
