@@ -11,6 +11,7 @@ import { type Input, type Output } from "./createEslintConfig.types";
 export default function createEslintConfig(...[core]: Input): Output {
   return {
     extends: [
+      "plugin:prettier/recommended",
       "plugin:sort/recommended",
       "next/core-web-vitals",
       "next/typescript",
@@ -49,6 +50,9 @@ export default function createEslintConfig(...[core]: Input): Output {
           varsIgnorePattern: "^_",
         },
       ],
+
+      // prettier
+      "prettier/prettier": "error",
 
       // react
       "react/jsx-boolean-value": ["error", "always"],
