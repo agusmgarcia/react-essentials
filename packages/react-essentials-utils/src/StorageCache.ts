@@ -27,7 +27,10 @@ export default class StorageCache extends Cache {
    */
   constructor(storageName: string, options?: Partial<Options>) {
     super({
-      items: loadItemsFromStore(options?.storage || "session", storageName),
+      items: loadItemsFromStore(
+        options?.storage || "session",
+        `${storageName}${!!options?.version ? `.${options.version}` : ""}`,
+      ),
       maxCacheTime: options?.maxCacheTime,
       maxErrorTime: options?.maxErrorTime,
     });
