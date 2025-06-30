@@ -1,5 +1,3 @@
-import { type StateCreator } from "zustand";
-
 import {
   catchError,
   equals,
@@ -8,6 +6,7 @@ import {
   type OmitFuncs,
   type OmitProperty,
 } from "@agusmgarcia/react-essentials-utils";
+import { type StateCreator } from "zustand";
 
 import {
   type Context,
