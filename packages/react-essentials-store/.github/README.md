@@ -12,8 +12,8 @@ This is the state that is going to be consumed globally across the app. It is ha
 import {
   createGlobalSlice,
   type CreateGlobalSliceTypes,
-  type Func,
 } from "@agusmgarcia/react-essentials-store";
+import { type Func } from "@agusmgarcia/react-essentials-utils";
 
 export type FormSearchSlice = CreateGlobalSliceTypes.SliceOf<
   "formSearch",
@@ -45,8 +45,8 @@ The state that is populated from an API or an external resource. It is handled b
 import {
   createServerSlice,
   type CreateServerSliceTypes,
-  type Func,
 } from "@agusmgarcia/react-essentials-store";
+import { type Func } from "@agusmgarcia/react-essentials-utils";
 
 import { type FormSearchSlice } from "./FormSearch.ts";
 
