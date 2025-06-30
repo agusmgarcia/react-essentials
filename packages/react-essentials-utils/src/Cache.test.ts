@@ -77,7 +77,7 @@ describe("Cache", () => {
     expect(factory).toHaveBeenCalledTimes(1);
 
     // Wait for error cache to expire
-    await delay(50);
+    await delay(100);
     factory.mockResolvedValue("ok");
     const result = await cache.getOrCreate(
       "err",
