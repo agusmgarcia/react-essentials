@@ -10,7 +10,7 @@ export default class Cache {
   private readonly maxCacheTime: number;
   private readonly maxErrorTime: number;
 
-  private readonly mutexes: Record<string, Mutex>;
+  private readonly mutexes: Record<string, IMutex>;
   private readonly items: Items;
   private readonly itemsPromise: Promise<void>;
   private readonly signal: AbortSignal;
@@ -68,7 +68,7 @@ export default class Cache {
   ): Promise<Item> {
     await this.itemsPromise;
 
-    if (!this.mutexes[key]) this.mutexes[key] = new Mutex();
+    if (!this.mutexes[key]) this.mutexes[key] = this.createMutext(key);
     signal = signal || this.signal;
 
     return this.mutexes[key].runExclusive(async () => {
@@ -108,6 +108,16 @@ export default class Cache {
 
       return this.items[key];
     });
+  }
+
+  /**
+   * Creates and returns a new mutex instance for the specified cache key.
+   *
+   * @param key - The unique key for which the mutex is being created.
+   * @returns An instance of `IMutex` used to control concurrent access to the cache entry for the given key.
+   */
+  protected createMutext(_key: string): IMutex {
+    return new Mutex();
   }
 
   /**
@@ -181,6 +191,10 @@ type Options = {
    */
   maxErrorTime: number;
 };
+
+interface IMutex {
+  runExclusive<TResult>(callback: AsyncFunc<TResult>): Promise<TResult>;
+}
 
 type Item = { expiresAt: number } & ({ result: any } | { error: any });
 
