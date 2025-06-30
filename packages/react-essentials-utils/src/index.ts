@@ -2,7 +2,7 @@ export { type default as AddArgumentToObject } from "./AddArgumentToObject.types
 export { default as aggregateResponse } from "./aggregateResponse";
 export { type default as AsyncFunc } from "./AsyncFunc.types";
 export { default as blockUntil } from "./blockUntil";
-export { default as Cache } from "./Cache";
+export { type CacheTypes, default as Cache } from "./Cache";
 export { default as capitalize } from "./capitalize";
 export { default as catchError } from "./catchError";
 export * as children from "./children";
@@ -28,7 +28,10 @@ export { type default as OmitProperty } from "./OmitProperty.types";
 export { type default as OnlyId } from "./OnlyId.types";
 export { default as replaceString } from "./replaceString";
 export * as sorts from "./sorts";
-export { default as StorageCache } from "./StorageCache";
+export {
+  default as StorageCache,
+  type StorageCacheTypes,
+} from "./StorageCache";
 export { default as throwError } from "./throwError";
 export { type default as Tuple } from "./Tuple.types";
 export { type default as TupleToUnion } from "./TupleToUnion.types";

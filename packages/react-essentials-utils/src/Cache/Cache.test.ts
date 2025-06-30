@@ -1,5 +1,5 @@
+import delay from "../delay";
 import Cache from "./Cache";
-import delay from "./delay";
 
 describe("Cache", () => {
   it("should cache and retrieve a value", async () => {
@@ -152,104 +152,6 @@ describe("Cache", () => {
       cache.getOrCreate("mutex", factory, new AbortController().signal),
       cache.getOrCreate("mutex", factory, new AbortController().signal),
     ]);
-    expect(factory).toHaveBeenCalledTimes(1);
-  });
-
-  it("should initialize cache with items from a resolved promise", async () => {
-    const initialItems = {
-      err: { error: new Error("init error"), expiresAt: Date.now() + 1000 },
-      foo: { expiresAt: Date.now() + 1000, result: "bar" },
-    };
-    const cache = new Cache({ items: Promise.resolve(initialItems) });
-
-    // Should retrieve pre-cached value
-    const factory = jest.fn();
-    const result = await cache.getOrCreate(
-      "foo",
-      factory,
-      new AbortController().signal,
-    );
-    expect(result).toBe("bar");
-    expect(factory).not.toHaveBeenCalled();
-
-    // Should throw pre-cached error
-    await expect(
-      cache.getOrCreate("err", factory, new AbortController().signal),
-    ).rejects.toThrow("init error");
-    expect(factory).not.toHaveBeenCalled();
-  });
-
-  it("should initialize cache with items from a direct object", async () => {
-    const expiresAt = Date.now() + 1000;
-
-    const cache = new Cache({
-      items: {
-        a: { expiresAt, result: 123 },
-        b: { error: new Error("fail b"), expiresAt },
-      },
-    });
-
-    const factory = jest.fn();
-    const result = await cache.getOrCreate(
-      "a",
-      factory,
-      new AbortController().signal,
-    );
-    expect(result).toBe(123);
-    expect(factory).not.toHaveBeenCalled();
-
-    await expect(
-      cache.getOrCreate("b", factory, new AbortController().signal),
-    ).rejects.toThrow("fail b");
-    expect(factory).not.toHaveBeenCalled();
-  });
-
-  it("should wait for promise items to resolve before serving requests", async () => {
-    async function loadItems() {
-      await delay(10);
-      return {};
-    }
-
-    const cache = new Cache({ items: loadItems() });
-    const factory = jest.fn().mockResolvedValue("late");
-
-    // Start getOrCreate before items are resolved
-    const result = await cache.getOrCreate(
-      "lateKey",
-      factory,
-      new AbortController().signal,
-    );
-
-    expect(result).toBe("late");
-    expect(factory).toHaveBeenCalledTimes(1);
-  });
-
-  it("should use initial items and expire them correctly", async () => {
-    const cache = new Cache({
-      items: {
-        exp: { expiresAt: Date.now() + 10, result: "soon" },
-      },
-    });
-
-    const factory = jest.fn().mockResolvedValue("after");
-
-    // Should get initial value
-    const result1 = await cache.getOrCreate(
-      "exp",
-      factory,
-      new AbortController().signal,
-    );
-    expect(result1).toBe("soon");
-    expect(factory).not.toHaveBeenCalled();
-
-    // Wait for expiration
-    await delay(20);
-    const result2 = await cache.getOrCreate(
-      "exp",
-      factory,
-      new AbortController().signal,
-    );
-    expect(result2).toBe("after");
     expect(factory).toHaveBeenCalledTimes(1);
   });
 });

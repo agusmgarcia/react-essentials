@@ -1,7 +1,7 @@
-import isSSR from "./isSSR";
+import isSSR from "../isSSR";
 import StorageCache from "./StorageCache";
 
-jest.mock("./isSSR", () => jest.fn());
+jest.mock("../isSSR", () => jest.fn());
 
 const mockIsSSR = isSSR as jest.Mock;
 
