@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.3](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v1.0.3)
+
+> June 30, 2025
+
+### Fixes 🎯
+
+- **Cache.test**: remove flaky test
+
 ## [v1.0.2](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v1.0.2)
 
 > June 30, 2025
