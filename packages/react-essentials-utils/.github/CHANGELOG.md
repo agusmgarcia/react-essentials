@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.2](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v1.0.2)
+
+> June 30, 2025
+
+### Fixes 🎯
+
+- stop using --ignore-scripts
+- **Cache**: add ability to customize the Mutex
+- **Cache.test**: adjust flaky test
+- **StorageCache**: adjust the logic to load items using version
+- **folders**: add utils
+- **files**: add utils
+- **hasProperty**: add utils
+
 ## [v1.0.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v1.0.1)
 
 > June 29, 2025
