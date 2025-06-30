@@ -262,8 +262,8 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
         )
       : aggregateDependencies(
           packageJSON.dependencies,
-          packageJSON.devDependencies,
           packageJSON.peerDependencies,
+          packageJSON.devDependencies,
         ),
   );
 
