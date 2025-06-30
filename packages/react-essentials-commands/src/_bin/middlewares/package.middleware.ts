@@ -65,6 +65,7 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
 
   const [
     essentialsCommandsVersion,
+    azureFunctionsCoreToolsVersion,
     functionsVersion,
     nextVersion,
     reactVersion,
@@ -73,6 +74,7 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
     packageJSON.dependencies?.[context.essentialsCommandsName] ||
       packageJSON.peerDependencies?.[context.essentialsCommandsName] ||
       packageJSON.devDependencies?.[context.essentialsCommandsName],
+    npm.getVersion("azure-functions-core-tools@4").then((v) => `^${v}`),
     npm.getVersion("@azure/functions@4").then((v) => `^${v}`),
     npm.getVersion("next@15").then((v) => `^${v}`),
     npm.getVersion("react@19").then((v) => `^${v}`),
@@ -92,6 +94,7 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
             packageJSON.dependencies,
             {
               [context.essentialsCommandsName]: undefined,
+              "azure-functions-core-tools": undefined,
             },
             context.core === "app"
               ? {
@@ -130,6 +133,7 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
             {
               [context.essentialsCommandsName]: undefined,
               "@azure/functions": undefined,
+              "azure-functions-core-tools": undefined,
               next: context.essentialsCommands ? nextVersion : undefined,
               react: context.essentialsCommands ? undefined : reactVersion,
               "react-dom": context.essentialsCommands
@@ -258,12 +262,19 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
             packageJSON.peerDependencies,
             packageJSON.dependencies,
           ),
-          { [context.essentialsCommandsName]: essentialsCommandsVersion },
+          {
+            [context.essentialsCommandsName]: essentialsCommandsVersion,
+            "azure-functions-core-tools":
+              context.core === "azure-func"
+                ? azureFunctionsCoreToolsVersion
+                : undefined,
+          },
         )
       : aggregateDependencies(
           packageJSON.dependencies,
           packageJSON.peerDependencies,
           packageJSON.devDependencies,
+          { "azure-functions-core-tools": undefined },
         ),
   );
 
