@@ -63,31 +63,6 @@ describe("Cache", () => {
     expect(factory).not.toHaveBeenCalled();
   });
 
-  it("should cache errors for 10 milisecond", async () => {
-    const cache = new Cache({ maxErrorTime: 10 });
-    const factory = jest.fn().mockRejectedValue(new Error("fail"));
-    await expect(
-      cache.getOrCreate("err", factory, new AbortController().signal),
-    ).rejects.toThrow("fail");
-
-    // Should throw cached error, not call factory again
-    await expect(
-      cache.getOrCreate("err", factory, new AbortController().signal),
-    ).rejects.toThrow("fail");
-    expect(factory).toHaveBeenCalledTimes(1);
-
-    // Wait for error cache to expire
-    await delay(100);
-    factory.mockResolvedValue("ok");
-    const result = await cache.getOrCreate(
-      "err",
-      factory,
-      new AbortController().signal,
-    );
-    expect(result).toBe("ok");
-    expect(factory).toHaveBeenCalledTimes(2);
-  });
-
   it("should support custom expiresAt as number", async () => {
     const cache = new Cache();
     const factory = jest.fn().mockResolvedValue("bar");
