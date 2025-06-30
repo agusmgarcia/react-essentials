@@ -93,7 +93,7 @@ export default function createMiddleware<
 
 function parse<TElement extends string | string[] | Record<string, any>>(
   path: string,
-  content: string | undefined,
+  content: string,
 ): TElement | undefined {
   if (!content) return undefined;
 
