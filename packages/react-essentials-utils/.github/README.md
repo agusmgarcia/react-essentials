@@ -137,6 +137,18 @@ equals.deep(
 ); // => true
 ```
 
+## Files
+
+```typescript
+import { files } from "@agusmgarcia/react-essentials-utils";
+
+files.isFile("src/index.json"); // => true if the path belongs to a file or throw error if it doesn't exist
+files.readFile("src/index.json"); // => a string representing the content of the file
+files.readRequiredFile("src/index.json"); // => a string representing the content of the file or throw error if it doesn't exist
+files.removeFile("src/index.json"); // => remove the file
+files.upsertFile("src/index.json", JSON.stringify({})); // => create or update the file
+```
+
 ## Filters
 
 ```typescript
