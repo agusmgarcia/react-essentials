@@ -33,8 +33,8 @@ export default async function run(
     if (command === "start") await executeDeferred(list);
     for (const cmd of commands) await cmd();
   } catch (error) {
-    if (hasProperty(error, "ignorable") && error.ignorable !== true)
-      console.error(error);
+    if (hasProperty(error, "message", "string")) console.error(error.message);
+    throw error;
   } finally {
     if (command !== "start") await executeDeferred(list);
   }
