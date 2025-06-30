@@ -73,7 +73,7 @@ export default function execute(
                 ? new Error(stderr)
                 : !!error
                   ? error
-                  : { ignorable: true },
+                  : new Error(`Command ${command} exit with code ${code}`),
             );
         }
 
