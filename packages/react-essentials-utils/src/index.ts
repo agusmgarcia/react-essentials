@@ -13,6 +13,7 @@ export * as equals from "./equals";
 export * as filters from "./filters";
 export * as finds from "./finds";
 export { type default as Func } from "./Func.types";
+export { default as hasProperty } from "./hasProperty";
 export { default as isChildOf } from "./isChildOf";
 export { default as isOnlyId } from "./isOnlyId";
 export { default as isParentOf } from "./isParentOf";
