@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.4](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.4)
+
+> June 30, 2025
+
+### Fixes 🎯
+
+- stop installing azure-functions-core-tools as peers
+
 ## [v1.0.3](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.3)
 
 > June 30, 2025
