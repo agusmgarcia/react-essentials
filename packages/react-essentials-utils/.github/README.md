@@ -170,6 +170,15 @@ type Func2 = Func<number>; // => () => number
 type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
 ```
 
+## Has property
+
+```typescript
+import { hasProperty } from "@agusmgarcia/react-essentials-utils";
+
+hasProperty({ foo: 123 }, "foo"); // => true
+hasProperty({ bar: undefined }, "foo"); // => false
+```
+
 ## Is child of
 
 ```typescript
