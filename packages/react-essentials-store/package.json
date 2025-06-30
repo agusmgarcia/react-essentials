@@ -24,7 +24,7 @@
     "test": "react-essentials-commands-test"
   },
   "peerDependencies": {
-    "@agusmgarcia/react-essentials-utils": "^0.1.0",
+    "@agusmgarcia/react-essentials-utils": "^0.3.0",
     "react": "^19.1.0",
     "zustand": "^5.0.6"
   },
