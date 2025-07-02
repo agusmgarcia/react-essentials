@@ -1,12 +1,6 @@
 import path from "path";
 
-import {
-  type AsyncFunc,
-  type Func,
-  getPackageJSON,
-  git,
-  hasProperty,
-} from "#src/utils";
+import { type AsyncFunc, type Func, getPackageJSON, git } from "#src/utils";
 
 import packageJSONEssentialsCommands from "../../package.json";
 import middlewares, { type MiddlewaresTypes } from "./middlewares";
@@ -32,9 +26,6 @@ export default async function run(
 
     if (command === "start") await executeDeferred(list);
     for (const cmd of commands) await cmd();
-  } catch (error) {
-    if (hasProperty(error, "message", "string")) console.error(error.message);
-    throw error;
   } finally {
     if (command !== "start") await executeDeferred(list);
   }
