@@ -1,5 +1,6 @@
 import { EOL } from "os";
 import process from "process";
+import { compare } from "semver";
 
 import execute from "./execute";
 import * as git from "./git";
@@ -39,8 +40,10 @@ export async function getVersion(
 ): Promise<string | undefined> {
   return await execute(`npm view ${dependency} version`, false)
     .then((result) => result.split(EOL))
-    .then((result) => result.at(-2))
-    .then((result) => result?.replace(/^.+?\s'(.+?)'$/, "$1"))
+    .then((result) => result.filter((r) => !!r))
+    .then((result) => result.map((r) => r.replace(/^.+?\s'(.+?)'$/, "$1")))
+    .then((result) => result.sort(compare))
+    .then((result) => result.at(-1))
     .catch(() => undefined);
 }
 
