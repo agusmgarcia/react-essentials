@@ -1,9 +1,6 @@
-import { sortProperties } from "#src/utils";
-
 import createMiddleware, { type Context } from "./createMiddleware";
 
 export default createMiddleware<string[]>({
-  mapOutput: (output) => sortProperties(output),
   path: ".gitignore",
   template: getTemplate,
   valid: ["app", "azure-func", "lib", "node"],
