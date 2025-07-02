@@ -1,9 +1,6 @@
-import { sortProperties } from "#src/utils";
-
 import createMiddleware from "./createMiddleware";
 
 export default createMiddleware<string[]>({
-  mapOutput: (output) => sortProperties(output),
   path: ".funcignore",
   template: getTemplate,
   valid: ["azure-func"],
