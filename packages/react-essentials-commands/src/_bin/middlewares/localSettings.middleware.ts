@@ -16,7 +16,7 @@ function getTemplate(context: Context): Record<string, any> {
       APP_VERSION: context.version,
       FUNCTIONS_EXTENSION_VERSION: "~4",
       FUNCTIONS_WORKER_RUNTIME: "node",
-      WEBSITE_NODE_DEFAULT_VERSION: "~22",
+      WEBSITE_NODE_DEFAULT_VERSION: "~22.16.0",
     },
   };
 }
