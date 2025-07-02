@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.5](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.5)
+
+> July 2, 2025
+
+### Fixes 🎯
+
+- return non-zero exit code on error
+- **.gitignore**: stop sorting properties
+- **.funcignore**: stop sorting properties
+- adjust the logic to calculate the latest version of a package
+- **.funcignore**: adjust WEBSITE_NODE_DEFAULT_VERSION
+
 ## [v1.0.4](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.4)
 
 > June 30, 2025
