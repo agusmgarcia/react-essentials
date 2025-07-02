@@ -5,6 +5,7 @@ export { default as execute } from "./execute";
 export * as files from "./files";
 export * as folders from "./folders";
 export { type default as Func } from "./Func.types";
+export { default as getErrorMessage } from "./getErrorMessage";
 export { default as getPackageJSON } from "./getPackageJSON";
 export * as git from "./git";
 export { default as hasProperty } from "./hasProperty";

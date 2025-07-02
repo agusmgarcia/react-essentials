@@ -1,55 +1,53 @@
 import process from "process";
 
-import { args, execute, git, hasProperty, npm, question } from "#src/utils";
+import { args, execute, getErrorMessage, git, npm, question } from "#src/utils";
 
 export default async function deploy(): Promise<void> {
-  const argsValue = args.validate("no-tag", "interactive", "filter");
-
-  if (!(await git.isInsideRepository())) return;
-
-  if (!(await git.isCurrentBranchSynced())) {
-    console.error("Your branch must be in synced with remote");
-    return;
-  }
-
-  const scope = await npm.getMonorepoDetails().then((m) => m?.name);
-
-  const lastTagMerged = await git
-    .getTags({ merged: true, scope })
-    .then((tags) => tags.at(-1));
-
-  const typeOfNewVersion = await git
-    .getCommits({ initial: lastTagMerged, path: process.cwd() })
-    .then((commits) => commits.reverse())
-    .then(findTypeOfNewVersion);
-
-  if (!typeOfNewVersion) return;
-
   try {
+    const argsValue = args.validate("no-tag", "interactive", "filter");
+
+    if (!(await git.isInsideRepository())) return;
+
+    if (!(await git.isCurrentBranchSynced()))
+      throw new Error("Your branch must be in synced with remote");
+
+    const scope = await npm.getMonorepoDetails().then((m) => m?.name);
+
+    const lastTagMerged = await git
+      .getTags({ merged: true, scope })
+      .then((tags) => tags.at(-1));
+
+    const typeOfNewVersion = await git
+      .getCommits({ initial: lastTagMerged, path: process.cwd() })
+      .then((commits) => commits.reverse())
+      .then(findTypeOfNewVersion);
+
+    if (!typeOfNewVersion) return;
+
     await validatePositionOfTheTag(scope, typeOfNewVersion, lastTagMerged);
+
+    const newTag = await npm.getNewTag(typeOfNewVersion);
+    if (!newTag) return;
+
+    await git.createCommit("chore: bump package version");
+    await git.createTag(`${newTag}-temp`);
+    await execute("npm run regenerate -- --file=.github/CHANGELOG.md", true);
+    await git.deleteTag(`${newTag}-temp`);
+    await git.createCommit("chore: bump package version", { amend: true });
+    if (argsValue.getBoolean("no-tag")) return;
+    await git.createTag(newTag);
+    await checkoutTagAndDeleteCurrentBranch(newTag);
+    await createNextRelease(
+      scope,
+      typeOfNewVersion,
+      newTag,
+      lastTagMerged,
+      argsValue.getBoolean("interactive"),
+    );
   } catch (error) {
-    if (hasProperty(error, "message")) console.error(error.message);
-    return;
+    console.error(getErrorMessage(error));
+    process.exit(1);
   }
-
-  const newTag = await npm.getNewTag(typeOfNewVersion);
-  if (!newTag) return;
-
-  await git.createCommit("chore: bump package version");
-  await git.createTag(`${newTag}-temp`);
-  await execute("npm run regenerate -- --file=.github/CHANGELOG.md", true);
-  await git.deleteTag(`${newTag}-temp`);
-  await git.createCommit("chore: bump package version", { amend: true });
-  if (argsValue.getBoolean("no-tag")) return;
-  await git.createTag(newTag);
-  await checkoutTagAndDeleteCurrentBranch(newTag);
-  await createNextRelease(
-    scope,
-    typeOfNewVersion,
-    newTag,
-    lastTagMerged,
-    argsValue.getBoolean("interactive"),
-  );
 }
 
 function findTypeOfNewVersion(
@@ -201,13 +199,7 @@ async function createNextRelease(
   }
 
   await git.checkout(nextTag);
-
-  try {
-    await git.cherryPick(lastTagMerged, `${newTag}~1`);
-  } catch (error) {
-    console.error(error);
-    return;
-  }
+  await git.cherryPick(lastTagMerged, `${newTag}~1`);
 
   if (interactive) {
     const response = await question(`Deploy changes into ${nextTag}? (Y/n)`);
