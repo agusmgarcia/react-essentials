@@ -1,7 +1,10 @@
 import { type getPackageJSON } from "#src/utils";
 
 export type Input = [
-  core: NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>,
+  core: Extract<
+    NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>,
+    "app" | "lib"
+  >,
 ];
 
 export type Output = {
