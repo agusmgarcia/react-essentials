@@ -135,7 +135,7 @@ export default async function createWebpackConfig(
         module: {
           rules: [
             {
-              test: /.css$/,
+              test: /\.css$/,
               use: [
                 MiniCssExtractPlugin.loader,
                 "style-loader",
@@ -220,7 +220,7 @@ export default async function createWebpackConfig(
         module: {
           rules: [
             {
-              test: /.css$/,
+              test: /\.css$/,
               use: [
                 MiniCssExtractPlugin.loader,
                 "style-loader",
