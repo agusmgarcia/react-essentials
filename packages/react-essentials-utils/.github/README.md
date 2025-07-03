@@ -208,15 +208,6 @@ type Func2 = Func<number>; // => () => number
 type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
 ```
 
-## Has property
-
-```typescript
-import { hasProperty } from "@agusmgarcia/react-essentials-utils";
-
-hasProperty({ foo: 123 }, "foo"); // => true
-hasProperty({ bar: undefined }, "foo"); // => false
-```
-
 ## Is child of
 
 ```typescript
@@ -320,6 +311,21 @@ type Person = { id: string; name: string };
 type OnlyIdPerson = OnlyId<Person>; // => { id: string, name?: undefined }
 ```
 
+## Properties
+
+```typescript
+import { properties } from "@agusmgarcia/react-essentials-utils";
+
+properties.has({ foo: 123 }, "foo"); // => true
+properties.sort({ b: 2, a: { y: 2, x: 1 }, c: 3 }, [
+  "a",
+  "a.x",
+  "a.y",
+  "b",
+  "c",
+]); // => { a: { x: 1, y: 2 }, b: 2, c: 3 }
+```
+
 ## Replace string
 
 ```typescript
@@ -328,20 +334,6 @@ import { replaceString } from "@agusmgarcia/react-essentials-utils";
 replaceString("This is the ${value} test", { value: "third" }); // => "This is the third test"
 replaceString("${nights} ${nights?night:nights}", { nights: 1 }); // => "1 night"
 replaceString("${nights} ${nights?night:nights}", { nights: 2 }); // => "2 nights"
-```
-
-## Sort properties
-
-```typescript
-import { sortProperties } from "@agusmgarcia/react-essentials-utils";
-
-sortProperties({ b: 2, a: { y: 2, x: 1 }, c: 3 }, [
-  "a",
-  "a.x",
-  "a.y",
-  "b",
-  "c",
-]); // => { a: { x: 1, y: 2 }, b: 2, c: 3 }
 ```
 
 ## Sorts

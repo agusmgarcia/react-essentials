@@ -7,14 +7,14 @@ import {
   getPackageJSON,
   git,
   npm,
-  sortProperties,
+  properties,
 } from "#src/utils";
 
 import createMiddleware, { type Context } from "./createMiddleware";
 
 const MIDDLEWARE = createMiddleware<Record<string, any>>({
   mapOutput: (output) =>
-    sortProperties(output, [
+    properties.sort(output, [
       "name",
       "core",
       "version",

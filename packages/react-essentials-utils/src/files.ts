@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import hasProperty from "./hasProperty";
+import * as properties from "./properties";
 
 /**
  * Checks if the given path points to a file.
@@ -28,7 +28,7 @@ export async function readFile(path: string): Promise<string> {
   try {
     return await readRequiredFile(path);
   } catch (error) {
-    if (hasProperty(error, "code") && error.code === "ENOENT") return "";
+    if (properties.has(error, "code") && error.code === "ENOENT") return "";
     throw error;
   }
 }

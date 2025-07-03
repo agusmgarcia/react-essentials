@@ -15,7 +15,6 @@ export * as filters from "./filters";
 export * as finds from "./finds";
 export * as folders from "./folders";
 export { type default as Func } from "./Func.types";
-export { default as hasProperty } from "./hasProperty";
 export { default as isChildOf } from "./isChildOf";
 export { default as isOnlyId } from "./isOnlyId";
 export { default as isParentOf } from "./isParentOf";
@@ -26,8 +25,8 @@ export * as merges from "./merges";
 export { type default as OmitFuncs } from "./OmitFuncs.types";
 export { type default as OmitProperty } from "./OmitProperty.types";
 export { type default as OnlyId } from "./OnlyId.types";
+export * as properties from "./properties";
 export { default as replaceString } from "./replaceString";
-export { default as sortProperties } from "./sortProperties";
 export * as sorts from "./sorts";
 export {
   default as StorageCache,

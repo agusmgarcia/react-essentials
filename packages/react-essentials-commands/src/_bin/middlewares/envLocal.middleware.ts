@@ -1,9 +1,9 @@
-import { files, folders, sortProperties } from "#src/utils";
+import { files, folders, properties } from "#src/utils";
 
 import createMiddleware, { type Context } from "./createMiddleware";
 
 const MIDDLEWARE = createMiddleware<Record<string, any>>({
-  mapOutput: (output) => sortProperties(output),
+  mapOutput: (output) => properties.sort(output),
   path: ".env.local",
   template: getTemplate,
   valid: ["app", "node"],

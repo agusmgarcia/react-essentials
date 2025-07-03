@@ -1,10 +1,10 @@
-import { files, sortProperties } from "#src/utils";
+import { files, properties } from "#src/utils";
 
 import createMiddleware, { type Context } from "./createMiddleware";
 
 const MIDDLEWARE = createMiddleware<Record<string, any>>({
   mapOutput: (output) =>
-    sortProperties(output, [
+    properties.sort(output, [
       "name",
       "run-name",
       "description",
