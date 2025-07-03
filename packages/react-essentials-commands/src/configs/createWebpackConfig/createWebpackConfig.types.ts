@@ -13,7 +13,7 @@ export type Input =
   | [
       core: Extract<
         NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>,
-        "app" | "azure-func" | "node"
+        "azure-func" | "node"
       >,
       configs?: Partial<{ externals: string[] }>,
     ];
