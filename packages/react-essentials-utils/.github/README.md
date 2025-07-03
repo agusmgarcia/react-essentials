@@ -330,6 +330,20 @@ replaceString("${nights} ${nights?night:nights}", { nights: 1 }); // => "1 night
 replaceString("${nights} ${nights?night:nights}", { nights: 2 }); // => "2 nights"
 ```
 
+## Sort properties
+
+```typescript
+import { sortProperties } from "@agusmgarcia/react-essentials-utils";
+
+sortProperties({ b: 2, a: { y: 2, x: 1 }, c: 3 }, [
+  "a",
+  "a.x",
+  "a.y",
+  "b",
+  "c",
+]); // => { a: { x: 1, y: 2 }, b: 2, c: 3 }
+```
+
 ## Sorts
 
 ```typescript
