@@ -4,12 +4,12 @@ export { type default as AsyncFunc } from "./AsyncFunc.types";
 export { default as blockUntil } from "./blockUntil";
 export { type CacheTypes, default as Cache } from "./Cache";
 export { default as capitalize } from "./capitalize";
-export { default as catchError } from "./catchError";
 export * as children from "./children";
 export * as dates from "./dates";
 export { default as delay } from "./delay";
 export { default as emptyFunction } from "./emptyFunction";
 export * as equals from "./equals";
+export * as errors from "./errors";
 export * as files from "./files";
 export * as filters from "./filters";
 export * as finds from "./finds";
@@ -32,7 +32,6 @@ export {
   default as StorageCache,
   type StorageCacheTypes,
 } from "./StorageCache";
-export { default as throwError } from "./throwError";
 export { type default as Tuple } from "./Tuple.types";
 export { type default as TupleToUnion } from "./TupleToUnion.types";
 export { type default as UnionToIntersection } from "./UnionToIntersection.types";

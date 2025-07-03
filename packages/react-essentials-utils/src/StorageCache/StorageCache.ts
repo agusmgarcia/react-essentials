@@ -1,4 +1,5 @@
 import Cache, { type CacheTypes } from "../Cache";
+import * as errors from "../errors";
 import isSSR from "../isSSR";
 import * as properties from "../properties";
 import { type Options } from "./StorageCache.types";
@@ -86,9 +87,7 @@ class Storage implements CacheTypes.Storage {
       else
         entries[key] = {
           ...entry,
-          error: properties.has(entry.error, "message", "string")
-            ? entry.error.message
-            : "Not serializable error",
+          error: errors.getMessage(entry.error),
           from: "message",
         };
 

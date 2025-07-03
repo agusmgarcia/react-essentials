@@ -1,6 +1,6 @@
 import process from "process";
 
-import { execute, getErrorMessage } from "#src/utils";
+import { errors, execute } from "#src/utils";
 
 import run from "./_run";
 
@@ -13,7 +13,7 @@ export default async function format(): Promise<void> {
       ),
     );
   } catch (error) {
-    console.error(getErrorMessage(error));
+    console.error(errors.getMessage(error));
     process.exit(1);
   }
 }

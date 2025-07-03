@@ -1,6 +1,6 @@
 import process from "process";
 
-import { args, execute, getErrorMessage, getPackageJSON } from "#src/utils";
+import { args, errors, execute, getPackageJSON } from "#src/utils";
 
 import run from "./_run";
 
@@ -23,7 +23,7 @@ export default async function regenerate(): Promise<void> {
       () => execute("echo Files regenerated!", true),
     );
   } catch (error) {
-    console.error(getErrorMessage(error));
+    console.error(errors.getMessage(error));
     process.exit(1);
   }
 }

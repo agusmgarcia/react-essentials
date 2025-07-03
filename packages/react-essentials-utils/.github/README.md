@@ -64,21 +64,6 @@ import { capitalize } from "@agusmgarcia/react-essentials-utils";
 capitalize("foo"); // => "Foo"
 ```
 
-## Catch error
-
-```typescript
-import { catchError } from "@agusmgarcia/react-essentials-utils";
-
-catchError(
-  () => {
-    throw new Error();
-  },
-  (error) => {
-    // Proper error handling
-  },
-);
-```
-
 ## Children
 
 ```tsx
@@ -150,6 +135,27 @@ equals.deep(
   { name: "john", address: { street: "doe" } },
   { name: "john", address: { street: "doe" } },
 ); // => true
+```
+
+## Errors
+
+```typescript
+import { errors } from "@agusmgarcia/react-essentials-utils";
+
+errors.handle(
+  () => {
+    throw new Error();
+  },
+  (error) => {
+    // Proper error handling
+  },
+);
+
+errors.getMessage(new Error("My message")); // => "My message"
+
+const result = input.startsWith("a")
+  ? true
+  : errors.emit("Input should start with 'a'");
 ```
 
 ## Files
@@ -360,16 +366,6 @@ cache
     // Run some exclusive function.
   })
   .then((result) => console.log(result));
-```
-
-## Throw error
-
-```typescript
-import { throwError } from "@agusmgarcia/react-essentials-utils";
-
-const result = input.startsWith("a")
-  ? true
-  : throwError("Input should start with 'a'");
 ```
 
 ## Tuple
