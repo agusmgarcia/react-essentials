@@ -64,6 +64,21 @@ import { capitalize } from "@agusmgarcia/react-essentials-utils";
 capitalize("foo"); // => "Foo"
 ```
 
+## Catch error
+
+```typescript
+import { catchError } from "@agusmgarcia/react-essentials-utils";
+
+catchError(
+  () => {
+    throw new Error();
+  },
+  (error) => {
+    // Proper error handling
+  },
+);
+```
+
 ## Children
 
 ```tsx
@@ -282,7 +297,17 @@ import { type Func, type OmitFuncs } from "@agusmgarcia/react-essentials-utils";
 
 type Person = { id: string; name: string; setName: Func<void, [name: string]> };
 
-type OmitFuncsPerson = OmitFuncs<Person>; // => { id: string; name: string }
+type OmitFuncsPerson = OmitFuncs<Person>; // => { id: string; name: string; }
+```
+
+## Omit property
+
+```typescript
+import { type OmitProperty } from "@agusmgarcia/react-essentials-utils";
+
+type Person = { id: string; name: string; setName: Func<void, [name: string]> };
+
+type OmitPropertyPerson = OmitProperty<Person, "name">; // => { id: string, setName: (name:string) => void; }
 ```
 
 ## Only id
