@@ -1,9 +1,9 @@
-import { sortProperties } from "#src/utils";
+import { properties } from "#src/utils";
 
 import createMiddleware from "./createMiddleware";
 
 export default createMiddleware<Record<string, any>>({
-  mapOutput: (output) => sortProperties(output, ["version"]),
+  mapOutput: (output) => properties.sort(output, ["version"]),
   path: "host.json",
   template: getTemplate,
   valid: ["azure-func"],

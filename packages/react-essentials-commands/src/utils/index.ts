@@ -8,7 +8,6 @@ export { type default as Func } from "./Func.types";
 export { default as getErrorMessage } from "./getErrorMessage";
 export { default as getPackageJSON } from "./getPackageJSON";
 export * as git from "./git";
-export { default as hasProperty } from "./hasProperty";
 export * as npm from "./npm";
+export * as properties from "./properties";
 export { default as question } from "./question";
-export { default as sortProperties } from "./sortProperties";

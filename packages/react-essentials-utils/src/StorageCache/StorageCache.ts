@@ -1,6 +1,6 @@
 import Cache, { type CacheTypes } from "../Cache";
-import hasProperty from "../hasProperty";
 import isSSR from "../isSSR";
+import * as properties from "../properties";
 import { type Options } from "./StorageCache.types";
 
 /**
@@ -57,11 +57,11 @@ class Storage implements CacheTypes.Storage {
 
     try {
       const entry = JSON.parse(raw)[key];
-      if (hasProperty(entry, "error", "string"))
+      if (properties.has(entry, "error", "string"))
         return {
           ...entry,
           error:
-            hasProperty(entry, "from", "string") && entry.from === "message"
+            properties.has(entry, "from", "string") && entry.from === "message"
               ? new Error(entry.error)
               : entry.error,
         } as CacheTypes.Entry;
@@ -86,7 +86,7 @@ class Storage implements CacheTypes.Storage {
       else
         entries[key] = {
           ...entry,
-          error: hasProperty(entry.error, "message", "string")
+          error: properties.has(entry.error, "message", "string")
             ? entry.error.message
             : "Not serializable error",
           from: "message",
