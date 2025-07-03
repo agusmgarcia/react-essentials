@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.7](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v1.0.7)
+
+> July 3, 2025
+
+### Fixes 🎯
+
+- **errors**: encapsulate it into a module
+- **properties**: encapsulate into a module
+- **sortProperties**: add types
+- **merges**: stop using sort
+- **README.md**: add missing utils
+
 ## [v1.0.6](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v1.0.6)
 
 > June 30, 2025
