@@ -27,6 +27,7 @@ export { type default as OmitFuncs } from "./OmitFuncs.types";
 export { type default as OmitProperty } from "./OmitProperty.types";
 export { type default as OnlyId } from "./OnlyId.types";
 export { default as replaceString } from "./replaceString";
+export { default as sortProperties } from "./sortProperties";
 export * as sorts from "./sorts";
 export {
   default as StorageCache,
