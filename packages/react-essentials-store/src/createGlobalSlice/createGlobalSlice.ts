@@ -1,6 +1,6 @@
 import {
-  catchError,
   equals,
+  errors,
   isSSR,
   merges,
   type OmitFuncs,
@@ -121,7 +121,7 @@ export default function createGlobalSlice<
               set,
             );
 
-            return catchError(
+            return errors.handle(
               () =>
                 middleware(() => element(...args, context), context, name, key),
               (error) => {

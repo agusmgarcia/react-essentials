@@ -1,6 +1,6 @@
 import process from "process";
 
-import { execute, getErrorMessage, getPackageJSON } from "#src/utils";
+import { errors, execute, getPackageJSON } from "#src/utils";
 
 import run from "./_run";
 
@@ -16,7 +16,7 @@ export default async function prepack(): Promise<void> {
       () => execute("cpy README.md CHANGELOG.md ../.. --cwd=.github", true),
     );
   } catch (error) {
-    console.error(getErrorMessage(error));
+    console.error(errors.getMessage(error));
     process.exit(1);
   }
 }

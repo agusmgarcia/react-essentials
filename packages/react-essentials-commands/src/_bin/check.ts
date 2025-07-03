@@ -1,6 +1,6 @@
 import process from "process";
 
-import { execute, getErrorMessage } from "#src/utils";
+import { errors, execute } from "#src/utils";
 
 import run from "./_run";
 
@@ -16,7 +16,7 @@ export default async function check(): Promise<void> {
       () => execute("tsc --pretty --noEmit", true),
     );
   } catch (error) {
-    console.error(getErrorMessage(error));
+    console.error(errors.getMessage(error));
     process.exit(1);
   }
 }

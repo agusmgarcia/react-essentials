@@ -1,7 +1,7 @@
 import {
   type AddArgumentToObject,
   type AsyncFunc,
-  catchError,
+  errors,
   type Func,
   type OmitFuncs,
 } from "@agusmgarcia/react-essentials-utils";
@@ -203,7 +203,7 @@ export default function createServerSlice<
         OmitFuncs<CreateGlobalSliceTypes.ExtractStateOf<TSlice>, "strict">
       >,
       (callback, context, slice, property) =>
-        catchError(
+        errors.handle(
           () => middleware(callback, context, slice, property),
           (error) => {
             if (property !== "reload" && property !== "loadMore") throw error;
