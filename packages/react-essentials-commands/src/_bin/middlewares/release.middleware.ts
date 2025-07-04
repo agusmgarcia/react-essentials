@@ -76,7 +76,7 @@ function getTemplate(context: Context): Record<string, any> {
           "${{ secrets.NODE_AUTH_TOKEN || secrets.GITHUB_TOKEN }}",
       },
       name: "Install dependencies",
-      run: "npm ci",
+      run: "npm ci --ignore-scripts --no-fund",
       shell: "bash",
     },
     {
@@ -240,7 +240,7 @@ function getTemplate(context: Context): Record<string, any> {
                       "${{ secrets.NODE_AUTH_TOKEN || secrets.GITHUB_TOKEN }}",
                   },
                   name: "Install dependencies for production",
-                  run: "npm ci --omit=dev",
+                  run: "npm ci --ignore-scripts --no-audit --no-fund --omit=dev",
                   shell: "bash",
                 },
                 // TODO: test if this actions finds the azure function even if it is under a monorepo

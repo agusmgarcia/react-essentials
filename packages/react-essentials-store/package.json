@@ -17,7 +17,7 @@
     "deploy": "react-essentials-commands-deploy",
     "format": "react-essentials-commands-format",
     "postpack": "react-essentials-commands-postpack",
-    "prebuild": "npm i --no-audit",
+    "prebuild": "npm i --ignore-scripts --no-audit --no-fund",
     "prepack": "react-essentials-commands-prepack",
     "regenerate": "react-essentials-commands-regenerate",
     "start": "react-essentials-commands-start",

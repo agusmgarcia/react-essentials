@@ -8,6 +8,7 @@
     "check": "turbo run check",
     "deploy": "turbo run deploy --concurrency 1",
     "format": "turbo run format",
+    "postinstall": "npm run build",
     "test": "turbo run test"
   },
   "devDependencies": {
