@@ -1,8 +1,9 @@
 import { files } from "#src/utils";
 
-import createMiddleware, { type Context } from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
-const MIDDLEWARE = createMiddleware<string>({
+const MIDDLEWARE = createFileMiddleware<string>({
   path: ".eslintrc.js",
   template: getTemplate,
   valid: ["app", "azure-func", "lib", "node"],
@@ -11,8 +12,12 @@ const MIDDLEWARE = createMiddleware<string>({
 export default async function eslintConfigMiddleware(
   context: Context,
 ): Promise<void> {
+  await Promise.all([MIDDLEWARE(context), deleteEslintConfigFiles(context)]);
+}
+
+async function deleteEslintConfigFiles(context: Context): Promise<void> {
+  if (context.command !== "regenerate") return;
   await Promise.all([
-    MIDDLEWARE(context),
     files.removeFile(".eslintrc"),
     files.removeFile(".eslintignore"),
     files.removeFile("eslint.config.js"),

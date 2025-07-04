@@ -1,8 +1,9 @@
 import { files, properties } from "#src/utils";
 
-import createMiddleware, { type Context } from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
-const MIDDLEWARE = createMiddleware<Record<string, any>>({
+const MIDDLEWARE = createFileMiddleware<Record<string, any>>({
   mapOutput: (output) =>
     properties.sort(output, [
       "name",
@@ -36,8 +37,12 @@ const MIDDLEWARE = createMiddleware<Record<string, any>>({
 export default async function releaseMiddleware(
   context: Context,
 ): Promise<void> {
+  await Promise.all([MIDDLEWARE(context), deleteWorkflowFiles(context)]);
+}
+
+async function deleteWorkflowFiles(context: Context): Promise<void> {
+  if (context.command !== "regenerate") return;
   await Promise.all([
-    MIDDLEWARE(context),
     files.removeFile(
       ".github/workflows/continuous-integration-and-deployment.yml",
     ),

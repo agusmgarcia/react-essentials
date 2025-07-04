@@ -10,9 +10,10 @@ import {
   properties,
 } from "#src/utils";
 
-import createMiddleware, { type Context } from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
-const MIDDLEWARE = createMiddleware<Record<string, any>>({
+const MIDDLEWARE = createFileMiddleware<Record<string, any>>({
   mapOutput: (output) =>
     properties.sort(output, [
       "name",
@@ -47,12 +48,16 @@ export default async function packageMiddleware(
   context: Context,
 ): Promise<void> {
   await MIDDLEWARE(context);
+  await installDependencies(context);
+}
+
+async function installDependencies(context: Context): Promise<void> {
+  if (context.command !== "regenerate") return;
+
   const fileArgs = args.get("file");
-  if (
-    context.command === "regenerate" &&
-    (!fileArgs.length || fileArgs.includes("package.json"))
-  )
-    await execute("npm i", false);
+  if (!fileArgs.length || fileArgs.includes("package.json"))
+    await execute("npm i --ignore-scripts --no-audit --no-fund", false);
+
   await files.removeFile(".npmignore");
 }
 

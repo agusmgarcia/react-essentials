@@ -1,8 +1,9 @@
 import { files, folders } from "#src/utils";
 
-import createMiddleware, { type Context } from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
-const MIDDLEWARE = createMiddleware<string>({
+const MIDDLEWARE = createFileMiddleware<string>({
   path: "jest.config.js",
   template: getTemplate,
   valid: ["app", "azure-func", "lib", "node"],
@@ -11,12 +12,16 @@ const MIDDLEWARE = createMiddleware<string>({
 export default async function jestConfigMiddleware(
   context: Context,
 ): Promise<void> {
+  await Promise.all([MIDDLEWARE(context), deleteJestConfigFiles(context)]);
+  context.defer(() => folders.removeFolder(".swc"));
+}
+
+async function deleteJestConfigFiles(context: Context): Promise<void> {
+  if (context.command !== "regenerate") return;
   await Promise.all([
-    MIDDLEWARE(context),
     files.removeFile("jest.config.mjs"),
     files.removeFile("jest.config.ts"),
   ]);
-  context.defer(() => folders.removeFolder(".swc"));
 }
 
 function getTemplate(context: Context): string {

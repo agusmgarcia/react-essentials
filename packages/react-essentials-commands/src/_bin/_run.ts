@@ -6,16 +6,7 @@ import packageJSONEssentialsCommands from "../../package.json";
 import middlewares, { type MiddlewaresTypes } from "./middlewares";
 
 export default async function run(
-  command:
-    | "build"
-    | "check"
-    | "deploy"
-    | "format"
-    | "postpack"
-    | "prepack"
-    | "regenerate"
-    | "start"
-    | "test",
+  command: MiddlewaresTypes.Context["command"],
   ...commands: AsyncFunc[]
 ): Promise<void> {
   const list = new Array<Func | AsyncFunc>();
@@ -32,16 +23,7 @@ export default async function run(
 }
 
 async function createContext(
-  command:
-    | "build"
-    | "check"
-    | "deploy"
-    | "format"
-    | "postpack"
-    | "prepack"
-    | "regenerate"
-    | "start"
-    | "test",
+  command: MiddlewaresTypes.Context["command"],
   list: (Func | AsyncFunc)[],
 ): Promise<MiddlewaresTypes.Context> {
   const packageJSON = await getPackageJSON();

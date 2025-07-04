@@ -1,8 +1,9 @@
 import { properties } from "#src/utils";
 
-import createMiddleware, { type Context } from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
-export default createMiddleware<Record<string, any>>({
+export default createFileMiddleware<Record<string, any>>({
   mapOutput: (output) =>
     properties.sort(output, [
       "extends",

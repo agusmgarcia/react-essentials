@@ -1,8 +1,9 @@
 import { files, folders, properties } from "#src/utils";
 
-import createMiddleware, { type Context } from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
-const MIDDLEWARE = createMiddleware<Record<string, any>>({
+const MIDDLEWARE = createFileMiddleware<Record<string, any>>({
   mapOutput: (output) => properties.sort(output),
   path: ".env.local",
   template: getTemplate,
@@ -16,6 +17,7 @@ export default async function envLocalMiddleware(
 }
 
 async function deleteEnvFiles(context: Context): Promise<void> {
+  if (context.command !== "regenerate") return;
   if (context.core === "app" || context.core === "node") return;
   await folders
     .readFolder(".")

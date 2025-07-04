@@ -5,33 +5,9 @@ import {
 } from "prettier";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 
-import {
-  args,
-  type AsyncFunc,
-  files,
-  folders,
-  type Func,
-  type getPackageJSON,
-} from "#src/utils";
+import { args, type AsyncFunc, files, folders, type Func } from "#src/utils";
 
-export type Context = {
-  command:
-    | "build"
-    | "check"
-    | "deploy"
-    | "format"
-    | "postpack"
-    | "prepack"
-    | "regenerate"
-    | "start"
-    | "test";
-  core: NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>;
-  defer: Func<void, [callback: Func | AsyncFunc]>;
-  essentialsCommands: boolean;
-  essentialsCommandsName: string;
-  name: string;
-  version: string;
-};
+import { type Context } from "./Middleware.types";
 
 type Options<TElement extends string | string[] | Record<string, any>> = {
   mapOutput?: Func<TElement, [input: TElement]>;
@@ -42,7 +18,7 @@ type Options<TElement extends string | string[] | Record<string, any>> = {
   valid: Context["core"][];
 };
 
-export default function createMiddleware<
+export default function createFileMiddleware<
   TElement extends string | string[] | Record<string, any>,
 >(options: Options<TElement>): AsyncFunc<void, [context: Context]> {
   return async (context) => {

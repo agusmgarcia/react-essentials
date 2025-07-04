@@ -1,6 +1,7 @@
-import createMiddleware, { type Context } from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
-export default createMiddleware<string[]>({
+export default createFileMiddleware<string[]>({
   path: ".gitignore",
   template: getTemplate,
   valid: ["app", "azure-func", "lib", "node"],

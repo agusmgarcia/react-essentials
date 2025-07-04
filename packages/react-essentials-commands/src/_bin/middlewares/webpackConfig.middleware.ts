@@ -1,8 +1,9 @@
 import { files } from "#src/utils";
 
-import createMiddleware, { type Context } from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
-const MIDDLEWARE = createMiddleware<string>({
+const MIDDLEWARE = createFileMiddleware<string>({
   path: getPath,
   template: getTemplate,
   valid: ["azure-func", "lib", "node"],
@@ -11,8 +12,12 @@ const MIDDLEWARE = createMiddleware<string>({
 export default async function webpackConfigMiddleware(
   context: Context,
 ): Promise<void> {
+  await Promise.all([MIDDLEWARE(context), deleteWebpackConfigFiles(context)]);
+}
+
+async function deleteWebpackConfigFiles(context: Context): Promise<void> {
+  if (context.command !== "regenerate") return;
   await Promise.all([
-    MIDDLEWARE(context),
     context.essentialsCommands
       ? files.removeFile("webpack.config.js")
       : files.removeFile("webpack.config.ts"),

@@ -1,6 +1,7 @@
-import createMiddleware, { type Context } from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
-export default createMiddleware<string>({
+export default createFileMiddleware<string>({
   path: "src/index.ts",
   template: getTemplate,
   valid: ["azure-func", "lib", "node"],
