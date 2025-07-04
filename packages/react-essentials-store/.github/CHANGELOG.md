@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.6](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v1.0.6)
+
+> July 4, 2025
+
+### Fixes 🎯
+
+- adjust install process
+
 ## [v1.0.5](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v1.0.5)
 
 > July 4, 2025
