@@ -5,7 +5,7 @@ import {
 } from "prettier";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 
-import { args, type AsyncFunc, files, folders, type Func } from "#src/utils";
+import { type AsyncFunc, files, folders, type Func } from "#src/utils";
 
 import { type Context } from "./Middleware.types";
 
@@ -38,11 +38,10 @@ export default function createFileMiddleware<
       return;
     }
 
-    const fileArgs = args.get("file");
-
     const output =
       context.command === "regenerate" &&
-      (!fileArgs.length || fileArgs.includes(path))
+      (!context.filesToRegenerate.length ||
+        context.filesToRegenerate.includes(path))
         ? await options.template(context)
         : context.command === "format"
           ? await files

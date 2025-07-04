@@ -18,6 +18,7 @@ export default async function jestConfigMiddleware(
 
 async function deleteJestConfigFiles(context: Context): Promise<void> {
   if (context.command !== "regenerate") return;
+  if (!!context.filesToRegenerate.length) return;
   await Promise.all([
     files.removeFile("jest.config.mjs"),
     files.removeFile("jest.config.ts"),

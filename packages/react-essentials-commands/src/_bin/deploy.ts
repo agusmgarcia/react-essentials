@@ -4,8 +4,6 @@ import { args, errors, execute, git, npm, question } from "#src/utils";
 
 export default async function deploy(): Promise<void> {
   try {
-    const argsValue = args.validate("no-tag", "interactive", "filter");
-
     if (!(await git.isInsideRepository())) return;
 
     if (!(await git.isCurrentBranchSynced()))
@@ -34,16 +32,10 @@ export default async function deploy(): Promise<void> {
     await execute("npm run regenerate -- --file=.github/CHANGELOG.md", true);
     await git.deleteTag(`${newTag}-temp`);
     await git.createCommit("chore: bump package version", { amend: true });
-    if (argsValue.getBoolean("no-tag")) return;
+    if (args.getBoolean("no-tag")) return;
     await git.createTag(newTag);
     await checkoutTagAndDeleteCurrentBranch(newTag);
-    await createNextRelease(
-      scope,
-      typeOfNewVersion,
-      newTag,
-      lastTagMerged,
-      argsValue.getBoolean("interactive"),
-    );
+    await createNextRelease(scope, typeOfNewVersion, newTag, lastTagMerged);
   } catch (error) {
     console.error(errors.getMessage(error));
     process.exit(1);
@@ -148,7 +140,6 @@ async function createNextRelease(
   typeOfNewVersion: NonNullable<ReturnType<typeof findTypeOfNewVersion>>,
   newTag: string,
   lastTagMerged: string | undefined,
-  interactive: boolean,
 ): Promise<void> {
   if (!lastTagMerged) return;
   if (typeOfNewVersion === "major") return;
@@ -189,9 +180,8 @@ async function createNextRelease(
   if (!nextTagInfo) return;
   const nextTag = `v${nextTagInfo.major}.${nextTagInfo.minor}.${nextTagInfo.patch}`;
 
-  if (interactive) {
+  if (args.getBoolean("interactive")) {
     const response = await question(`Merge changes into ${nextTag}? (Y/n)`);
-
     if (response === "n") {
       console.log("Deploy finished!");
       return;
@@ -201,7 +191,7 @@ async function createNextRelease(
   await git.checkout(nextTag);
   await git.cherryPick(lastTagMerged, `${newTag}~1`);
 
-  if (interactive) {
+  if (args.getBoolean("interactive")) {
     const response = await question(`Deploy changes into ${nextTag}? (Y/n)`);
     if (response === "n") {
       console.log(

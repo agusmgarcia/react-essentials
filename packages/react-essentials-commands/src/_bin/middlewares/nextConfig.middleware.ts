@@ -20,6 +20,7 @@ export default async function nextConfigMiddleware(
 
 async function deleteNextConfigFiles(context: Context): Promise<void> {
   if (context.command !== "regenerate") return;
+  if (!!context.filesToRegenerate.length) return;
   await Promise.all([
     files.removeFile("next.config.mjs"),
     files.removeFile("next.config.ts"),

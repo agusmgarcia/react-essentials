@@ -18,6 +18,7 @@ export default async function envLocalMiddleware(
 
 async function deleteEnvFiles(context: Context): Promise<void> {
   if (context.command !== "regenerate") return;
+  if (!!context.filesToRegenerate.length) return;
   if (context.core === "app" || context.core === "node") return;
   await folders
     .readFolder(".")

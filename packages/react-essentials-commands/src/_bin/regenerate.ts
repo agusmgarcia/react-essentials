@@ -10,12 +10,11 @@ export default async function regenerate(): Promise<void> {
     if (!core)
       throw new Error("'core' property is missing within the 'package.json'");
 
-    const argsValue = args.validate("file", "filter");
-    const file = argsValue.get("file");
+    const file = args.getStrings("file");
 
-    console.log("Regenerating files...");
     await run(
       "regenerate",
+      () => execute("echo Regenerating files...", true),
       () =>
         !file.length
           ? execute(`del bin dist${core !== "app" ? " pages" : ""} *.tgz`, true)

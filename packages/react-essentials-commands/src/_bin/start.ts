@@ -7,9 +7,7 @@ import run from "./_run";
 export default async function start(): Promise<void> {
   try {
     const core = await getPackageJSON().then((json) => json.core);
-
-    const argsValue = args.validate("filter", "port", "production");
-    const port = argsValue.getString("port");
+    const port = args.getString("port");
 
     if (core === "app")
       await run("start", () =>

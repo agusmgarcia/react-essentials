@@ -42,6 +42,7 @@ export default async function releaseMiddleware(
 
 async function deleteWorkflowFiles(context: Context): Promise<void> {
   if (context.command !== "regenerate") return;
+  if (!!context.filesToRegenerate.length) return;
   await Promise.all([
     files.removeFile(
       ".github/workflows/continuous-integration-and-deployment.yml",

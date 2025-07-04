@@ -17,6 +17,7 @@ export default async function webpackConfigMiddleware(
 
 async function deleteWebpackConfigFiles(context: Context): Promise<void> {
   if (context.command !== "regenerate") return;
+  if (!!context.filesToRegenerate.length) return;
   await Promise.all([
     context.essentialsCommands
       ? files.removeFile("webpack.config.js")

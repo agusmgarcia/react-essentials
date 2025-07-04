@@ -15,6 +15,7 @@ export type Context = {
   defer: Func<void, [callback: Func | AsyncFunc]>;
   essentialsCommands: boolean;
   essentialsCommandsName: string;
+  filesToRegenerate: string[];
   name: string;
   version: string;
 };
