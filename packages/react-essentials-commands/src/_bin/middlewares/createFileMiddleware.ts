@@ -38,7 +38,7 @@ export default function createFileMiddleware<
       return;
     }
 
-    const fileArgs = args.get("file");
+    const fileArgs = args.getStrings("file");
 
     const output =
       context.command === "regenerate" &&

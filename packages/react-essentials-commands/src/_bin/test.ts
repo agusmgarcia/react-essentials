@@ -6,9 +6,8 @@ import run from "./_run";
 
 export default async function test(): Promise<void> {
   try {
-    const argsValue = args.validate("pattern", "filter", "watch");
-    const watch = argsValue.getBoolean("watch");
-    const pattern = argsValue.get("pattern");
+    const watch = args.getBoolean("watch");
+    const pattern = args.getStrings("pattern");
 
     await run("test", () =>
       execute(

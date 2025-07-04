@@ -54,7 +54,7 @@ export default async function packageMiddleware(
 async function installDependencies(context: Context): Promise<void> {
   if (context.command !== "regenerate") return;
 
-  const fileArgs = args.get("file");
+  const fileArgs = args.getStrings("file");
   if (!fileArgs.length || fileArgs.includes("package.json"))
     await execute("npm i --ignore-scripts --no-audit --no-fund", false);
 
