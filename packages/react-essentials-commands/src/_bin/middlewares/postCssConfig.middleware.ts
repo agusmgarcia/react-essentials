@@ -17,6 +17,7 @@ export default async function postCssConfigMiddleware(
 
 async function deletePostCSSConfigFiles(context: Context): Promise<void> {
   if (context.command !== "regenerate") return;
+  if (!!context.filesToRegenerate.length) return;
   await Promise.all([
     files.removeFile("postcss.config.mjs"),
     files.removeFile("postcss.config.ts"),

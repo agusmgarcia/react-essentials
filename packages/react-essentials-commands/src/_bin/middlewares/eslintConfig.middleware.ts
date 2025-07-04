@@ -17,6 +17,7 @@ export default async function eslintConfigMiddleware(
 
 async function deleteEslintConfigFiles(context: Context): Promise<void> {
   if (context.command !== "regenerate") return;
+  if (!!context.filesToRegenerate.length) return;
   await Promise.all([
     files.removeFile(".eslintrc"),
     files.removeFile(".eslintignore"),

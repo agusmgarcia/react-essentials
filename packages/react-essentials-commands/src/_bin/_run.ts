@@ -1,6 +1,12 @@
 import path from "path";
 
-import { type AsyncFunc, type Func, getPackageJSON, git } from "#src/utils";
+import {
+  args,
+  type AsyncFunc,
+  type Func,
+  getPackageJSON,
+  git,
+} from "#src/utils";
 
 import packageJSONEssentialsCommands from "../../package.json";
 import middlewares, { type MiddlewaresTypes } from "./middlewares";
@@ -45,6 +51,7 @@ async function createContext(
     defer: (callback) => list.push(callback),
     essentialsCommands: packageJSON.name === packageJSONEssentialsCommands.name,
     essentialsCommandsName: packageJSONEssentialsCommands.name,
+    filesToRegenerate: args.getStrings("file"),
     name,
     version: packageJSON.version || "0.0.0",
   };
