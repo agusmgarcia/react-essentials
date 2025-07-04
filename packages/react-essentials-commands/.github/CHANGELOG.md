@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.9](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.9)
+
+> July 4, 2025
+
+### Fixes 🎯
+
+- prevent regenerating files when --file arg is passed
+- **args**: stop validating args
+- prevent regenerating files outside regenerate phase
+
 ## [v1.0.8](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.8)
 
 > July 4, 2025
