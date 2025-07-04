@@ -22,8 +22,6 @@ import tailwindConfigMiddleware from "./tailwindConfig.middleware";
 import tsConfigMiddleware from "./tsConfig.middleware";
 import webpackConfigMiddleware from "./webpackConfig.middleware";
 
-export type * as MiddlewaresTypes from "./createMiddleware";
-
 const MIDDLEWARES = [
   appMiddleware,
   appCSSMiddleware,
@@ -50,4 +48,5 @@ const MIDDLEWARES = [
   webpackConfigMiddleware,
 ];
 
+export type * as MiddlewaresTypes from "./Middleware.types";
 export default MIDDLEWARES;

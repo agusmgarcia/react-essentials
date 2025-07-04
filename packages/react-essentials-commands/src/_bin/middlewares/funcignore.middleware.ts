@@ -1,6 +1,6 @@
-import createMiddleware from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
 
-export default createMiddleware<string[]>({
+export default createFileMiddleware<string[]>({
   path: ".funcignore",
   template: getTemplate,
   valid: ["azure-func"],

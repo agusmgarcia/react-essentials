@@ -3,9 +3,9 @@ import process from "process";
 
 import { git, npm } from "#src/utils";
 
-import createMiddleware from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
 
-export default createMiddleware<string>({
+export default createFileMiddleware<string>({
   path: ".github/CHANGELOG.md",
   template: getTemplate,
   valid: ["app", "azure-func", "lib", "node"],

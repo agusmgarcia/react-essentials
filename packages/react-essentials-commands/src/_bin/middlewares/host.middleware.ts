@@ -1,8 +1,8 @@
 import { properties } from "#src/utils";
 
-import createMiddleware from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
 
-export default createMiddleware<Record<string, any>>({
+export default createFileMiddleware<Record<string, any>>({
   mapOutput: (output) => properties.sort(output, ["version"]),
   path: "host.json",
   template: getTemplate,

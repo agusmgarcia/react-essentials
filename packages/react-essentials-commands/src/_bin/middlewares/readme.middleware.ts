@@ -1,8 +1,9 @@
 import { capitalize } from "#src/utils";
 
-import createMiddleware, { type Context } from "./createMiddleware";
+import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
-export default createMiddleware<string>({
+export default createFileMiddleware<string>({
   path: ".github/README.md",
   template: getTemplate,
   valid: ["app", "azure-func", "lib", "node"],
