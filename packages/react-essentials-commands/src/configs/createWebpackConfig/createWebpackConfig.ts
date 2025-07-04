@@ -61,8 +61,8 @@ export default async function createWebpackConfig(
     return [
       {
         entry: {
-          index: path.resolve("src", "index.ts"),
           ...functions,
+          index: path.resolve("src", "index.ts"),
         },
         externals: [
           ...Object.keys(packageJSON.dependencies || {}),
@@ -125,7 +125,7 @@ export default async function createWebpackConfig(
       {
         entry:
           configs?.omit !== "web"
-            ? { index: path.resolve("src", "index.ts"), ...outs }
+            ? { ...outs, index: path.resolve("src", "index.ts") }
             : {},
         externals: [
           ...Object.keys(packageJSON.peerDependencies || {}),
@@ -210,7 +210,7 @@ export default async function createWebpackConfig(
       {
         entry:
           configs?.omit !== "node"
-            ? { index: path.resolve("src", "index.ts"), ...outs }
+            ? { ...outs, index: path.resolve("src", "index.ts") }
             : {},
         externals: [
           ...Object.keys(packageJSON.peerDependencies || {}),
