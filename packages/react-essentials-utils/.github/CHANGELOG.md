@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.8](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v1.0.8)
+
+> July 4, 2025
+
+### Fixes 🎯
+
+- adjust install process
+
 ## [v1.0.7](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v1.0.7)
 
 > July 3, 2025
