@@ -33,7 +33,12 @@ export default function createFileMiddleware<
       context.defer(() => folders.removeFolderIfEmpty(folderPath));
     }
 
-    if (!options.valid.includes(context.core)) {
+    if (
+      context.command === "regenerate" &&
+      (!context.filesToRegenerate.length ||
+        context.filesToRegenerate.includes(path)) &&
+      !options.valid.includes(context.core)
+    ) {
       await files.removeFile(path);
       return;
     }
