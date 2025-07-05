@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.10](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.10)
+
+> July 5, 2025
+
+### Fixes 🎯
+
+- **release.yml**: adjust sorting options
+- prevent deleting file when regenerating phase doesn't include it
+
 ## [v1.0.9](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.9)
 
 > July 4, 2025
