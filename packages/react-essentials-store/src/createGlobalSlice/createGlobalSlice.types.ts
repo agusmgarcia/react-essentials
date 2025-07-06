@@ -31,35 +31,6 @@ export type ExtractStateOf<TSlice extends SliceOf<any, any>> =
   TSlice extends SliceOf<any, infer TState> ? TState : never;
 
 /**
- * Represents the context provided to subscription callbacks for a slice.
- *
- * @template TSlice - The type of the main slice.
- *
- * @property get - Retrieves the current state of the main slice.
- * @property regenerate - A function to regenerate the subscription context, allowing for dynamic updates.
- * @property signal - An AbortSignal used to manage the lifecycle and cancellation of subscriptions.
- */
-export type SubscribeContext<
-  TSlice extends SliceOf<any, any>,
-  TOtherSlices = {},
-> = {
-  /**
-   * A function to get the current state of the slice and other slices.
-   */
-  get: Func<OmitProperty<TSlice & TOtherSlices, "__internal__", "shallow">>;
-
-  /**
-   * A function to regenerate the subscription context.
-   */
-  regenerate: Func<SubscribeContext<TSlice, TOtherSlices>>;
-
-  /**
-   * An abort signal to manage the lifecycle of subscriptions.
-   */
-  signal: AbortSignal;
-};
-
-/**
  * Represents the context provided to a slice, including methods for getting and setting state,
  * and an abort signal for managing subscriptions.
  *
@@ -104,16 +75,44 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
  *
  * @template TSlice - The slice type for which the subscription is created.
  * @template TOtherSlices - The other slices that may be combined with the current slice.
+ * @template TContext - The context type that provides access to the slice's state and utilities.
  *
- * @param listener - A function to be called when the state changes, receiving the current context.
+ * @param listener - A function to be called when the state changes, receiving the selection and the current context.
  * @param selector - An optional function to select a specific part of the state.
  *
  * @returns A function to unsubscribe the listener.
  */
-export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
-  listener: Func<void, [context: SubscribeContext<TSlice, TOtherSlices>]>,
-  selector?: Func<any, [state: OmitFuncs<TSlice & TOtherSlices, "shallow">]>,
+export type Subscribe<
+  TSlice extends SliceOf<any, any>,
+  TOtherSlices,
+  TContext,
+> = <TSelection>(
+  listener: Func<void, [context: TContext]>,
+  selector?: Func<
+    TSelection,
+    [state: OmitFuncs<TSlice & TOtherSlices, "shallow">]
+  >,
+  equality?: Func<boolean, [selection: TSelection, prevSelection: TSelection]>,
 ) => Func;
+
+/**
+ * Represents a factory function that creates a slice's state, receiving the context and a subscription function.
+ *
+ * @template TSlice - The slice type being created.
+ * @template TOtherSlices - The other slices that may be combined with the current slice.
+ *
+ * @param subscribe - A function to subscribe to state changes, which provides the context.
+ *
+ * @returns A function that takes the subscription function and returns the factory output.
+ */
+export type Factory<TSlice extends SliceOf<any, any>, TOtherSlices> = Func<
+  AddArgumentToObject<
+    OmitFuncs<ExtractStateOf<TSlice>, "strict">,
+    Context<TSlice, TOtherSlices>,
+    "strict"
+  >,
+  [subscribe: Subscribe<TSlice, TOtherSlices, Context<TSlice, TOtherSlices>>]
+>;
 
 /**
  * Represents the input required to create a slice, including its name and a factory function.
@@ -122,18 +121,11 @@ export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
  * @template TOtherSlices - The other slices that may be combined with the current slice.
  *
  * @param name - The name of the slice.
- * @param sliceFactory - A factory function to create the slice's state, receiving the context and subscription function.
+ * @param factory - A factory function to create the slice's state, receiving the context and subscription function.
  */
 export type Input<TSlice extends SliceOf<any, any>, TOtherSlices> = [
   name: ExtractNameOf<TSlice>,
-  sliceFactory: Func<
-    AddArgumentToObject<
-      ExtractStateOf<TSlice>,
-      Context<TSlice, TOtherSlices>,
-      "strict"
-    >,
-    [subscribe: Subscribe<TSlice, TOtherSlices>]
-  >,
+  factory: Factory<TSlice, TOtherSlices>,
 ];
 
 /**
@@ -161,7 +153,6 @@ type InitialState<TSlice extends SliceOf<any, any>, TInitialState> =
  * @param callback - The original function to be executed, which can be called, replaced, or wrapped by the middleware.
  * @param context - The context object associated with the slice, providing access to state and utilities.
  * @param slice - The name of the slice being operated on.
- * @param property - The name of the function being called within the slice.
  *
  * @returns The result of the callback or any value as determined by the middleware logic.
  */
@@ -171,7 +162,6 @@ export type Middleware<TSlice extends SliceOf<any, any>, TOtherSlices> = Func<
     callback: Func<any>,
     context: Context<TSlice, TOtherSlices>,
     slice: keyof TOtherSlices,
-    property: string,
   ]
 >;
 
