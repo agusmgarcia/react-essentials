@@ -68,13 +68,12 @@ export default function createStore<
       callback,
       context,
       slice,
-      property,
     ) {
       let result = callback;
 
       for (let i = middlewares.length - 1; i >= 0; i--) {
         const middleware = middlewares[i];
-        result = middleware.bind(undefined, result, context, slice, property);
+        result = middleware.bind(undefined, result, context, slice);
       }
 
       return result();

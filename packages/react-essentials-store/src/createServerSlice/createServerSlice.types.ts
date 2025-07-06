@@ -4,13 +4,12 @@ import {
   type Func,
   type Merge,
   type OmitFuncs,
-  type OmitProperty,
 } from "@agusmgarcia/react-essentials-utils";
 
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
 
 /**
- * Represents a slice of state with a specific name, data, selected properties, and extra methods.
+ * Represents a slice of state with a specific name, data, selected properties and extra methods.
  *
  * @template TName - The name of the slice.
  * @template TData - The type of the data managed by the slice.
@@ -72,35 +71,6 @@ export type ExtractExtraMethodsOf<TSlice extends SliceOf<any, any, any, any>> =
     : never;
 
 /**
- * Represents the context provided to subscription callbacks for a slice.
- *
- * @template TSlice - The type of the main slice.
- *
- * @property get - Retrieves the current state of the main slice.
- * @property regenerate - A function to regenerate the subscription context, allowing for dynamic updates.
- * @property signal - An AbortSignal used to manage the lifecycle and cancellation of subscriptions.
- */
-export type SubscribeContext<
-  TSlice extends SliceOf<any, any, any, any>,
-  TOtherSlices = {},
-> = {
-  /**
-   * A function to get the current state of the slice and other slices.
-   */
-  get: Func<OmitProperty<TSlice & TOtherSlices, "__internal__", "shallow">>;
-
-  /**
-   * A function to regenerate the subscription context.
-   */
-  regenerate: Func<SubscribeContext<TSlice, TOtherSlices>>;
-
-  /**
-   * An abort signal to manage the lifecycle of subscriptions.
-   */
-  signal: AbortSignal;
-};
-
-/**
  * Represents the context provided to a slice, including methods for getting and setting state,
  * and an abort signal for managing subscriptions.
  *
@@ -110,18 +80,10 @@ export type SubscribeContext<
 export type Context<
   TSlice extends SliceOf<any, any, any, any>,
   TOtherSlices = {},
-> = {
-  /**
-   * A function to get the current state of the slice and other slices, excluding functions.
-   */
-  get: Func<
-    OmitProperty<
-      OmitFuncs<TSlice, "shallow"> & TOtherSlices,
-      "__internal__",
-      "shallow"
-    >
-  >;
-
+> = Omit<
+  CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+  "regenerate" | "set"
+> & {
   /**
    * Asynchronously reloads the slice data, optionally accepting partial selected arguments.
    */
@@ -146,11 +108,6 @@ export type Context<
     void,
     [data: React.SetStateAction<ExtractDataOf<TSlice> | undefined>]
   >;
-
-  /**
-   * An abort signal to manage the lifecycle of subscriptions.
-   */
-  signal: AbortSignal;
 };
 
 /**
@@ -158,6 +115,7 @@ export type Context<
  *
  * @template TSlice - The slice type for which the subscription is created.
  * @template TOtherSlices - The other slices that may be combined with the current slice.
+ * @template TContext - The context type that provides access to the slice's state and utilities.
  *
  * @param listener - A function to be called when the state changes, receiving the current context.
  * @param selector - An optional function to select a specific part of the state.
@@ -167,10 +125,8 @@ export type Context<
 export type Subscribe<
   TSlice extends SliceOf<any, any, any, any>,
   TOtherSlices,
-> = (
-  listener: Func<void, [context: SubscribeContext<TSlice, TOtherSlices>]>,
-  selector?: Func<any, [state: OmitFuncs<TSlice & TOtherSlices, "shallow">]>,
-) => Func;
+  TContext,
+> = CreateGlobalSliceTypes.Subscribe<TSlice, TOtherSlices, TContext>;
 
 /**
  * Represents an asynchronous function responsible for fetching data for a specific slice.
@@ -212,8 +168,9 @@ export type Selector<
 /**
  * A function type for creating additional methods for a slice, with access to the slice's context.
  *
- * @template TSlice - The slice type for which the factory is being created.
- * @template TOtherSlices - Additional slices that may be included in the context.
+ * @template TFactoryOutput - The type of the output produced by the factory function.
+ * @template TContext - The context type that provides access to the slice's state and utilities.
+ * @template TSubscribe - The type of the subscription function for the slice.
  *
  * @param subscribe - A function to subscribe to changes in the slice's context.
  * @returns An object containing the extra methods for the slice, with the slice's context added as an argument.
@@ -227,7 +184,7 @@ export type Factory<
     Context<TSlice, TOtherSlices>,
     "strict"
   >,
-  [subscribe: Subscribe<TSlice, TOtherSlices>]
+  [subscribe: Subscribe<TSlice, TOtherSlices, Context<TSlice, TOtherSlices>>]
 >;
 
 /**
@@ -284,3 +241,25 @@ export type Output<
   TOtherSlices,
   ExtractDataOf<TSlice> | undefined
 >;
+
+/**
+ * Represents an error thrown by server slice operations.
+ *
+ * @remarks
+ * This error is thrown when a server-side operation such as `loadMore` or `reload` fails.
+ *
+ * @property source - The source of the error, either "loadMore" or "reload".
+ * @property inline - Additional information about the error.
+ *
+ * @constructor
+ * @param source - The source of the error.
+ * @param inline - Additional information about the error.
+ */
+export class Error extends globalThis.Error {
+  readonly inline: unknown;
+
+  constructor(inline: unknown) {
+    super(`A server error ocurred. Check 'inline' for more information`);
+    this.inline = inline;
+  }
+}

@@ -1,6 +1,7 @@
 import {
   equals,
   errors,
+  type Func,
   isSSR,
   merges,
   type OmitFuncs,
@@ -16,7 +17,6 @@ import {
   type Output,
   type SliceOf,
   type Subscribe,
-  type SubscribeContext,
 } from "./createGlobalSlice.types";
 
 /**
@@ -57,44 +57,62 @@ export default function createGlobalSlice<
     const controllerProvider = new AbortControllerProvider();
     const name = input[0];
 
-    const subscribe: Subscribe<TSlice, TOtherSlices> = (listener, selector) => {
+    const enhancedMiddleware = (
+      callback: Func,
+      context: Context<TSlice, TOtherSlices>,
+    ) =>
+      errors.handle(
+        () => middleware(callback, context, name),
+        (error) => {
+          if (context.signal.aborted) return;
+          throw error;
+        },
+      );
+
+    const subscribe: Subscribe<
+      TSlice,
+      TOtherSlices,
+      Context<TSlice, TOtherSlices>
+    > = (listener, selector, equality) => {
       let handler: NodeJS.Timeout;
 
       const unsubscribe = store.subscribe((state, prevState) => {
         const selection = !!selector
           ? selector(state as OmitFuncs<TSlice & TOtherSlices, "shallow">)
-          : ({} as ReturnType<NonNullable<typeof selector>>);
+          : undefined;
 
         const prevSelection = !!selector
           ? selector(prevState as OmitFuncs<TSlice & TOtherSlices, "shallow">)
-          : ({} as ReturnType<NonNullable<typeof selector>>);
+          : undefined;
 
-        if (equals.shallow(selection, prevSelection, 2)) return;
+        if (
+          !!equality
+            ? equality(selection!, prevSelection!)
+            : equals.shallow(selection, prevSelection)
+        )
+          return;
 
         clearTimeout(handler);
-        listener(
-          buildContext<TSlice, TOtherSlices>(
+
+        const context = buildContext<TSlice, TOtherSlices>(
+          name,
+          controllerProvider,
+          get,
+          set,
+        );
+        enhancedMiddleware(() => listener(context), context);
+      });
+
+      if (!isSSR()) {
+        handler = setTimeout(() => {
+          const context = buildContext<TSlice, TOtherSlices>(
             name,
             controllerProvider,
             get,
             set,
-          ) as SubscribeContext<TSlice, TOtherSlices>,
-        );
-      });
-
-      if (!isSSR()) {
-        handler = setTimeout(
-          () =>
-            listener(
-              buildContext<TSlice, TOtherSlices>(
-                name,
-                controllerProvider,
-                get,
-                set,
-              ) as SubscribeContext<TSlice, TOtherSlices>,
-            ),
-          0,
-        );
+          );
+          enhancedMiddleware(() => listener(context), context);
+        }, 0);
       }
 
       return unsubscribe;
@@ -121,14 +139,7 @@ export default function createGlobalSlice<
               set,
             );
 
-            return errors.handle(
-              () =>
-                middleware(() => element(...args, context), context, name, key),
-              (error) => {
-                if (context.signal.aborted) return;
-                throw error;
-              },
-            );
+            return enhancedMiddleware(() => element(...args, context), context);
           };
         }
 

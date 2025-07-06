@@ -1,5 +1,4 @@
 import {
-  type AddArgumentToObject,
   type AsyncFunc,
   errors,
   type Func,
@@ -11,15 +10,14 @@ import createGlobalSlice, {
 } from "../createGlobalSlice";
 import {
   type Context,
+  Error,
   type ExtractDataOf,
-  type ExtractExtraMethodsOf,
   type ExtractNameOf,
   type ExtractSelectedOf,
   type Input,
   type Output,
   type SliceOf,
   type Subscribe,
-  type SubscribeContext,
 } from "./createServerSlice.types";
 
 /**
@@ -81,7 +79,7 @@ export default function createServerSlice<
 
         const selected = !!selector
           ? selector(context.get() as OmitFuncs<TOtherSlices, "shallow">)
-          : ({} as ExtractSelectedOf<TSlice>);
+          : (undefined as ExtractSelectedOf<TSlice>);
 
         const data = await fetcher(
           { ...selected, ...args },
@@ -101,7 +99,8 @@ export default function createServerSlice<
           error: undefined,
           loading: false,
         }));
-        throw error;
+
+        throw new Error(error);
       }
     }
 
@@ -124,56 +123,46 @@ export default function createServerSlice<
     }
 
     function __internal__(): ExtractDataOf<TSlice> {
-      throw new Error("This method is for internal purposes");
+      throw new globalThis.Error("This method is for internal purposes");
     }
 
     const result = createGlobalSlice<TSlice, TOtherSlices>(
       name,
       (subscribe) => {
         subscribe(
-          (context) => context.get()[name].reload(undefined),
-          selector as Parameters<Subscribe<TSlice, TOtherSlices>>[1],
+          (context) => reload(undefined, context),
+          selector as Parameters<
+            Subscribe<TSlice, TOtherSlices, Context<TSlice, TOtherSlices>>
+          >[1],
         );
 
-        const serverSubscribe: Subscribe<TSlice, TOtherSlices> = (
-          listener,
-          selector,
-        ) =>
+        const serverSubscribe: Subscribe<
+          TSlice,
+          TOtherSlices,
+          Context<TSlice, TOtherSlices>
+        > = (listener, selector, equality) =>
           subscribe(
-            (context) =>
-              listener(
-                buildContext(loadMore, reload, context) as SubscribeContext<
-                  TSlice,
-                  TOtherSlices
-                >,
-              ),
+            (context) => listener(buildContext(loadMore, reload, context)),
             selector,
+            equality,
           );
 
-        const serverExtraMethods =
-          factory?.(serverSubscribe) ||
-          ({} as AddArgumentToObject<
-            ExtractExtraMethodsOf<TSlice>,
-            Context<TSlice, TOtherSlices>,
-            "strict"
-          >);
+        const serverExtraMethods = factory?.(serverSubscribe);
 
-        const extraMethods = Object.keys(serverExtraMethods).reduce(
-          (result, key) => {
-            const element = serverExtraMethods[key];
-            result[key] = (...args: any[]) =>
-              element(
-                ...args.slice(0, -1),
-                buildContext(loadMore, reload, args.at(-1)),
-              );
-            return result;
-          },
-          {} as AddArgumentToObject<
-            ExtractExtraMethodsOf<TSlice>,
-            CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
-            "strict"
-          >,
-        );
+        const extraMethods = !!serverExtraMethods
+          ? Object.keys(serverExtraMethods).reduce(
+              (result, key) => {
+                const element = serverExtraMethods[key];
+                result[key] = (...args: any[]) =>
+                  element(
+                    ...args.slice(0, -1),
+                    buildContext(loadMore, reload, args.at(-1)),
+                  );
+                return result;
+              },
+              {} as Record<string, any>,
+            )
+          : undefined;
 
         return {
           ...extraMethods,
@@ -183,11 +172,7 @@ export default function createServerSlice<
           loading: true,
           loadMore,
           reload,
-        } as AddArgumentToObject<
-          CreateGlobalSliceTypes.ExtractStateOf<TSlice>,
-          CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
-          "strict"
-        >;
+        } as ReturnType<CreateGlobalSliceTypes.Factory<TSlice, TOtherSlices>>;
       },
     );
 
@@ -202,12 +187,13 @@ export default function createServerSlice<
         ExtractNameOf<TSlice>,
         OmitFuncs<CreateGlobalSliceTypes.ExtractStateOf<TSlice>, "strict">
       >,
-      (callback, context, slice, property) =>
+      (callback, context, slice) =>
         errors.handle(
-          () => middleware(callback, context, slice, property),
+          () => middleware(callback, context, slice),
           (error) => {
-            if (property !== "reload" && property !== "loadMore") throw error;
-            context.set((prevState) => ({ ...prevState, error }));
+            if (!(error instanceof Error)) throw error;
+            const message = errors.getMessage(error.inline);
+            context.set((prevState) => ({ ...prevState, error: message }));
           },
         ),
     );
@@ -229,11 +215,8 @@ function buildContext<TSlice extends SliceOf<any, any, any, any>, TOtherSlices>(
       context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
     ]
   >,
-  context:
-    | CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>
-    | CreateGlobalSliceTypes.SubscribeContext<TSlice, TOtherSlices>,
+  context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
 ): Context<TSlice, TOtherSlices> {
-  context = context as CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>;
   return {
     get: context.get,
     loadMore: (...args) => loadMore(...args, context),
