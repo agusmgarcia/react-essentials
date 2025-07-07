@@ -4,6 +4,11 @@ export {
 } from "./createGlobalSlice";
 
 export {
+  type CreateLocalStorageSliceTypes,
+  default as createLocalStorageSlice,
+} from "./createLocalStorageSlice";
+
+export {
   type CreateServerSliceTypes,
   default as createServerSlice,
 } from "./createServerSlice";
