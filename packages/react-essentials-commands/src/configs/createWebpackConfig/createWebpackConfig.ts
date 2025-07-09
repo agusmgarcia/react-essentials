@@ -93,7 +93,10 @@ export default async function createWebpackConfig(
           umdNamedDefine: true,
         },
         resolve: {
-          alias: { "#src": path.resolve("src") },
+          alias: {
+            "#src": path.resolve("src"),
+            ...configs?.alias,
+          },
           extensions: [".js", ".ts"],
         },
         target: "node",
@@ -172,7 +175,12 @@ export default async function createWebpackConfig(
         },
         plugins: [new MiniCssExtractPlugin()],
         resolve: {
-          alias: { "#src": path.resolve("src") },
+          alias: {
+            "#src": path.resolve("src"),
+            ...(typeof configs?.alias === "function"
+              ? configs.alias("web")
+              : configs?.alias),
+          },
           extensions: [".js", ".jsx", ".ts", ".tsx"],
           fallback: {
             assert: false,
@@ -258,7 +266,12 @@ export default async function createWebpackConfig(
         },
         plugins: [new MiniCssExtractPlugin()],
         resolve: {
-          alias: { "#src": path.resolve("src") },
+          alias: {
+            "#src": path.resolve("src"),
+            ...(typeof configs?.alias === "function"
+              ? configs.alias("node")
+              : configs?.alias),
+          },
           extensions: [".js", ".jsx", ".ts", ".tsx"],
         },
         target: "node",
@@ -331,7 +344,12 @@ export default async function createWebpackConfig(
           }),
         ],
         resolve: {
-          alias: { "#src": path.resolve("src") },
+          alias: {
+            "#src": path.resolve("src"),
+            ...(typeof configs?.alias === "function"
+              ? configs.alias("binaries")
+              : configs?.alias),
+          },
           extensions: [".js", ".jsx", ".ts", ".tsx"],
         },
         target: "node",
@@ -386,7 +404,10 @@ export default async function createWebpackConfig(
         umdNamedDefine: true,
       },
       resolve: {
-        alias: { "#src": path.resolve("src") },
+        alias: {
+          "#src": path.resolve("src"),
+          ...configs?.alias,
+        },
         extensions: [".js", ".ts"],
       },
       target: "node",
