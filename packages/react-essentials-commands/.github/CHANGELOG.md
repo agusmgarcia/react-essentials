@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.11](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.11)
+
+> July 9, 2025
+
+### Fixes 🎯
+
+- **createWebpackConfig**: add alias option
+- **createWebpackConfig**: add react/jsx-runtime as external
+
 ## [v1.0.10](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.10)
 
 > July 5, 2025
