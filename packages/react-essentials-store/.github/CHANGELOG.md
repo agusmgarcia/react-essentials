@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.8](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v1.0.8)
+
+> July 9, 2025
+
+### Fixes 🎯
+
+- add zustand/middleware as external
+
 ## [v1.0.7](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v1.0.7)
 
 > July 8, 2025
