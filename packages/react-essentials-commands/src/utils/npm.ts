@@ -46,15 +46,3 @@ export async function getVersion(
     .then((result) => result.at(-1))
     .catch(() => undefined);
 }
-
-export async function isDependencyInstalled(
-  dependency: string,
-  options?: { peer?: true },
-): Promise<boolean> {
-  return await execute(
-    `npm list -p${!!options?.peer ? " --omit=dev --omit=optional" : ""} ${dependency}`,
-    false,
-  )
-    .then((result) => result.replace(EOL, ""))
-    .then((result) => !!result);
-}
