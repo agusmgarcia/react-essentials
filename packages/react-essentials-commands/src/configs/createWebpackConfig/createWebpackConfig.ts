@@ -4,7 +4,7 @@ import getCustomTransformers from "ts-transform-paths";
 import { default as webpack } from "webpack";
 
 import packageJSONEssentialsCommands from "../../../package.json";
-import { folders, getPackageJSON, npm } from "../../utils"; // TODO: see how to convert it into #src/utils
+import { folders, getPackageJSON } from "../../utils"; // TODO: see how to convert it into #src/utils
 import { type Input, type Output } from "./createWebpackConfig.types";
 
 /**
@@ -27,10 +27,7 @@ import { type Input, type Output } from "./createWebpackConfig.types";
 export default async function createWebpackConfig(
   ...[core, configs]: Input
 ): Promise<Output> {
-  const [packageJSON, react] = await Promise.all([
-    getPackageJSON(),
-    npm.isDependencyInstalled("react", { peer: true }),
-  ]);
+  const packageJSON = await getPackageJSON();
 
   if (core === "azure-func") {
     const functions = await folders
@@ -129,7 +126,7 @@ export default async function createWebpackConfig(
             : {},
         externals: [
           ...Object.keys(packageJSON.peerDependencies || {}),
-          react ? "react/jsx-runtime" : "",
+          "react/jsx-runtime",
           ...(configs?.externals || []),
         ].filter((i) => !!i),
         module: {
@@ -214,7 +211,7 @@ export default async function createWebpackConfig(
             : {},
         externals: [
           ...Object.keys(packageJSON.peerDependencies || {}),
-          react ? "react/jsx-runtime" : "",
+          "react/jsx-runtime",
           ...(configs?.externals || []),
         ].filter((i) => !!i),
         module: {
@@ -289,7 +286,7 @@ export default async function createWebpackConfig(
           ),
         externals: [
           ...Object.keys(packageJSON.peerDependencies || {}),
-          react ? "react/jsx-runtime" : "",
+          "react/jsx-runtime",
           ...(configs?.externals || []),
         ].filter((i) => !!i),
         module: {
