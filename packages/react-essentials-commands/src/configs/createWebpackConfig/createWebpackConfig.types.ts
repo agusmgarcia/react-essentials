@@ -1,6 +1,6 @@
 import { type Configuration } from "webpack";
 
-import { type getPackageJSON } from "#src/utils";
+import { type Func, type getPackageJSON } from "#src/utils";
 
 export type Input =
   | [
@@ -8,14 +8,26 @@ export type Input =
         NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>,
         "lib"
       >,
-      configs?: Partial<{ externals: string[]; omit: "node" | "web" }>,
+      configs?: Partial<{
+        alias:
+          | Record<string, string | false | string[]>
+          | Func<
+              Record<string, string | false | string[]>,
+              [target: "binaries" | "node" | "web"]
+            >;
+        externals: string[];
+        omit: "node" | "web";
+      }>,
     ]
   | [
       core: Extract<
         NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>,
         "azure-func" | "node"
       >,
-      configs?: Partial<{ externals: string[] }>,
+      configs?: Partial<{
+        alias: Record<string, string | false | string[]>;
+        externals: string[];
+      }>,
     ];
 
 export type Output = Configuration[];
