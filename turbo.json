@@ -4,7 +4,12 @@
     "build": {
       "cache": true,
       "dependsOn": ["^build"],
-      "inputs": ["src/**/*", "!src/**/*.test.*"],
+      "inputs": [
+        "src/**/*",
+        "!src/**/*.test.*",
+        "package.json",
+        "webpack.config.[jt]s"
+      ],
       "outputs": ["bin", "dist"]
     },
     "check": {
