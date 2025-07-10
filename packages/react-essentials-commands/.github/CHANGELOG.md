@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.12](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.12)
+
+> July 10, 2025
+
+### Fixes 🎯
+
+- **errors.getMessage**: send undefined when no error
+- add documentation to the createConfigs functions
+- **createWebpackConfig**: make externals config as function for libs
+
 ## [v1.0.11](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v1.0.11)
 
 > July 9, 2025
