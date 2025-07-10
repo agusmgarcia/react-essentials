@@ -15,7 +15,9 @@ export type Input =
               Record<string, string | false | string[]>,
               [target: "binaries" | "node" | "web"]
             >;
-        externals: string[];
+        externals:
+          | string[]
+          | Func<string[], [target: "binaries" | "node" | "web"]>;
         omit: "node" | "web";
       }>,
     ]

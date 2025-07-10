@@ -130,7 +130,9 @@ export default async function createWebpackConfig(
         externals: [
           ...Object.keys(packageJSON.peerDependencies || {}),
           "react/jsx-runtime",
-          ...(configs?.externals || []),
+          ...(typeof configs?.externals === "function"
+            ? configs.externals("web")
+            : configs?.externals || []),
         ].filter((i) => !!i),
         module: {
           rules: [
@@ -220,7 +222,9 @@ export default async function createWebpackConfig(
         externals: [
           ...Object.keys(packageJSON.peerDependencies || {}),
           "react/jsx-runtime",
-          ...(configs?.externals || []),
+          ...(typeof configs?.externals === "function"
+            ? configs.externals("node")
+            : configs?.externals || []),
         ].filter((i) => !!i),
         module: {
           rules: [
@@ -300,7 +304,9 @@ export default async function createWebpackConfig(
         externals: [
           ...Object.keys(packageJSON.peerDependencies || {}),
           "react/jsx-runtime",
-          ...(configs?.externals || []),
+          ...(typeof configs?.externals === "function"
+            ? configs.externals("binaries")
+            : configs?.externals || []),
         ].filter((i) => !!i),
         module: {
           rules: [
