@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.9](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v1.0.9)
+
+> July 10, 2025
+
+### Fixes 🎯
+
+- **errors.getMessage**: send undefined when no error
+
 ## [v1.0.8](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v1.0.8)
 
 > July 9, 2025
