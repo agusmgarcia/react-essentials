@@ -32,25 +32,24 @@ export function emit(
 }
 
 /**
- * Retrieves the message from an error object.
+ * Extracts the message from an error object.
  *
- * @param error - The error to extract the message from. Can be of any type.
- * @returns The extracted error message as a string, or a default message if none is found.
- */
-export function getMessage(error: unknown): string;
-
-/**
- * Retrieves the message from an error object.
+ * @param error - The error object to extract the message from.
+ * @param notFound - Optional string to return if the error does not have a message.
  *
- * @param error - The error to extract the message from. Can be of any type.
- * @param notFound - The fallback message to return if no message is found.
- * @returns The extracted error message as a string, the provided `notFound` message, or a default message if none is found.
+ *  @returns The message from the error object, or the `notFound` string if provided, or a default message if no message is found.
  */
-export function getMessage(error: unknown, notFound: string): string;
-
-export function getMessage(error: unknown, notFound?: string): string {
+export function getMessage(
+  error: unknown,
+  notFound?: string,
+): string | undefined {
+  if (typeof error === "undefined") return undefined;
   if (typeof error === "string") return error;
   if (properties.has(error, "message", "string")) return error.message;
+  if (properties.has(error, "message", "number"))
+    return error.message.toString();
+  if (properties.has(error, "message", "boolean"))
+    return error.message.toString();
   return notFound || "An unexpected error occurred";
 }
 
