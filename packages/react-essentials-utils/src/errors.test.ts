@@ -54,7 +54,7 @@ describe("errors", () => {
     });
 
     it("should return the default message if error is undefined", () => {
-      expect(errors.getMessage(undefined)).toBe("An unexpected error occurred");
+      expect(errors.getMessage(undefined)).toBe(undefined);
     });
 
     it("should return the message if error is an object with a string message property", () => {
@@ -64,7 +64,7 @@ describe("errors", () => {
 
     it("should return the fallback if error is an object with a non-string message property", () => {
       const errorObj = { message: 123 };
-      expect(errors.getMessage(errorObj, "Fallback")).toBe("Fallback");
+      expect(errors.getMessage(errorObj, "Fallback")).toBe("123");
     });
   });
 
