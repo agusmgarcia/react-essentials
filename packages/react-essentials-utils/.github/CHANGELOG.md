@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.10](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v1.0.10)
+
+> July 10, 2025
+
+### Fixes 🎯
+
+- **errors.getMessage**: send undefined when no error
+
 ## [v1.0.9](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v1.0.9)
 
 > July 4, 2025
