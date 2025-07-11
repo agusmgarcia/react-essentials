@@ -1,4 +1,3 @@
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
 import getCustomTransformers from "ts-transform-paths";
 import { default as webpack } from "webpack";
@@ -138,12 +137,7 @@ export default async function createWebpackConfig(
           rules: [
             {
               test: /\.css$/,
-              use: [
-                MiniCssExtractPlugin.loader,
-                "style-loader",
-                "css-loader",
-                "postcss-loader",
-              ],
+              use: ["style-loader", "css-loader", "postcss-loader"],
             },
             {
               exclude: /node_modules/,
@@ -175,7 +169,6 @@ export default async function createWebpackConfig(
           path: path.resolve("."),
           umdNamedDefine: true,
         },
-        plugins: [new MiniCssExtractPlugin()],
         resolve: {
           alias: {
             "#src": path.resolve("src"),
@@ -230,12 +223,7 @@ export default async function createWebpackConfig(
           rules: [
             {
               test: /\.css$/,
-              use: [
-                MiniCssExtractPlugin.loader,
-                "style-loader",
-                "css-loader",
-                "postcss-loader",
-              ],
+              use: ["style-loader", "css-loader", "postcss-loader"],
             },
             {
               exclude: /node_modules/,
@@ -268,7 +256,6 @@ export default async function createWebpackConfig(
           path: path.resolve("."),
           umdNamedDefine: true,
         },
-        plugins: [new MiniCssExtractPlugin()],
         resolve: {
           alias: {
             "#src": path.resolve("src"),
@@ -310,6 +297,10 @@ export default async function createWebpackConfig(
         ].filter((i) => !!i),
         module: {
           rules: [
+            {
+              test: /\.css$/,
+              use: ["style-loader", "css-loader", "postcss-loader"],
+            },
             {
               exclude: /node_modules/,
               test: /\.tsx?$/,
