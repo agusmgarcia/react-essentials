@@ -100,7 +100,6 @@ export default function createEslintConfig(...[core]: Input): Output {
           natural: true,
         },
       ],
-
       "sort/string-unions": [
         "error",
         {
