@@ -5,23 +5,26 @@ import { type Const, type DeepPrimitive, sealed } from "#src/utils";
 import GlobalSlice from "./GlobalSlice";
 
 export default abstract class ServerSlice<
-  TResponse extends DeepPrimitive | undefined,
+  TResponse extends DeepPrimitive,
   TSlices extends Record<string, GlobalSlice<any, any>> = {},
-  TRequest extends DeepPrimitive | undefined = undefined,
+  TRequest extends DeepPrimitive = undefined,
 > extends GlobalSlice<
   {
     error: string | undefined;
     loading: boolean;
-    request: TRequest | undefined;
+    request: TRequest | symbol;
     response: TResponse | undefined;
   },
   TSlices
 > {
+  private static readonly NOT_INITIALIZED_SYMBOL = Symbol("Not initialized");
+  private static readonly FORCE_RELOAD_SYMBOL = Symbol("Force reload");
+
   protected constructor(initialResponse?: Const<TResponse>) {
     super({
       error: undefined,
       loading: true,
-      request: undefined,
+      request: ServerSlice.NOT_INITIALIZED_SYMBOL,
       response: initialResponse,
     });
   }
@@ -36,7 +39,7 @@ export default abstract class ServerSlice<
     this.state = {
       error: undefined,
       loading: false,
-      request: undefined,
+      request: ServerSlice.NOT_INITIALIZED_SYMBOL,
       response,
     };
   }
@@ -56,12 +59,13 @@ export default abstract class ServerSlice<
   protected abstract fetch(
     request: Const<TRequest>,
     signal: AbortSignal,
-  ): Const<TResponse> | Promise<Const<TResponse>>;
+  ): Const<TResponse> | Promise<Const<TResponse> | undefined> | undefined;
 
   @sealed
-  protected async reload(request?: Const<TRequest>): Promise<void> {
-    const newRequest = request || this.state.request;
-    if (!newRequest) return;
+  protected async reload(
+    request: Const<TRequest> | symbol = ServerSlice.FORCE_RELOAD_SYMBOL,
+  ): Promise<void> {
+    if (request === ServerSlice.NOT_INITIALIZED_SYMBOL) return;
 
     if (equals.deep(this.state.request, newRequest)) return;
     this.state = { ...this.state, loading: true, request: newRequest };
@@ -72,7 +76,7 @@ export default abstract class ServerSlice<
       await delay(0, signal);
       signal.throwIfAborted();
 
-      const response = await this.fetch(newRequest, signal);
+      const response = await this.fetch(newRequest as Const<TRequest>, signal);
       signal.throwIfAborted();
 
       this.state = {
