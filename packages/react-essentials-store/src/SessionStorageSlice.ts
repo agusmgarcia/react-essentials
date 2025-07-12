@@ -3,7 +3,7 @@ import { type Const, type DeepPrimitive, sealed } from "#src/utils";
 import type GlobalSlice from "./GlobalSlice";
 import StorageSlice from "./StorageSlice";
 
-export default abstract class LocalStorageSlice<
+export default abstract class SessionStorageSlice<
   TData extends DeepPrimitive,
   TSlices extends Record<string, GlobalSlice<any, any>> = {},
 > extends StorageSlice<TData, TSlices> {
@@ -18,7 +18,7 @@ export default abstract class LocalStorageSlice<
     super.init();
 
     window.addEventListener("storage", (event) => {
-      if (event.storageArea !== localStorage) return;
+      if (event.storageArea !== sessionStorage) return;
 
       if (typeof event.key === "object") {
         this.response = undefined;
@@ -38,14 +38,14 @@ export default abstract class LocalStorageSlice<
 
   @sealed
   protected override getDataFromStorage(): Const<TData> | undefined {
-    const item = localStorage.getItem(this._name);
+    const item = sessionStorage.getItem(this._name);
     if (typeof item === "object") return undefined;
     return JSON.parse(item);
   }
 
   @sealed
   protected override setDataIntoStorage(data: Const<TData> | undefined): void {
-    if (typeof data === "undefined") localStorage.removeItem(this._name);
-    else localStorage.setItem(this._name, JSON.stringify(data));
+    if (typeof data === "undefined") sessionStorage.removeItem(this._name);
+    else sessionStorage.setItem(this._name, JSON.stringify(data));
   }
 }
