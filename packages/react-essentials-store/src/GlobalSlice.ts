@@ -36,6 +36,10 @@ export default abstract class GlobalSlice<
       throw new Error(`'${this.constructor.name}' has been initialized`);
 
     this._slices = slices;
+
+    if (this._initialized)
+      throw new Error(`'${this.constructor.name}' has called this.init()`);
+
     this.init();
 
     if (!this._initialized)
@@ -44,16 +48,25 @@ export default abstract class GlobalSlice<
 
   @sealed
   protected get signal(): AbortSignal {
+    if (!this._initialized)
+      throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
+
     return this._controller.signal;
   }
 
   @sealed
   get state(): Const<TState> {
+    if (!this._initialized)
+      throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
+
     return this._state;
   }
 
   @sealed
   protected set state(state: Const<TState>) {
+    if (!this._initialized)
+      throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
+
     this._controller.abort("Aborted");
     this._controller = new AbortController();
 
@@ -98,6 +111,9 @@ export default abstract class GlobalSlice<
     selector?: Func<any, [state: Const<TState>]>,
     equality?: Func<boolean, [newSelection: any, prevSelection: any]>,
   ): Func {
+    if (!this._initialized)
+      throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
+
     const subscription: Subscription = {
       equality: equality || equals.strict,
       listener,

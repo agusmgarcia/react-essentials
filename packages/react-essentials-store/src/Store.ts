@@ -5,3 +5,7 @@ export default class Store<
 > {
   constructor();
 }
+
+type SliceFactories<TSlices extends Record<string, GlobalSlice<any, any>>> = {
+  [TKey in keyof TSlices]: new () => TSlices[TKey];
+};
