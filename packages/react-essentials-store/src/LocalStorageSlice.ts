@@ -20,23 +20,31 @@ export default abstract class LocalStorageSlice<
     super.init();
 
     this.subscribe<TData | undefined>(
-      (data) => localStorage.setItem(this._name, JSON.stringify(data)),
+      (data) =>
+        typeof data !== "undefined"
+          ? localStorage.setItem(this._name, JSON.stringify(data))
+          : localStorage.removeItem(this._name),
       (state) => state.response,
       equals.deep,
     );
 
-    const handleStorage = (event: StorageEvent) => {
+    window.addEventListener("storage", (event) => {
       if (event.storageArea !== localStorage) return;
 
-      if (event.key === null) {
+      if (typeof event.key === "object") {
         this.response = undefined;
         return;
       }
 
       if (event.key !== this._name) return;
-    };
 
-    window.addEventListener("storage", handleStorage);
+      if (typeof event.newValue === "object") {
+        this.response = undefined;
+        return;
+      }
+
+      this.response = JSON.parse(event.newValue);
+    });
   }
 
   @sealed

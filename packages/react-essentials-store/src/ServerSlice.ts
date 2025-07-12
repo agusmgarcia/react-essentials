@@ -12,19 +12,20 @@ export default abstract class ServerSlice<
   {
     error: string | undefined;
     loading: boolean;
-    request: TRequest | symbol;
+    request: TRequest | {};
     response: TResponse | undefined;
   },
   TSlices
 > {
-  private static readonly NOT_INITIALIZED_SYMBOL = Symbol("Not initialized");
-  private static readonly FORCE_RELOAD_SYMBOL = Symbol("Force reload");
+  private static readonly UNINITIALIZED = {};
+  private static readonly INITIALIZED = {};
+  private static readonly ABORT_SYMBOL = Symbol("abort");
 
   protected constructor(initialResponse?: Const<TResponse>) {
     super({
       error: undefined,
       loading: true,
-      request: ServerSlice.NOT_INITIALIZED_SYMBOL,
+      request: ServerSlice.UNINITIALIZED,
       response: initialResponse,
     });
   }
@@ -39,7 +40,7 @@ export default abstract class ServerSlice<
     this.state = {
       error: undefined,
       loading: false,
-      request: ServerSlice.NOT_INITIALIZED_SYMBOL,
+      request: ServerSlice.INITIALIZED,
       response,
     };
   }
@@ -62,36 +63,36 @@ export default abstract class ServerSlice<
   ): Const<TResponse> | Promise<Const<TResponse> | undefined> | undefined;
 
   @sealed
-  protected async reload(
-    request: Const<TRequest> | symbol = ServerSlice.FORCE_RELOAD_SYMBOL,
-  ): Promise<void> {
-    if (request === ServerSlice.NOT_INITIALIZED_SYMBOL) return;
+  protected async reload(req?: Const<TRequest>): Promise<void> {
+    const forceReload = !arguments.length;
 
-    if (equals.deep(this.state.request, newRequest)) return;
-    this.state = { ...this.state, loading: true, request: newRequest };
+    const request = !!arguments.length
+      ? (req as Const<TRequest>)
+      : this.state.request === ServerSlice.UNINITIALIZED
+        ? ServerSlice.ABORT_SYMBOL
+        : (this.state.request as Const<TRequest>);
 
+    if (typeof request === "symbol") return;
+    if (!forceReload && equals.deep(this.state.request, request)) return;
+
+    this.state = { ...this.state, loading: true, request };
     const signal = this.signal;
 
     try {
       await delay(0, signal);
       signal.throwIfAborted();
 
-      const response = await this.fetch(newRequest as Const<TRequest>, signal);
+      const response = await this.fetch(request, signal);
       signal.throwIfAborted();
 
-      this.state = {
-        error: undefined,
-        loading: false,
-        request: newRequest,
-        response,
-      };
+      this.state = { error: undefined, loading: false, request, response };
     } catch (error) {
       if (signal.aborted) return;
 
       this.state = {
         error: errors.getMessage(error),
         loading: false,
-        request: newRequest,
+        request,
         response: undefined,
       };
     }

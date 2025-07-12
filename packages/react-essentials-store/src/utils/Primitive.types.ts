@@ -1,3 +1,3 @@
-type Primitive = boolean | bigint | null | number | undefined | string | symbol;
+type Primitive = boolean | null | number | string | undefined;
 
 export default Primitive;
