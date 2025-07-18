@@ -33,7 +33,7 @@ export default async function createJestConfig(
           : core === "lib"
             ? undefined
             : "node",
-    testRegex:
+    testMatch:
       core === "app"
         ? [
             "<rootDir>/pages/**/*.test.[jt]s?(x)",
