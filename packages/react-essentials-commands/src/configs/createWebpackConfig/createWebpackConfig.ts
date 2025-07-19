@@ -156,6 +156,9 @@ export default async function createWebpackConfig(
             },
           ],
         },
+        optimization: {
+          nodeEnv: false,
+        },
         output: {
           filename: (data) =>
             data.chunk?.name === "index"
