@@ -1,3 +1,5 @@
+import { Mutex as AsyncMutex } from "async-mutex";
+
 import Cache, { type CacheTypes } from "../Cache";
 import * as errors from "../errors";
 import isSSR from "../isSSR";
@@ -27,7 +29,7 @@ export default class StorageCache extends Cache {
     super({
       maxCacheTime: options?.maxCacheTime,
       maxErrorTime: options?.maxErrorTime,
-      mutexFactory: undefined,
+      mutexFactory: (key) => mutexFactory(storageName, key),
       storage: new Storage(
         `${storageName}${!!options?.version ? `.${options.version}` : ""}`,
         options?.storage || "session",
@@ -99,6 +101,13 @@ class Storage implements CacheTypes.Storage {
       return;
     }
   }
+}
+
+function mutexFactory(storageName: string, key: string): CacheTypes.Mutex {
+  if (isSSR()) return new AsyncMutex();
+
+  return (((window.__REACT_ESSENTIALS_STORAGE_CACHES__ ||= {})[storageName] ||=
+    {})[key] ||= new AsyncMutex());
 }
 
 function deleteOlderStorages(
