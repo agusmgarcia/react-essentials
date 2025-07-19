@@ -48,7 +48,6 @@ export default class Cache {
 
     return this.mutexes[key].runExclusive(async () => {
       signal.throwIfAborted();
-
       const entry = await this.options.storage.getEntry(key, signal);
 
       if (byPassExpiration || !entry || Date.now() >= entry.expiresAt) {
@@ -63,7 +62,6 @@ export default class Cache {
               : factory;
 
           signal.throwIfAborted();
-
           expiresAt =
             typeof expiresAt === "undefined"
               ? Date.now() + this.options.maxCacheTime
@@ -71,16 +69,18 @@ export default class Cache {
                 ? expiresAt
                 : expiresAt(result);
 
-          const returnedEntry = { expiresAt, result };
-          await this.options.storage.setEntry(key, returnedEntry, signal);
-          return returnedEntry;
+          const newEntry = { expiresAt, result };
+          await this.options.storage.setEntry(key, newEntry, signal);
+
+          return newEntry;
         } catch (error) {
           signal.throwIfAborted();
           expiresAt = Date.now() + this.options.maxErrorTime;
 
-          const returnedEntry = { error, expiresAt };
-          await this.options.storage.setEntry(key, returnedEntry, signal);
-          return returnedEntry;
+          const newEntry = { error, expiresAt };
+          await this.options.storage.setEntry(key, newEntry, signal);
+
+          return newEntry;
         }
       }
 
@@ -123,6 +123,7 @@ export default class Cache {
    *
    * @param key - The unique key identifying the cached item.
    * @param value - The value to store in the cache.
+   * @param signal - An AbortSignal to cancel the operation if needed.
    * @param expiresAt - Optional. Specifies the expiration time for the cached item. It can be:
    *   - A number representing the absolute expiration timestamp.
    *   - A function that takes the value as input and returns the expiration timestamp.
@@ -133,9 +134,10 @@ export default class Cache {
   async set<TValue>(
     key: string,
     value: TValue,
+    signal?: AbortSignal,
     expiresAt?: number | Func<number, [value: TValue]>,
   ): Promise<void> {
-    const item = await this.rawSet(key, value, true, undefined, expiresAt);
+    const item = await this.rawSet(key, value, true, signal, expiresAt);
     if ("result" in item) return;
     throw item.error;
   }
