@@ -33,16 +33,6 @@ type Func2 = AsyncFunc<number>; // => () => Promise<number>
 type Func3 = AsyncFunc<number, [arg0: string]>; // => (arg0: string) => Promise<number>
 ```
 
-## Block until
-
-```typescript
-import { blockUntil } from "@agusmgarcia/react-essentials-utils";
-
-const controller = new AbortController();
-blockUntil(controller.signal).then(() => console.log("Continue"));
-setTimeout(() => controller.abort(), 3000);
-```
-
 ## Cache
 
 ```typescript
@@ -54,14 +44,6 @@ cache
     // Run some exclusive function.
   })
   .then((result) => console.log(result));
-```
-
-## Capitalize
-
-```typescript
-import { capitalize } from "@agusmgarcia/react-essentials-utils";
-
-capitalize("foo"); // => "Foo"
 ```
 
 ## Children
@@ -214,35 +196,6 @@ type Func2 = Func<number>; // => () => number
 type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
 ```
 
-## Is child of
-
-```typescript
-import { isChildOf } from "@agusmgarcia/react-essentials-utils";
-
-const child = document.getElementById("element1");
-const potentialParent = document.getElementById("element2");
-return isChildOf(potentialParent, child);
-```
-
-## Is only id
-
-```typescript
-import { isOnlyId } from "@agusmgarcia/react-essentials-utils";
-
-isOnlyId({ id: "3" }); // => true
-isOnlyId({ id: "3", name: "John" }); // => false
-```
-
-## Is parent of
-
-```typescript
-import { isParentOf } from "@agusmgarcia/react-essentials-utils";
-
-const potentialChild = document.getElementById("element1");
-const parent = document.getElementById("element2");
-return isParentOf(potentialChild, parent);
-```
-
 ## Is SSR
 
 ```typescript
@@ -259,20 +212,6 @@ import { type Merge } from "@agusmgarcia/react-essentials-utils";
 type ObjectA = { name: string };
 type ObjectB = { surname: string };
 type Result = Merge<ObjectA, ObjectB>; // => { name: string; surname: string; }
-```
-
-## Merge refs
-
-```tsx
-import { mergeRefs } from "@agusmgarcia/react-essentials-utils";
-import { useRef } from "react";
-
-function Component() {
-  const ref1 = useRef<HTMLDivElement>(null);
-  const ref2 = useRef<HTMLDivElement>(null);
-
-  return <div ref={mergeRefs(ref1, ref2)} />;
-}
 ```
 
 ## Merges
@@ -307,16 +246,6 @@ type Person = { id: string; name: string; setName: Func<void, [name: string]> };
 type OmitPropertyPerson = OmitProperty<Person, "name">; // => { id: string, setName: (name:string) => void; }
 ```
 
-## Only id
-
-```typescript
-import { type OnlyId } from "@agusmgarcia/react-essentials-utils";
-
-type Person = { id: string; name: string };
-
-type OnlyIdPerson = OnlyId<Person>; // => { id: string, name?: undefined }
-```
-
 ## Properties
 
 ```typescript
@@ -332,14 +261,15 @@ properties.sort({ b: 2, a: { y: 2, x: 1 }, c: 3 }, [
 ]); // => { a: { x: 1, y: 2 }, b: 2, c: 3 }
 ```
 
-## Replace string
+## Strings
 
 ```typescript
-import { replaceString } from "@agusmgarcia/react-essentials-utils";
+import { strings } from "@agusmgarcia/react-essentials-utils";
 
-replaceString("This is the ${value} test", { value: "third" }); // => "This is the third test"
-replaceString("${nights} ${nights?night:nights}", { nights: 1 }); // => "1 night"
-replaceString("${nights} ${nights?night:nights}", { nights: 2 }); // => "2 nights"
+strings.capitalize("foo"); // => "Foo"
+strings.replace("This is the ${value} test", { value: "third" }); // => "This is the third test"
+strings.replace("${nights} ${nights?night:nights}", { nights: 1 }); // => "1 night"
+strings.replace("${nights} ${nights?night:nights}", { nights: 2 }); // => "2 nights"
 ```
 
 ## Sorts

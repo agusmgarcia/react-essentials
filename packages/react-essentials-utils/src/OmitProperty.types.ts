@@ -16,7 +16,7 @@ type OmitProperty<
   TData,
   TPropertyName extends string,
   TRecursive extends "deep" | "shallow" | "strict" = "deep",
-> = TData extends Function
+> = TData extends (...args: any) => any
   ? TData
   : TData extends Array<infer TArrayElement>
     ? TRecursive extends "deep"
@@ -24,7 +24,7 @@ type OmitProperty<
       : TRecursive extends "shallow"
         ? Array<OmitProperty<TArrayElement, TPropertyName, "strict">>
         : TData
-    : TData extends Record<string, any>
+    : TData extends object
       ? {
           [TProperty in keyof TData as TProperty extends TPropertyName
             ? never

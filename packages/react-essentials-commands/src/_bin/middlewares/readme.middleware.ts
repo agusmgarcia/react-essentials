@@ -1,4 +1,4 @@
-import { capitalize } from "#src/utils";
+import { strings } from "#src/utils";
 
 import createFileMiddleware from "./createFileMiddleware";
 import { type Context } from "./Middleware.types";
@@ -15,7 +15,7 @@ function getTemplate(context: Context): string {
       .split("/")
       .at(-1)
       ?.split("-")
-      .map((i) => capitalize(i))
+      .map((i) => strings.capitalize(i))
       .join(" ") || ""
   }`;
 }

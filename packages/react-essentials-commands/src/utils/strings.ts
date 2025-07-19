@@ -1,4 +1,4 @@
-export default function capitalize<TString extends string>(
+export function capitalize<TString extends string>(
   string: TString,
 ): Capitalize<TString> {
   return (string.charAt(0).toUpperCase() +

@@ -223,11 +223,11 @@ function recursiveSort<TElement>(
     }, {} as TElement);
 }
 
-type NestedPaths<TElement> = TElement extends Function
+type NestedPaths<TElement> = TElement extends (...args: any) => any
   ? never
   : TElement extends Array<infer TElementArray>
     ? `*.${NestedPaths<TElementArray>}`
-    : TElement extends Record<string, any>
+    : TElement extends object
       ? {
           [TProperty in keyof TElement]: TProperty extends string
             ?

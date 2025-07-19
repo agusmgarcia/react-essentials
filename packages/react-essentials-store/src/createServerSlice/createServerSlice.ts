@@ -75,7 +75,7 @@ export default function createServerSlice<
       >,
     ): Promise<void> {
       try {
-        context.set((prevState) => ({ ...prevState, loading: true }));
+        context.set((prevState: any) => ({ ...prevState, loading: true }));
 
         const selected = !!selector
           ? selector(context.get() as OmitFuncs<TOtherSlices, "shallow">)
@@ -87,14 +87,14 @@ export default function createServerSlice<
           context.get()[name].data,
         );
 
-        context.set((prevState) => ({
+        context.set((prevState: any) => ({
           ...prevState,
           data: mergeData(data, prevState.data),
           error: undefined,
           loading: false,
         }));
       } catch (error) {
-        context.set((prevState) => ({
+        context.set((prevState: any) => ({
           ...prevState,
           error: undefined,
           loading: false,
@@ -193,7 +193,7 @@ export default function createServerSlice<
           (error) => {
             if (!(error instanceof Error)) throw error;
             const message = errors.getMessage(error.inline);
-            context.set((prevState) => ({ ...prevState, error: message }));
+            context.set((prevState: any) => ({ ...prevState, error: message }));
           },
         ),
     );
@@ -223,7 +223,7 @@ function buildContext<TSlice extends SliceOf<any, any, any, any>, TOtherSlices>(
     regenerate: () => buildContext(loadMore, reload, context.regenerate()),
     reload: (...args) => reload(...args, context),
     set: (state) =>
-      context.set((prev) => ({
+      context.set((prev: any) => ({
         ...prev,
         data:
           typeof state === "function" ? (state as Function)(prev.data) : state,

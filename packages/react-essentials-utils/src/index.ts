@@ -1,9 +1,7 @@
 export { type default as AddArgumentToObject } from "./AddArgumentToObject.types";
 export { default as aggregateResponse } from "./aggregateResponse";
 export { type default as AsyncFunc } from "./AsyncFunc.types";
-export { default as blockUntil } from "./blockUntil";
 export { type CacheTypes, default as Cache } from "./Cache";
-export { default as capitalize } from "./capitalize";
 export * as children from "./children";
 export * as dates from "./dates";
 export { default as delay } from "./delay";
@@ -15,23 +13,18 @@ export * as filters from "./filters";
 export * as finds from "./finds";
 export * as folders from "./folders";
 export { type default as Func } from "./Func.types";
-export { default as isChildOf } from "./isChildOf";
-export { default as isOnlyId } from "./isOnlyId";
-export { default as isParentOf } from "./isParentOf";
 export { default as isSSR } from "./isSSR";
 export { type default as Merge } from "./Merge.types";
-export { default as mergeRefs } from "./mergeRefs";
 export * as merges from "./merges";
 export { type default as OmitFuncs } from "./OmitFuncs.types";
 export { type default as OmitProperty } from "./OmitProperty.types";
-export { type default as OnlyId } from "./OnlyId.types";
 export * as properties from "./properties";
-export { default as replaceString } from "./replaceString";
 export * as sorts from "./sorts";
 export {
   default as StorageCache,
   type StorageCacheTypes,
 } from "./StorageCache";
+export * as strings from "./strings";
 export { type default as Tuple } from "./Tuple.types";
 export { type default as TupleToUnion } from "./TupleToUnion.types";
 export { type default as UnionToIntersection } from "./UnionToIntersection.types";

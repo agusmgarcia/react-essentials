@@ -33,7 +33,7 @@ type AddArgumentToObject<
   TData,
   TParameter,
   TRecursive extends "deep" | "shallow" | "strict" = "deep",
-> = TData extends Function
+> = TData extends (...args: any) => any
   ? TData
   : TData extends Array<infer TArrayElement>
     ? TRecursive extends "deep"
@@ -41,7 +41,7 @@ type AddArgumentToObject<
       : TRecursive extends "shallow"
         ? Array<AddArgumentToObject<TArrayElement, TParameter, "strict">>
         : TData
-    : TData extends Record<string, any>
+    : TData extends object
       ? {
           [TProperty in keyof TData]: TData[TProperty] extends (
             ...args: any

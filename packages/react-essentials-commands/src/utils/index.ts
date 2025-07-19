@@ -1,6 +1,5 @@
 export * as args from "./args";
 export { type default as AsyncFunc } from "./AsyncFunc.types";
-export { default as capitalize } from "./capitalize";
 export * as errors from "./errors";
 export { default as execute } from "./execute";
 export * as files from "./files";
@@ -11,3 +10,4 @@ export * as git from "./git";
 export * as npm from "./npm";
 export * as properties from "./properties";
 export { default as question } from "./question";
+export * as strings from "./strings";
