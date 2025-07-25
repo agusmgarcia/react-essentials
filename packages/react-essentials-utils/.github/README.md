@@ -2,15 +2,6 @@
 
 A set of functions and types that can be used in the consumer projects.
 
-## Add argument to object
-
-```typescript
-import { type AddArgumentToObject } from "@agusmgarcia/react-essentials-utils";
-
-type Person = { name: string; setName: Func<void, [name: string]> };
-type PersonWithContext = AddArgumentToObject<Person, number>; // => { name: string; setName: Func<void, [name: string, parameter: number]> }
-```
-
 ## Aggregate response
 
 ```typescript
@@ -64,6 +55,17 @@ const children = children.mapOfType(input, MyComponent, (child) => (
 )); // => <div><p>input replaced</p></div>
 
 const isMyComponent = children.isOfType(MyComponent, <MyComponent />); // => true;
+```
+
+## Const
+
+```typescript
+import { type Const } from "@agusmgarcia/react-essentials-utils";
+
+type Example = { a: { b: number } };
+type DeepConst = Const<Example, "deep">; // { readonly a: { readonly b: number } }
+type ShallowConst = Const<Example, "shallow">; // { readonly a: { b: number } }
+type StrictConst = Const<Example, "strict">; // { readonly a: { b: number } }
 ```
 
 ## Dates
@@ -204,16 +206,6 @@ import { isSSR } from "@agusmgarcia/react-essentials-utils";
 isSSR(); // => 'true' if server side and 'false' for client
 ```
 
-## Merge
-
-```typescript
-import { type Merge } from "@agusmgarcia/react-essentials-utils";
-
-type ObjectA = { name: string };
-type ObjectB = { surname: string };
-type Result = Merge<ObjectA, ObjectB>; // => { name: string; surname: string; }
-```
-
 ## Merges
 
 ```tsx
@@ -224,16 +216,6 @@ merges.deep(
   [{ name: "John" }, { name: "Foo" }],
   [{ surname: "Doe" }, { surname: "Bar" }],
 ); // => [{ name: "John", surname: "Doe" }, { name: "Foo", surname: "Bar" }];
-```
-
-## Omit Funcs
-
-```typescript
-import { type Func, type OmitFuncs } from "@agusmgarcia/react-essentials-utils";
-
-type Person = { id: string; name: string; setName: Func<void, [name: string]> };
-
-type OmitFuncsPerson = OmitFuncs<Person>; // => { id: string; name: string; }
 ```
 
 ## Omit property
@@ -304,33 +286,6 @@ cache
 import { type Tuple } from "@agusmgarcia/react-essentials-utils";
 
 type TupleOfThreeStrings = Tuple<string, 3>; // => [string, string, string]
-```
-
-## Tuple to union
-
-```typescript
-import { type TupleToUnion } from "@agusmgarcia/react-essentials-utils";
-
-type AorB = TupleToUnion<["a", "b"]>; // => "a" | "b"
-```
-
-## Union to intersection
-
-```typescript
-import { type UnionToIntersection } from "@agusmgarcia/react-essentials-utils";
-
-type Person = { person: { id: string } };
-type Pet = { pet: { id: string } };
-
-type PersonAndPet = UnionToIntersection<Person | Pet>; // => { person: { id: string }; pet: { id: string } }
-```
-
-## Union to tuple
-
-```typescript
-import { type UnionToTuple } from "@agusmgarcia/react-essentials-utils";
-
-type ArrayOfAOrB = UnionToTuple<"a" | "b">; // => ["a", "b"]
 ```
 
 ## Use device pixel ratio

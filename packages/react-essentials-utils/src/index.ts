@@ -1,8 +1,8 @@
-export { type default as AddArgumentToObject } from "./AddArgumentToObject.types";
 export { default as aggregateResponse } from "./aggregateResponse";
 export { type default as AsyncFunc } from "./AsyncFunc.types";
 export { type CacheTypes, default as Cache } from "./Cache";
 export * as children from "./children";
+export { type default as Const } from "./Const.types";
 export * as dates from "./dates";
 export { default as delay } from "./delay";
 export { default as emptyFunction } from "./emptyFunction";
@@ -14,11 +14,11 @@ export * as finds from "./finds";
 export * as folders from "./folders";
 export { type default as Func } from "./Func.types";
 export { default as isSSR } from "./isSSR";
-export { type default as Merge } from "./Merge.types";
 export * as merges from "./merges";
-export { type default as OmitFuncs } from "./OmitFuncs.types";
 export { type default as OmitProperty } from "./OmitProperty.types";
+export { type default as Primitive } from "./Primitive.types";
 export * as properties from "./properties";
+export { type default as Serializable } from "./Serializable.types";
 export * as sorts from "./sorts";
 export {
   default as StorageCache,
@@ -26,9 +26,6 @@ export {
 } from "./StorageCache";
 export * as strings from "./strings";
 export { type default as Tuple } from "./Tuple.types";
-export { type default as TupleToUnion } from "./TupleToUnion.types";
-export { type default as UnionToIntersection } from "./UnionToIntersection.types";
-export { type default as UnionToTuple } from "./UnionToTuple.types";
 export { default as useDevicePixelRatio } from "./useDevicePixelRatio";
 export { default as useDimensions } from "./useDimensions";
 export { default as useElementAtBottom } from "./useElementAtBottom";
