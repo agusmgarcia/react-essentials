@@ -86,10 +86,10 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
     Object.keys(this._slices).forEach((key) => {
       const slice = getGlobalSlice(this._slices[key]);
 
-      slice["init"]();
+      slice["onInit"]();
 
       if (!slice["_initialized"])
-        throw new Error(`'${slice.constructor.name}' must call super.init()`);
+        throw new Error(`'${slice.constructor.name}' must call super.onInit()`);
     });
   }
 

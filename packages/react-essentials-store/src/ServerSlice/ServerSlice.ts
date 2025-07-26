@@ -43,8 +43,8 @@ export default abstract class ServerSlice<
     this.state = { error: undefined, loading: false, response };
   }
 
-  protected override init(): void {
-    super.init();
+  protected override onInit(): void {
+    super.onInit();
 
     this.subscribe(
       (state) => state.response,
@@ -55,17 +55,19 @@ export default abstract class ServerSlice<
     );
 
     Object.values(this.slices).forEach((slice) =>
-      slice.subscribe(() => this._reload(this.buildRequest(), false)),
+      slice.subscribe(() =>
+        this._reload(this.onBuildRequest(this._request), false),
+      ),
     );
 
-    const request = this.buildRequest();
+    const request = this.onBuildRequest(this._request);
     if (request === ServerSlice.UNINITIALIZED)
       this.state = { ...this.state, loading: false };
     else this._reload(request, false);
   }
 
-  protected buildRequest(): Const<TRequest> {
-    return this._request;
+  protected onBuildRequest(prevRequest: Const<TRequest>): Const<TRequest> {
+    return prevRequest;
   }
 
   protected abstract fetch(

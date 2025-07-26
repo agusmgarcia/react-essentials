@@ -7,12 +7,12 @@ export default abstract class StorageSlice<
   TData extends BaseData,
   TSlices extends BaseSlices = {},
 > extends ServerSlice<TData, TSlices, undefined> {
-  protected constructor() {
-    super(undefined);
+  protected constructor(initialData?: TData) {
+    super(initialData);
   }
 
-  protected override init(): void {
-    super.init();
+  protected override onInit(): void {
+    super.onInit();
 
     this.subscribe(
       (state) => state.response,
@@ -21,8 +21,8 @@ export default abstract class StorageSlice<
     );
   }
 
-  protected override buildRequest(): undefined {
-    return super.buildRequest();
+  protected override onBuildRequest(): undefined {
+    return undefined;
   }
 
   protected override fetch(): Const<TData> | undefined {

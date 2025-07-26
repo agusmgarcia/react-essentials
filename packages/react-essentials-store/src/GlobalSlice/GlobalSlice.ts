@@ -62,16 +62,18 @@ export default abstract class GlobalSlice<
     });
   }
 
-  protected init(): void {
-    if (!this._slices)
-      throw new Error(`'${this.constructor.name}' hasn't set 'slices'`);
-
+  protected onInit(): void {
     if (this._initialized)
-      throw new Error(
-        `'${this.constructor.name}' has been already initialized`,
-      );
+      throw new Error(`'${this.constructor.name}' has been initialized`);
 
     this._initialized = true;
+  }
+
+  protected onDestroy() {
+    if (!this._initialized)
+      throw new Error(`'${this.constructor.name}' hasn't been initialized`);
+
+    this._initialized = false;
   }
 
   subscribe(listener: Subscription<TState>["listener"]): Unsubscribe;

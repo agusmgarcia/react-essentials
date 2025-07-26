@@ -9,13 +9,13 @@ export default abstract class LocalStorageSlice<
 > extends StorageSlice<TData, TSlices> {
   private readonly _name: string;
 
-  protected constructor(name: string) {
-    super();
+  protected constructor(name: string, initialData?: TData) {
+    super(initialData);
     this._name = name;
   }
 
-  protected override init(): void {
-    super.init();
+  protected override onInit(): void {
+    super.onInit();
 
     if (isSSR()) return;
 

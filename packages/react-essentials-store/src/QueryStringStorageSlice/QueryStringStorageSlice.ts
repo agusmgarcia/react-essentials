@@ -20,8 +20,8 @@ export default abstract class QueryStringStorageSlice<
     this._mode = configs?.mode || "replace";
   }
 
-  protected override init(): void {
-    super.init();
+  protected override onInit(): void {
+    super.onInit();
 
     if (isSSR()) return;
     let prevSearch = location.search;
