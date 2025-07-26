@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.7.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.7.0)
+
+> July 26, 2025
+
+### Features ✅
+
+- **Cache**: forward signal over the set method
+- remove unused utilities
+
+### Fixes 🎯
+
+- **StorageCache**: preserve mutex across caches
+
 ## [v0.6.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.6.0)
 
 > July 26, 2025
