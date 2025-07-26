@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.5.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.5.0)
+
+> July 26, 2025
+
+### Features ✅
+
+- **errors**: encapsulate it into a module
+- **properties**: encapsulate into a module
+- **sortProperties**: add types
+- add ability to customize the error message when not found
+
+### Fixes 🎯
+
+- **createWebpackConfig**: limit the core option to lib, azure-func or node
+- **createPostCSSConfig**: limit the core option to app or lib
+- **createNextConfig**: limit the core option to app
+- **check**: adjust typescript checks
+- adjust getPackageJSON result type
+
 ## [v0.4.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.4.0)
 
 > July 26, 2025
