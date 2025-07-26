@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.4.0)
+
+> July 26, 2025
+
+### Features ✅
+
+- **Cache**: improve the way is implemented
+- make compatible with react 18
+
+### Fixes 🎯
+
+- **package.json**: adjust typo
+- **Cache.test**: remove flaky test
+
 ## [v0.3.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.3.0)
 
 > July 26, 2025
