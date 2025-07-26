@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.3.0)
+
+> July 26, 2025
+
+### Features ✅
+
+- stop using --ignore-scripts
+- abort operation on error
+- **hasProperty**: add utils
+- **files**: send emtpy string instead of undefined
+
+### Fixes 🎯
+
+- exit with error when format not pass
+
 ## [v0.2.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.2.0)
 
 > July 26, 2025
