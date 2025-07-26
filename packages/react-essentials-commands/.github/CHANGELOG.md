@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.7.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.7.0)
+
+> July 26, 2025
+
+### Features ✅
+
+- **createWebpackConfig**: prevent setting NODE_ENV for libs
+- remove unused utilities
+- **createWebpackConfig**: stop using MiniCSSExtractPlugin
+
+### Fixes 🎯
+
+- **createJestConfig**: adjust testMatch
+- bump dependencies
+- **createEslintConfig**: remove space
+
 ## [v0.6.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.6.0)
 
 > July 26, 2025
