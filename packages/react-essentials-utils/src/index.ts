@@ -1,4 +1,3 @@
-export { type default as AddArgumentToObject } from "./AddArgumentToObject.types";
 export { default as aggregateResponse } from "./aggregateResponse";
 export { type default as AsyncFunc } from "./AsyncFunc.types";
 export { type CacheTypes, default as Cache } from "./Cache";
