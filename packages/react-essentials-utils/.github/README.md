@@ -277,14 +277,6 @@ import { type Tuple } from "@agusmgarcia/react-essentials-utils";
 type TupleOfThreeStrings = Tuple<string, 3>; // => [string, string, string]
 ```
 
-## Tuple to union
-
-```typescript
-import { type TupleToUnion } from "@agusmgarcia/react-essentials-utils";
-
-type AorB = TupleToUnion<["a", "b"]>; // => "a" | "b"
-```
-
 ## Union to intersection
 
 ```typescript
