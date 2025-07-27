@@ -14,7 +14,6 @@ export * as folders from "./folders";
 export { type default as Func } from "./Func.types";
 export { default as isSSR } from "./isSSR";
 export * as merges from "./merges";
-export { type default as OmitFuncs } from "./OmitFuncs.types";
 export { type default as OmitProperty } from "./OmitProperty.types";
 export { type default as Primitive } from "./Primitive.types";
 export * as properties from "./properties";

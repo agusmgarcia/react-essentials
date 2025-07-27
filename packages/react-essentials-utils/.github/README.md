@@ -207,16 +207,6 @@ merges.deep(
 ); // => [{ name: "John", surname: "Doe" }, { name: "Foo", surname: "Bar" }];
 ```
 
-## Omit Funcs
-
-```typescript
-import { type Func, type OmitFuncs } from "@agusmgarcia/react-essentials-utils";
-
-type Person = { id: string; name: string; setName: Func<void, [name: string]> };
-
-type OmitFuncsPerson = OmitFuncs<Person>; // => { id: string; name: string; }
-```
-
 ## Omit property
 
 ```typescript
