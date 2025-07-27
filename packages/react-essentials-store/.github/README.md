@@ -4,64 +4,88 @@ An opinionated state manager. It provides tools to create global and server stat
 
 ## Global slice
 
-This is the state that is going to be consumed globally across the app. It is handled by `createGlobalSlice` function. It can be **read and written**.
+This is the state that is going to be consumed globally across the app. It is handled by the `GlobalSlice` class. It can be **read and written**.
 
 ```ts
 // ./src/store/FormSearchSlice.ts
 
-import {
-  createGlobalSlice,
-  type CreateGlobalSliceTypes,
-} from "@agusmgarcia/react-essentials-store";
+import { GlobalSlice } from "@agusmgarcia/react-essentials-store";
 import { type Func } from "@agusmgarcia/react-essentials-utils";
 
-export type FormSearchSlice = CreateGlobalSliceTypes.SliceOf<
-  "formSearch",
-  {
-    asc: boolean;
-    clear: Func;
-    name: string;
-    setAsc: Func<void, [asc: boolean]>;
-    setName: Func<void, [name: string]>;
-  }
->;
+export type FormSearch = {
+  asc: boolean;
+  clear: Func;
+  name: string;
+};
 
-export default createGlobalSlice<FormSearchSlice>("formSearch", () => ({
-  asc: false,
-  clear: (context) => context.set({ asc: false, name: "" }),
-  name: "",
-  setAsc: (asc, context) => context.set((prev) => ({ ...prev, asc })),
-  setName: (name, context) => context.set((prev) => ({ ...prev, name })),
-}));
+export default class FormSearchSlice extends GlobalSlice<FormSearch> {
+  constructor() {
+    super({ asc: false, name: "" });
+  }
+
+  clear(): void {
+    this.state = { asc: false, name: "" };
+  }
+
+  setAsc(asc: boolean): void {
+    this.state = { ...this.state, asc };
+  }
+
+  setName(name: string): void {
+    this.state = { ...this.state, name };
+  }
+}
 ```
 
 ## Server slice
 
-The state that is populated from an API or an external resource. It is handled by `createServerSlice` function. Due the way it gets originated, it can be **read** only.
+The state that is populated from an API or an external resource. It is handled by the `ServerSlice` class. Due the way it gets originated, it can be **read** only.
 
 ```ts
 // ./src/store/FormResultSlice.ts
 
-import {
-  createServerSlice,
-  type CreateServerSliceTypes,
-} from "@agusmgarcia/react-essentials-store";
+import { ServerSlice } from "@agusmgarcia/react-essentials-store";
 import { type Func } from "@agusmgarcia/react-essentials-utils";
 
-import { type FormSearchSlice } from "./FormSearch.ts";
+import type FormSearchSlice from "./FormSearchSlice";
+import { type FormSearch } from "./FormSearchSlice";
 
-export type FormResultSlice = CreateServerSliceTypes.SliceOf<
-  "formResult",
-  { age: number; name: string; surname: string }[],
-  { asc: boolean; name: string }
->;
+export type FormResult = {
+  age: number;
+  name: string;
+  surname: string;
+}[];
 
-export default createServerSlice<FormResultSlice, FormSearchSlice>(
-  "formResult",
-  ({ asc, name }, signal) =>
-    fetch(`/api/search?asc=${asc}&name=${name}`, { signal }),
-  (state) => ({ asc: state.formSearch.asc, name: state.formSearch.name }),
-);
+export type Request = {
+  asc: boolean;
+  name: string;
+};
+
+export default class FormResultSlice extends ServerSlice<
+  FormResult,
+  Request,
+  { formSearch: FormSearchSlice }
+> {
+  constructor() {
+    super();
+  }
+
+  protected override onBuildRequest(): Request {
+    return {
+      asc: this.slices.formSearch.state.asc,
+      name: this.slices.formSearch.state.name,
+    };
+  }
+
+  protected override onFetch(
+    request: Request,
+    signal: AbortSignal,
+  ): FormResult {
+    return fetch(`/api/search?asc=${request.asc}&name=${request.name}`, {
+      signal,
+    }).then((result) => result.json());
+  }
+}
 ```
 
 ## Store
@@ -71,23 +95,25 @@ The slices are gathered into a store object. It is handled by `createStore` func
 ```typescript
 // ./src/store/index.ts
 
-import { createStore } from "@agusmgarcia/react-essentials-store";
+import { createReactStore } from "@agusmgarcia/react-essentials-store";
 
-import createFormSearchSlice from "./FormSearchSlice";
-import createFormResultSlice from "./FormResultSlice";
+import FormSearchSlice from "./FormSearchSlice";
+import FormResultSlice from "./FormResultSlice";
 
-const { useSelector, ...reactStore } = createStore(
-  createFormSearchSlice,
-  createFormResultSlice,
-);
+const { useSelector, ...reactStore } = createReactStore({
+  slices: {
+    formSearch: FormSearchSlice,
+    formResult: FormResultSlice,
+  },
+});
 
 export const StoreProvider = reactStore.StoreProvider;
 
 export function useFormSearch() {
   return {
     clearFormSearch: useSelector((state) => state.formSearch.clear),
-    formSearchAsc: useSelector((state) => state.formSearch.asc),
-    formSearchName: useSelector((state) => state.formSearch.name),
+    formSearchAsc: useSelector((state) => state.formSearch.state.asc),
+    formSearchName: useSelector((state) => state.formSearch.state.name),
     setFormSearchAsc: useSelector((state) => state.formSearch.setAsc),
     setFormSearchName: useSelector((state) => state.formSearch.setName),
   };
@@ -95,9 +121,9 @@ export function useFormSearch() {
 
 export function useFormResult() {
   return {
-    formResult: useSelector((state) => state.formResult.data),
-    formResultError: useSelector((state) => state.formResult.error),
-    formResultLoading: useSelector((state) => state.formResult.loading),
+    formResult: useSelector((state) => state.formResult.response),
+    formResultError: useSelector((state) => state.formResult.state.error),
+    formResultLoading: useSelector((state) => state.formResult.state.loading),
     formResultReload: useSelector((state) => state.formResult.reload),
   };
 }
