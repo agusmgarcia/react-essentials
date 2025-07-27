@@ -277,14 +277,6 @@ import { type Tuple } from "@agusmgarcia/react-essentials-utils";
 type TupleOfThreeStrings = Tuple<string, 3>; // => [string, string, string]
 ```
 
-## Union to tuple
-
-```typescript
-import { type UnionToTuple } from "@agusmgarcia/react-essentials-utils";
-
-type ArrayOfAOrB = UnionToTuple<"a" | "b">; // => ["a", "b"]
-```
-
 ## Use device pixel ratio
 
 ```typescript

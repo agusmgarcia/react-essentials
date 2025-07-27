@@ -25,7 +25,6 @@ export {
 } from "./StorageCache";
 export * as strings from "./strings";
 export { type default as Tuple } from "./Tuple.types";
-export { type default as UnionToTuple } from "./UnionToTuple.types";
 export { default as useDevicePixelRatio } from "./useDevicePixelRatio";
 export { default as useDimensions } from "./useDimensions";
 export { default as useElementAtBottom } from "./useElementAtBottom";
