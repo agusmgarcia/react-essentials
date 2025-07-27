@@ -195,16 +195,6 @@ import { isSSR } from "@agusmgarcia/react-essentials-utils";
 isSSR(); // => 'true' if server side and 'false' for client
 ```
 
-## Merge
-
-```typescript
-import { type Merge } from "@agusmgarcia/react-essentials-utils";
-
-type ObjectA = { name: string };
-type ObjectB = { surname: string };
-type Result = Merge<ObjectA, ObjectB>; // => { name: string; surname: string; }
-```
-
 ## Merges
 
 ```tsx
