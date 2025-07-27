@@ -277,17 +277,6 @@ import { type Tuple } from "@agusmgarcia/react-essentials-utils";
 type TupleOfThreeStrings = Tuple<string, 3>; // => [string, string, string]
 ```
 
-## Union to intersection
-
-```typescript
-import { type UnionToIntersection } from "@agusmgarcia/react-essentials-utils";
-
-type Person = { person: { id: string } };
-type Pet = { pet: { id: string } };
-
-type PersonAndPet = UnionToIntersection<Person | Pet>; // => { person: { id: string }; pet: { id: string } }
-```
-
 ## Union to tuple
 
 ```typescript
