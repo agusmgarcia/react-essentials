@@ -31,7 +31,7 @@
   "devDependencies": {
     "@agusmgarcia/react-essentials-commands": "*",
     "@agusmgarcia/react-essentials-utils": "*",
-    "react": "^19.1.0",
+    "react": "^19.1.1",
     "zustand": "^5.0.6"
   },
   "files": [
