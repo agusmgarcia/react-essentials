@@ -20,20 +20,6 @@ import useDimensions from "./useDimensions";
  * The hook depends on two custom hooks:
  * - `useDevicePixelRatio`: Retrieves the device's pixel ratio.
  * - `useDimensions`: Retrieves the dimensions of the referenced element.
- *
- * @example
- * ```tsx
- * const ref = useRef<HTMLDivElement>(null);
- * const isAtBottom = useElementAtBottom(ref);
- *
- * useEffect(() => {
- *   if (isAtBottom) {
- *     console.log("Element is at the bottom!");
- *   }
- * }, [isAtBottom]);
- *
- * return <div ref={ref}>Scrollable content...</div>;
- * ```
  */
 export default function useElementAtBottom<TElement extends HTMLElement>(
   elementRef: React.RefObject<TElement | null>,

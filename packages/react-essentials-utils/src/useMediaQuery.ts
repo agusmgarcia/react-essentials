@@ -7,17 +7,6 @@ import { useEffect, useState } from "react";
  * @param mediaQuery - The media query string to evaluate (e.g., "(min-width: 768px)").
  * @param initialValue - An optional initial value for the match state. Defaults to `false`.
  * @returns A boolean value indicating whether the media query matches the current viewport.
- *
- * @example
- * ```tsx
- * const isLargeScreen = useMediaQuery("(min-width: 1024px)");
- *
- * return (
- *   <div>
- *     {isLargeScreen ? "Large screen" : "Small screen"}
- *   </div>
- * );
- * ```
  */
 export default function useMediaQuery(
   mediaQuery: string,

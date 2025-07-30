@@ -16,18 +16,6 @@ import useDimensions from "./useDimensions";
  *   based on the element's `scrollTop` value.
  * - The `devicePixelRatio` is used as a threshold to determine if the element is at the top.
  * - The hook also accounts for changes in the element's dimensions by using the `useDimensions` hook.
- *
- * @example
- * ```tsx
- * const ref = useRef<HTMLDivElement>(null);
- * const isAtTop = useElementAtTop(ref);
- *
- * useEffect(() => {
- *   console.log("Is at top:", isAtTop);
- * }, [isAtTop]);
- *
- * return <div ref={ref} style={{ overflow: "scroll", height: "200px" }}>Content</div>;
- * ```
  */
 export default function useElementAtTop<TElement extends HTMLElement>(
   elementRef: React.RefObject<TElement | null>,

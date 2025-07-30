@@ -9,12 +9,6 @@
  * @remarks
  * This type uses recursion to construct the tuple by repeatedly prepending `TType`
  * to the `TRest` array until the length of `TRest` matches `TLength`.
- *
- * @example
- * ```typescript
- * type TupleOfThreeStrings = _TupleOf<string, 3, []>;
- * // Result: [string, string, string]
- * ```
  */
 type _TupleOf<
   TType,

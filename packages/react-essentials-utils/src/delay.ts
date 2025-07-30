@@ -8,21 +8,6 @@
  * @returns A promise that resolves after the specified delay, or rejects if the signal is aborted.
  *
  * @throws If the `AbortSignal` is already aborted when the function is called, the promise will immediately reject.
- *
- * @example
- * ```typescript
- * const controller = new AbortController();
- * const signal = controller.signal;
- *
- * delay(1000, signal).then(() => {
- *   console.log('Resolved after 1 second');
- * }).catch((error) => {
- *   console.error('Promise rejected:', error);
- * });
- *
- * // Abort the delay
- * controller.abort();
- * ```
  */
 export default function delay(ms: number, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {

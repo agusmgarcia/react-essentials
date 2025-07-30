@@ -19,24 +19,6 @@ import { useEffect, useState } from "react";
  * @returns An object containing the current dimensions of the observed element:
  * - `height`: The height of the element.
  * - `width`: The width of the element.
- *
- * @example
- * ```tsx
- * import React, { useRef } from "react";
- * import useDimensions from "./useDimensions";
- *
- * const MyComponent = () => {
- *   const ref = useRef<HTMLDivElement>(null);
- *   const dimensions = useDimensions(ref);
- *
- *   return (
- *     <div ref={ref}>
- *       <p>Height: {dimensions.height}px</p>
- *       <p>Width: {dimensions.width}px</p>
- *     </div>
- *   );
- * };
- * ```
  */
 export default function useDimensions<TElement extends Element>(
   elementRef: React.RefObject<TElement | null>,

@@ -6,12 +6,6 @@ import { useEffect, useState } from "react";
  *
  * @returns {number} The current device pixel ratio.
  *
- * @example
- * ```tsx
- * const devicePixelRatio = useDevicePixelRatio();
- * console.log(devicePixelRatio); // Logs the current DPR, e.g., 2 for Retina displays.
- * ```
- *
  * @remarks
  * This hook uses the `window.devicePixelRatio` property and a `matchMedia` listener
  * to detect changes in the device's pixel ratio. It ensures the value is updated
