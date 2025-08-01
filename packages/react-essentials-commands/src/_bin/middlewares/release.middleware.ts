@@ -197,6 +197,7 @@ function getTemplate(context: Context): Record<string, any> {
           workflow_dispatch: null,
         },
         permissions: "write-all",
+        "run-name": "Release ${{ github.ref_name }}",
       }
     : context.core === "azure-func"
       ? {
@@ -275,6 +276,7 @@ function getTemplate(context: Context): Record<string, any> {
             workflow_dispatch: null,
           },
           permissions: "write-all",
+          "run-name": "Release ${{ github.ref_name }}",
         }
       : context.core === "lib"
         ? {
@@ -309,6 +311,7 @@ function getTemplate(context: Context): Record<string, any> {
               },
             },
             permissions: "write-all",
+            "run-name": "Release ${{ github.ref_name }}",
           }
         : {
             concurrency: {
@@ -341,5 +344,6 @@ function getTemplate(context: Context): Record<string, any> {
               workflow_dispatch: null,
             },
             permissions: "write-all",
+            "run-name": "Release ${{ github.ref_name }}",
           };
 }
