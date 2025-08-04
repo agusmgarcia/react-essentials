@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.8.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.8.0)
+
+> August 4, 2025
+
+### Features ✅
+
+- **release.yml**: add run-name
+- **createNextConfig**: remove configs
+
+### Fixes 🎯
+
+- bump dependencies
+
 ## [v0.7.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.7.0)
 
 > July 26, 2025
