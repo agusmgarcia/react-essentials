@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.8.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.8.0)
+
+> August 4, 2025
+
+### Features ✅
+
+- **UnionToTuple**: remove type
+- **UnionToIntersection**: remove type
+- **TupleToUnion**: remove type
+- **OmitFuncs**: remove type
+- **Merge**: remove type
+- **AddArgumentToObject**: remove type
+- **Serializable**: add type
+- **Primitive**: add type
+
+### Fixes 🎯
+
+- adjust documentaiton
+- bump dependencies
+
 ## [v0.7.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.7.0)
 
 > July 26, 2025
