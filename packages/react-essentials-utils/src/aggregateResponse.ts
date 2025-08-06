@@ -6,17 +6,18 @@ import type AsyncFunc from "./AsyncFunc.types";
  * Calls the provided asynchronous callback function to fetch all pages of data,
  * starting from the first page, and concatenates the `items` arrays from each page.
  *
- * @template TResult - The result type, which must include an `items` array and a `totalCount` number.
+ * @template TItem - The result type.
  * @param callback - An async function that fetches a page of results, given a page index and page size.
  * @param pageSize - The number of items per page to request from the callback.
  * @returns A promise that resolves to an array containing all items from all pages.
  */
-export default async function aggregateResponse<
-  TResult extends { items: any[]; totalCount: number },
->(
-  callback: AsyncFunc<TResult, [pageIndex: number, pageSize: number]>,
+export default async function aggregateResponse<TItem>(
+  callback: AsyncFunc<
+    { items: TItem[]; totalCount: number },
+    [pageIndex: number, pageSize: number]
+  >,
   pageSize: number,
-): Promise<TResult["items"]> {
+): Promise<TItem[]> {
   const { items, totalCount } = await callback(1, pageSize);
 
   const pagesCount = Math.ceil(totalCount / pageSize);
