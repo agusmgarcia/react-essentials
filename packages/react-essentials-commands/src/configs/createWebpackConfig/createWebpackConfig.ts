@@ -72,7 +72,12 @@ export default async function createWebpackConfig(
               use: [
                 {
                   loader: "ts-loader",
-                  options: { getCustomTransformers },
+                  options: {
+                    compilerOptions: {
+                      noEmit: false,
+                    },
+                    getCustomTransformers,
+                  },
                 },
               ],
             },
@@ -159,7 +164,9 @@ export default async function createWebpackConfig(
                   loader: "ts-loader",
                   options: {
                     compilerOptions: {
+                      declaration: true,
                       jsx: "react-jsx",
+                      noEmit: false,
                     },
                     getCustomTransformers,
                   },
@@ -258,6 +265,7 @@ export default async function createWebpackConfig(
                     compilerOptions: {
                       declaration: configs?.omit === "web" ? true : false,
                       jsx: "react-jsx",
+                      noEmit: false,
                     },
                     getCustomTransformers,
                   },
@@ -340,8 +348,8 @@ export default async function createWebpackConfig(
                   loader: "ts-loader",
                   options: {
                     compilerOptions: {
-                      declaration: false,
                       jsx: "react-jsx",
+                      noEmit: false,
                     },
                     getCustomTransformers,
                   },
@@ -415,7 +423,12 @@ export default async function createWebpackConfig(
             use: [
               {
                 loader: "ts-loader",
-                options: { getCustomTransformers },
+                options: {
+                  compilerOptions: {
+                    noEmit: false,
+                  },
+                  getCustomTransformers,
+                },
               },
             ],
           },

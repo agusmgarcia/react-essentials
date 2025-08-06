@@ -18,62 +18,57 @@ export default createFileMiddleware<Record<string, any>>({
 });
 
 function getTemplate(context: Context): Record<string, any> {
-  const baseCompilerOptions = {
-    allowJs: true,
-    declaration: true,
-    esModuleInterop: true,
-    forceConsistentCasingInFileNames: true,
-    incremental: true,
-    isolatedModules: true,
-    jsx: "preserve",
-    lib: ["DOM", "DOM.Iterable", "ESNext"],
-    module: "esnext",
-    moduleResolution: "bundler",
-    noEmit: false,
-    noImplicitOverride: true,
-    plugins: [{ name: "next" }],
-    resolveJsonModule: true,
-    skipLibCheck: true,
-    strict: true,
-    target: "es2017",
-    tsBuildInfoFile: "node_modules/.typescriptcache",
-  };
-
   return context.core === "app"
     ? {
         compilerOptions: {
-          ...baseCompilerOptions,
           baseUrl: "./",
-          declaration: false,
-          noEmit: true,
+          module: "esnext",
+          moduleResolution: "bundler",
           paths: {
             "#public/*": ["public/*"],
             "#src/*": ["src/*"],
           },
         },
-        exclude: [".next", "dist", "node_modules"],
+        exclude: context.essentialsCommands
+          ? [".next", "dist", "node_modules", "webpack.config.ts"]
+          : [".next", "dist", "node_modules"],
+        extends: context.essentialsCommands
+          ? "./src/_out/tsconfig.base.json"
+          : `${context.essentialsCommandsName}/tsconfig.json`,
         include: ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+        "ts-node": context.essentialsCommands
+          ? { compilerOptions: { module: "commonjs" } }
+          : undefined,
       }
     : context.core === "azure-func"
       ? {
           compilerOptions: {
-            ...baseCompilerOptions,
             baseUrl: "./",
-            declaration: false,
+            module: "esnext",
+            moduleResolution: "bundler",
             outDir: "./dist",
             paths: {
               "#src/*": ["src/*"],
             },
             rootDir: "./src",
           },
-          exclude: [".next", "dist", "node_modules"],
+          exclude: context.essentialsCommands
+            ? [".next", "dist", "node_modules", "webpack.config.ts"]
+            : [".next", "dist", "node_modules"],
+          extends: context.essentialsCommands
+            ? "./src/_out/tsconfig.base.json"
+            : `${context.essentialsCommandsName}/tsconfig.json`,
           include: ["**/*.ts"],
+          "ts-node": context.essentialsCommands
+            ? { compilerOptions: { module: "commonjs" } }
+            : undefined,
         }
       : context.core === "lib"
         ? {
             compilerOptions: {
-              ...baseCompilerOptions,
               baseUrl: "./",
+              module: "esnext",
+              moduleResolution: "bundler",
               outDir: "./dist",
               paths: {
                 "#src/*": ["src/*"],
@@ -83,6 +78,9 @@ function getTemplate(context: Context): Record<string, any> {
             exclude: context.essentialsCommands
               ? [".next", "bin", "dist", "node_modules", "webpack.config.ts"]
               : [".next", "bin", "dist", "node_modules"],
+            extends: context.essentialsCommands
+              ? "./src/_out/tsconfig.base.json"
+              : `${context.essentialsCommandsName}/tsconfig.json`,
             include: ["**/*.ts", "**/*.tsx"],
             "ts-node": context.essentialsCommands
               ? { compilerOptions: { module: "commonjs" } }
@@ -90,16 +88,24 @@ function getTemplate(context: Context): Record<string, any> {
           }
         : {
             compilerOptions: {
-              ...baseCompilerOptions,
               baseUrl: "./",
-              declaration: false,
+              module: "esnext",
+              moduleResolution: "bundler",
               outDir: "./dist",
               paths: {
                 "#src/*": ["src/*"],
               },
               rootDir: "./src",
             },
-            exclude: [".next", "dist", "node_modules"],
+            exclude: context.essentialsCommands
+              ? [".next", "dist", "node_modules", "webpack.config.ts"]
+              : [".next", "dist", "node_modules"],
+            extends: context.essentialsCommands
+              ? "./src/_out/tsconfig.base.json"
+              : `${context.essentialsCommandsName}/tsconfig.json`,
             include: ["**/*.ts"],
+            "ts-node": context.essentialsCommands
+              ? { compilerOptions: { module: "commonjs" } }
+              : undefined,
           };
 }
