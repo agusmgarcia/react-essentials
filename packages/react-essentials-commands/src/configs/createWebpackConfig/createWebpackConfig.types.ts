@@ -12,6 +12,7 @@ export type Input =
         NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>,
         "lib"
       >,
+
       /**
        * Optional configurations for the webpack setup.
        */
@@ -30,6 +31,7 @@ export type Input =
               Record<string, string | false | string[]>,
               [target: "binaries" | "node" | "web"]
             >;
+
         /**
          * Externals configuration for webpack.
          * This can be a static array of strings or a function that returns an array based on
@@ -42,12 +44,14 @@ export type Input =
         externals:
           | string[]
           | Func<string[], [target: "binaries" | "node" | "web"]>;
+
         /**
          * Omit configuration for the webpack setup.
          * This specifies which environments to omit from the configuration.
          * - `node`: Omit Node.js specific configurations.
          * - `web`: Omit web specific configurations.
          */
+
         omit: "node" | "web";
       }>,
     ]
@@ -61,6 +65,7 @@ export type Input =
         NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>,
         "azure-func" | "node"
       >,
+
       /**
        * Optional configurations for the webpack setup.
        */
@@ -70,6 +75,7 @@ export type Input =
          * This is a static object that returns an object.
          */
         alias: Record<string, string | false | string[]>;
+
         /**
          * Externals configuration for webpack.
          * This is a static array of strings.

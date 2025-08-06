@@ -109,11 +109,23 @@ export default async function createWebpackConfig(
   if (core === "lib") {
     const outs = await folders
       .readFolder(path.resolve("src", "_out"))
-      .then((fs) => fs.filter((f) => !f.startsWith("_") && f.endsWith(".ts")))
+      .then((fs) =>
+        fs.filter(
+          (f) =>
+            !f.startsWith("_") &&
+            (f.endsWith(".ts") || f.endsWith(".tsx") || f.endsWith(".json")),
+        ),
+      )
       .then((files) =>
         files.reduce(
           (result, file) => {
-            result[file.split(".ts")[0]] = path.resolve("src", "_out", file);
+            const fileName = file.endsWith(".ts")
+              ? file.split(".ts")[0]
+              : file.endsWith(".tsx")
+                ? file.split(".tsx")[0]
+                : file.split(".json")[0];
+
+            result[fileName] = path.resolve("src", "_out", file);
             return result;
           },
           {} as Record<string, string>,
@@ -153,6 +165,14 @@ export default async function createWebpackConfig(
                   },
                 },
               ],
+            },
+            {
+              exclude: /node_modules/,
+              generator: {
+                filename: `dist${path.sep}_out${path.sep}[name].json`,
+              },
+              test: /src\/_out\/.+?\.json$/,
+              type: "asset/resource",
             },
           ],
         },
@@ -243,6 +263,14 @@ export default async function createWebpackConfig(
                   },
                 },
               ],
+            },
+            {
+              exclude: /node_modules/,
+              generator: {
+                filename: `dist${path.sep}_out${path.sep}[name].json`,
+              },
+              test: /src\/_out\/.+?\.json$/,
+              type: "asset/resource",
             },
           ],
         },
