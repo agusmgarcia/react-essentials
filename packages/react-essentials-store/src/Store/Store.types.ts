@@ -1,7 +1,4 @@
-import {
-  type Func,
-  type OmitProperty,
-} from "@agusmgarcia/react-essentials-utils";
+import { type Func } from "@agusmgarcia/react-essentials-utils";
 
 import type GlobalSlice from "../GlobalSlice";
 
@@ -106,16 +103,17 @@ export type SlicesOf<TSliceFactories extends BaseSliceFactories> = {
 /**
  * Represents the state shape of the store, derived from the provided slice factories.
  *
- * This type maps each slice name to its corresponding instance type, omitting the "subscribe" and "shallow" properties
+ * This type maps each slice name to its corresponding instance type, omitting the "subscribe" property
  * from each slice instance. The resulting type is a plain object containing only the stateful properties of each slice.
  *
  * @typeParam TSliceFactories - The mapping of slice names to their factory constructors.
  */
-export type StateOf<TSliceFactories extends BaseSliceFactories> = OmitProperty<
-  SlicesOf<TSliceFactories>,
-  "subscribe",
-  "shallow"
->;
+export type StateOf<TSliceFactories extends BaseSliceFactories> = {
+  [TKey in keyof SlicesOf<TSliceFactories>]: Omit<
+    SlicesOf<TSliceFactories>[TKey],
+    "subscribe"
+  >;
+};
 
 /**
  * Represents a listener function that is called with the current state of the store.
