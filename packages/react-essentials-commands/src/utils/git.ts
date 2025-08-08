@@ -55,7 +55,7 @@ export async function getCommits(
   options?: Partial<{
     initial: string;
     last: string;
-    path: string;
+    path: string | string[];
   }>,
 ): Promise<string[]> {
   return await getDetailedCommits(options).then((commits) =>
@@ -67,15 +67,23 @@ export async function getDetailedCommits(
   options?: Partial<{
     initial: string;
     last: string;
-    path: string;
+    path: string | string[];
   }>,
 ): Promise<{ commit: string; createdAt: Date; sha: string }[]> {
+  const paths = (
+    Array.isArray(options?.path)
+      ? options.path
+      : typeof options?.path === "string"
+        ? [options.path]
+        : []
+  ).join(" ");
+
   return await execute("git fetch -p -P", true)
     .then(() =>
       execute(
         !!options?.initial
-          ? `git log --pretty=format:"%H-----%ci-----%s" ${options.initial}...${options.last || "HEAD"}${!!options.path ? ` -- ${options.path}` : ""}`
-          : `git log --pretty=format:"%H-----%ci-----%s" ${options?.last || "HEAD"}${!!options?.path ? ` -- ${options.path}` : ""}`,
+          ? `git log --pretty=format:"%H-----%ci-----%s" ${options.initial}...${options.last || "HEAD"}${!!paths ? ` -- ${paths}` : ""}`
+          : `git log --pretty=format:"%H-----%ci-----%s" ${options?.last || "HEAD"}${!!paths ? ` -- ${paths}` : ""}`,
         false,
       ),
     )

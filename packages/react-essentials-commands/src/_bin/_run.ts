@@ -53,6 +53,7 @@ async function createContext(
     essentialsCommandsName: packageJSONEssentialsCommands.name,
     filesToRegenerate: args.getStrings("file"),
     name,
+    paths: args.getStrings("path"),
     version: packageJSON.version || "0.0.0",
   };
 }

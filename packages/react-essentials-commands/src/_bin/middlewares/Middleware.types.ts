@@ -17,5 +17,6 @@ export type Context = {
   essentialsCommandsName: string;
   filesToRegenerate: string[];
   name: string;
+  paths: string[];
   version: string;
 };

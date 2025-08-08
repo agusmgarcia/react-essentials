@@ -1,3 +1,4 @@
+import path from "path";
 import process from "process";
 
 import { args, errors, execute, git, npm, question } from "#src/utils";
@@ -16,7 +17,13 @@ export default async function deploy(): Promise<void> {
       .then((tags) => tags.at(-1));
 
     const typeOfNewVersion = await git
-      .getCommits({ initial: lastTagMerged, path: process.cwd() })
+      .getCommits({
+        initial: lastTagMerged,
+        path: [
+          process.cwd(),
+          ...args.getStrings("path").map((p) => path.resolve(process.cwd(), p)),
+        ],
+      })
       .then((commits) => commits.reverse())
       .then(findTypeOfNewVersion);
 

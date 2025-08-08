@@ -1,9 +1,11 @@
 import { EOL } from "os";
+import path from "path";
 import process from "process";
 
 import { git, npm } from "#src/utils";
 
 import createFileMiddleware from "./createFileMiddleware";
+import { type Context } from "./Middleware.types";
 
 export default createFileMiddleware<string>({
   path: ".github/CHANGELOG.md",
@@ -11,7 +13,7 @@ export default createFileMiddleware<string>({
   valid: ["app", "azure-func", "lib", "node"],
 });
 
-async function getTemplate(): Promise<string> {
+async function getTemplate(context: Context): Promise<string> {
   let fragments = "";
 
   const scope = await npm.getMonorepoDetails().then((m) => m?.name);
@@ -20,7 +22,12 @@ async function getTemplate(): Promise<string> {
     const [remoteURL, detailedTags, detailedCommits] = await Promise.all([
       git.getRemoteURL(),
       git.getDetailedTags({ merged: true, scope }),
-      git.getDetailedCommits({ path: process.cwd() }),
+      git.getDetailedCommits({
+        path: [
+          process.cwd(),
+          ...context.paths.map((p) => path.resolve(process.cwd(), p)),
+        ],
+      }),
     ]);
 
     fragments = detailedTags
