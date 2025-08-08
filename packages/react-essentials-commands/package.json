@@ -32,13 +32,13 @@
   "scripts": {
     "build": "tsx src/_bin/build.ts",
     "check": "tsx src/_bin/check.ts",
-    "deploy": "tsx src/_bin/deploy.ts",
+    "deploy": "tsx src/_bin/deploy.ts --path=../../.github/workflows",
     "format": "tsx src/_bin/format.ts",
     "postbuild": "chmod +x bin/*.js",
     "postpack": "tsx src/_bin/postpack.ts",
     "prebuild": "npm i --ignore-scripts --no-audit --no-fund",
     "prepack": "tsx src/_bin/prepack.ts",
-    "regenerate": "tsx src/_bin/regenerate.ts",
+    "regenerate": "tsx src/_bin/regenerate.ts --path=../../.github/workflows",
     "start": "tsx src/_bin/start.ts",
     "test": "tsx src/_bin/test.ts"
   },

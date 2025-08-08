@@ -8,6 +8,7 @@ import {
   git,
 } from "#src/utils";
 
+import packageJSONEssentials from "../../../../package.json";
 import packageJSONEssentialsCommands from "../../package.json";
 import middlewares, { type MiddlewaresTypes } from "./middlewares";
 
@@ -51,6 +52,8 @@ async function createContext(
     defer: (callback) => list.push(callback),
     essentialsCommands: packageJSON.name === packageJSONEssentialsCommands.name,
     essentialsCommandsName: packageJSONEssentialsCommands.name,
+    essentialsCommandsVersion: packageJSONEssentialsCommands.version,
+    essentialsName: packageJSONEssentials.name,
     filesToRegenerate: args.getStrings("file"),
     name,
     paths: args.getStrings("path"),

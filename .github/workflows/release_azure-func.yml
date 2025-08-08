@@ -1,0 +1,186 @@
+name: Release Azure func
+
+on:
+  workflow_call:
+    inputs:
+      azure-allow-no-subscriptions:
+        required: false
+        type: boolean
+        description: Set this value to true to enable support for accessing tenants without subscriptions
+
+      azure-app-name:
+        required: true
+        type: string
+        description: Name of the Azure Function App
+
+      azure-audience:
+        required: false
+        type: string
+        description: Provide audience field for access-token. Default value is api://AzureADTokenExchange
+
+      azure-auth-type:
+        required: false
+        type: string
+        description: The type of authentication. Supported values are SERVICE_PRINCIPAL, IDENTITY. Default value is SERVICE_PRINCIPAL
+
+      azure-environment:
+        required: false
+        type: string
+        description: Name of the environment. Supported values are azurecloud, azurestack, azureusgovernment, azurechinacloud, azuregermancloud. Default being azurecloud
+
+    secrets:
+      azure-client-id:
+        required: false
+        description: ClientId of the Azure Service principal created
+
+      azure-creds:
+        required: false
+        description: Paste output of az ad sp create-for-rbac as value of secret variable AZURE_CREDENTIALS
+
+      azure-subscription-id:
+        required: false
+        description: Azure subscriptionId
+
+      azure-tenant-id:
+        required: false
+        description: TenantId of the Azure Service principal created
+
+      node-auth-token:
+        required: true
+        description: The token to authenticate NPM
+
+jobs:
+  deploy-azure-func:
+    name: Deploy Azure func
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if the type is 'tag'
+        if: ${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' }}
+        run: |
+          echo "::error::Workflow needs to be dispatched from a tag"
+          exit 1
+        shell: bash
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: 22.16
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-fund
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.node-auth-token }}
+
+      - name: Get scope from tag
+        id: get-scope-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: $1
+          string: ${{ github.ref_name }}
+
+      - name: Get package location
+        if: ${{ steps.get-scope-from-tag.outputs.replaced }}
+        id: get-package-location
+        run: |
+          value=$(npm query .workspace | jq -r --arg pkg_name '${{steps.get-scope-from-tag.outputs.replaced }}' '.[] | select(.name == $pkg_name) | .location')
+          echo "value=${value}" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Get version from tag
+        id: get-version-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: $2.$3.$4
+          string: ${{ github.ref_name }}
+
+      - name: Extract version from package
+        id: extract-version-from-package
+        run: |
+          value=$(jq .version package.json -r)
+          echo "value=${value}" >> "$GITHUB_OUTPUT"
+        shell: bash
+        working-directory: ${{ steps.get-package-location.outputs.value }}
+
+      - name: Verify versions match
+        if: ${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
+        run: |
+          echo "::error::Version in the package.json (${{ steps.extract-version-from-package.outputs.value }}) and tag (${{ steps.get-version-from-tag.outputs.replaced }}) don't match"
+          exit 1
+        shell: bash
+
+      - name: Check
+        run: npm run check -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
+        shell: bash
+
+      - name: Test
+        run: npm test -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
+        shell: bash
+
+      - name: Build
+        run: npm run build -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
+        shell: bash
+
+      - name: Azure login
+        id: azure-login
+        uses: azure/login@v2
+        with:
+          allow-no-subscriptions: ${{ inputs.azure-allow-no-subscriptions }}
+          audience: ${{ inputs.azure-audience }}
+          auth-type: ${{ inputs.azure-auth-type }}
+          client-id: ${{ secrets.azure-client-id }}
+          creds: ${{ secrets.azure-creds }}
+          environment: ${{ inputs.azure-environment }}
+          subscription-id: ${{ secrets.azure-subscription-id }}
+          tenant-id: ${{ secrets.azure-tenant-id }}
+
+      - name: Add app settings
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ inputs.azure-app-name }}
+          app-settings-json: |
+            [
+              {
+                "name": "APP_VERSION",
+                "value": "${{ steps.get-version-from-tag.outputs.replaced }}",
+                "slotSetting": false
+              },
+              {
+                "name": "FUNCTIONS_EXTENSION_VERSION",
+                "value": "~4",
+                "slotSetting": false
+              },
+              {
+                "name": "FUNCTIONS_WORKER_RUNTIME",
+                "value": "node",
+                "slotSetting": false
+              },
+              {
+                "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                "value": "~22.16.0",
+                "slotSetting": false
+              }
+            ]
+
+      - name: Install dependencies for production
+        run: npm ci --ignore-scripts --no-audit --no-fund --omit=dev
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.node-auth-token }}
+
+      - name: Deploy function
+        uses: azure/functions-action@v1
+        with:
+          app-name: ${{ inputs.azure-app-name }}
+          respect-funcignore: true
+
+      - name: Azure logout
+        if: ${{ always() && steps.azure-login.conclusion == 'success' }}
+        run: az logout
+        shell: bash
