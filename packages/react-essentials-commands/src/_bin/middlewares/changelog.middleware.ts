@@ -66,7 +66,16 @@ async function getTemplate(context: Context): Promise<string> {
           .join(EOL);
 
         const fixCommits = commits
-          .filter((c) => c.type !== "feat" && !c.isBreakingChange)
+          .filter((c) => c.type === "fix" && !c.isBreakingChange)
+          .map(transformCommit)
+          .join(EOL);
+
+        const choreCommits = commits
+          .filter(
+            (c) =>
+              (c.type === "chore" || c.type === "refactor") &&
+              !c.isBreakingChange,
+          )
           .map(transformCommit)
           .join(EOL);
 
@@ -84,10 +93,11 @@ async function getTemplate(context: Context): Promise<string> {
         return `## ${!!remoteURL ? `[${tagValue.replace(`${scope}@`, "")}](${remoteURL}/tree/${tagValue})` : tagValue.replace(`${scope}@`, "")}
 
 > ${date}
-${!breakingChangeCommits && !featureCommits && !fixCommits ? `${EOL}- No compatible changes to show${EOL}` : ""}
+${!breakingChangeCommits && !featureCommits && !fixCommits && !choreCommits ? `${EOL}- No compatible changes to show${EOL}` : ""}
 ${!!breakingChangeCommits ? `### Breaking changes ❗️${EOL}${EOL}${breakingChangeCommits}${EOL}` : ""}
 ${!!featureCommits ? `### Features ✅${EOL}${EOL}${featureCommits}${EOL}` : ""}
-${!!fixCommits ? `### Fixes 🎯${EOL}${EOL}${fixCommits}${EOL}` : ""}`;
+${!!fixCommits ? `### Fixes 🎯${EOL}${EOL}${fixCommits}${EOL}` : ""}
+${!!choreCommits ? `### Chores ⚙️${EOL}${EOL}${choreCommits}${EOL}` : ""}`;
       })
       .reverse()
       .join(EOL);
