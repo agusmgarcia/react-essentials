@@ -1,3 +1,5 @@
+import { EOL } from "os";
+
 import { files, folders, properties } from "#src/utils";
 
 import createFileMiddleware from "./createFileMiddleware";
@@ -26,13 +28,31 @@ async function deleteEnvFiles(context: Context): Promise<void> {
     .then((fs) => Promise.all(fs.map((f) => files.removeFile(f))));
 }
 
-function getTemplate(context: Context): Record<string, any> {
+async function getTemplate(context: Context): Promise<Record<string, any>> {
+  const envLocal = await files.readFile(".env.local").then((envLocal) =>
+    envLocal.split(EOL).reduce(
+      (result, line) => {
+        const [key, value] = line.split("=", 2);
+        if (!key) return result;
+
+        result[key] = value || "";
+        return result;
+      },
+      {} as Record<string, string>,
+    ),
+  );
+
   return context.core === "app"
     ? {
+        ...envLocal,
+        APP_VERSION: undefined,
         NEXT_PUBLIC_APP_VERSION: context.version,
         NEXT_PUBLIC_BASE_PATH: "",
       }
     : {
+        ...envLocal,
         APP_VERSION: context.version,
+        NEXT_PUBLIC_APP_VERSION: undefined,
+        NEXT_PUBLIC_BASE_PATH: undefined,
       };
 }

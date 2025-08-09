@@ -181,11 +181,13 @@ function stringify<TElement extends string | string[] | Record<string, any>>(
         .join(EOL);
 
     case ".env.local":
-      return Object.entries(element).reduce(
-        (result, [key, value], index) =>
-          `${result}${!!index ? EOL : ""}${key}=${value}`,
-        "",
-      );
+      return Object.entries(element)
+        .filter(([_, value]) => typeof value !== "undefined")
+        .reduce(
+          (result, [key, value], index) =>
+            `${result}${!!index ? EOL : ""}${key}=${value}`,
+          "",
+        );
 
     case ".eslintrc.js":
     case ".github/CHANGELOG.md":
