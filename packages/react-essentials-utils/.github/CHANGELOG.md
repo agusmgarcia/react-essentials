@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.9.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.9.0)
+
+> August 9, 2025
+
+### Features ✅
+
+- **tsconfig.json**: use base configs from commands
+- **OmitProperty**: remove type
+- **aggregateResponse**: adjust generic type
+
 ## [v0.8.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.8.0)
 
 > August 4, 2025
@@ -17,7 +27,7 @@ All notable changes to this project will be documented in this file.
 - **Serializable**: add type
 - **Primitive**: add type
 
-### Fixes 🎯
+### Chores ⚙️
 
 - adjust documentaiton
 - bump dependencies
@@ -55,7 +65,7 @@ All notable changes to this project will be documented in this file.
 - **sortProperties**: add types
 - **merges**: stop using sort
 
-### Fixes 🎯
+### Chores ⚙️
 
 - **README.md**: add missing utils
 
@@ -71,6 +81,9 @@ All notable changes to this project will be documented in this file.
 ### Fixes 🎯
 
 - **package.json**: adjust typo
+
+### Chores ⚙️
+
 - **Cache.test**: remove flaky test
 
 ## [v0.3.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.3.0)
@@ -87,8 +100,11 @@ All notable changes to this project will be documented in this file.
 
 ### Fixes 🎯
 
-- **Cache.test**: adjust flaky test
 - **StorageCache**: adjust the logic to load items using version
+
+### Chores ⚙️
+
+- **Cache.test**: adjust flaky test
 
 ## [v0.2.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.2.0)
 
