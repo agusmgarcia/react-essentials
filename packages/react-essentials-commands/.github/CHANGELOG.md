@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.9.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.9.0)
+
+> August 9, 2025
+
+### Features ✅
+
+- **local.settings.json**: keep old values
+- **env.local**: keep old values
+- **changelog.md**: discriminate chore commits
+- **release.yml**: reuse workflows
+- **deploy**: add support for external paths
+- **tsconfig.json**: use base configs from commands
+- **createWebpackConfig**: start exporting json files from \_out folder
+
 ## [v0.8.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.8.0)
 
 > August 4, 2025
@@ -11,7 +25,7 @@ All notable changes to this project will be documented in this file.
 - **release.yml**: add run-name
 - **createNextConfig**: remove configs
 
-### Fixes 🎯
+### Chores ⚙️
 
 - bump dependencies
 
@@ -28,6 +42,9 @@ All notable changes to this project will be documented in this file.
 ### Fixes 🎯
 
 - **createJestConfig**: adjust testMatch
+
+### Chores ⚙️
+
 - bump dependencies
 - **createEslintConfig**: remove space
 
@@ -47,13 +64,16 @@ All notable changes to this project will be documented in this file.
 
 ### Fixes 🎯
 
-- add documentation to the createConfigs functions
 - **release.yml**: adjust sorting options
 - prevent deleting file when regenerating phase doesn't include it
 - prevent regenerating files outside regenerate phase
-- **createPrettierConfig**: adjust output types
 - **createWebpackConfig**: adjust order of outputs
 - **createWebpackConfig**: adjust css locator
+
+### Chores ⚙️
+
+- add documentation to the createConfigs functions
+- **createPrettierConfig**: adjust output types
 
 ## [v0.5.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.5.0)
 
@@ -122,9 +142,12 @@ All notable changes to this project will be documented in this file.
 
 ### Fixes 🎯
 
-- **release.yml**: set TODO's for the future
 - **release.yml**: stop using working-directory where not supported
 - **release.yml**: adjust typo
+
+### Chores ⚙️
+
+- **release.yml**: set TODO's for the future
 
 ## [v0.1.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.1.0)
 
@@ -133,3 +156,7 @@ All notable changes to this project will be documented in this file.
 ### Features ✅
 
 - **react-essentials-commands**: add project
+
+### Chores ⚙️
+
+- setup project
