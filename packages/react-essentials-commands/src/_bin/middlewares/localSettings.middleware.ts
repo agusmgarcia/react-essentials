@@ -1,4 +1,4 @@
-import { properties } from "#src/utils";
+import { files, properties } from "#src/utils";
 
 import createFileMiddleware from "./createFileMiddleware";
 import { type Context } from "./Middleware.types";
@@ -10,10 +10,15 @@ export default createFileMiddleware<Record<string, any>>({
   valid: ["azure-func"],
 });
 
-function getTemplate(context: Context): Record<string, any> {
+async function getTemplate(context: Context): Promise<Record<string, any>> {
+  const localSettings = await files
+    .readFile("local.settings.json")
+    .then((localSettings) => JSON.parse(localSettings || "{}"));
+
   return {
     isEncrypted: false,
     values: {
+      ...localSettings.values,
       APP_VERSION: context.version,
       FUNCTIONS_EXTENSION_VERSION: "~4",
       FUNCTIONS_WORKER_RUNTIME: "node",
