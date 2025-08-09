@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.9.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.9.0)
+
+> August 9, 2025
+
+### Features ✅
+
+- **tsconfig.json**: use base configs from commands
+- **OmitProperty**: remove type
+
 ## [v0.8.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.8.0)
 
 > August 4, 2025
@@ -10,7 +19,7 @@ All notable changes to this project will be documented in this file.
 
 - **store**: use classes instead of functions
 
-### Fixes 🎯
+### Chores ⚙️
 
 - bump dependencies
 
@@ -61,6 +70,9 @@ All notable changes to this project will be documented in this file.
 ### Fixes 🎯
 
 - exit with error when format not pass
+
+### Chores ⚙️
+
 - **README.md**: update file
 
 ## [v0.2.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.2.0)
