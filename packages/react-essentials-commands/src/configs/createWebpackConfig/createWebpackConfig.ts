@@ -43,14 +43,17 @@ export default async function createWebpackConfig(
       .then((files) =>
         files.reduce(
           (result, file) => {
-            result[file.split(".ts")[0]] = path.resolve(
-              "src",
-              "functions",
-              file,
-            );
+            result[file.split(".ts")[0]] = {
+              import: path.resolve("src", "functions", file),
+              library: {
+                name: `${packageJSON.name}/functions/[name]`,
+                type: "umd",
+                umdNamedDefine: true,
+              },
+            };
             return result;
           },
-          {} as Record<string, string>,
+          {} as Record<string, webpack.EntryObject[string]>,
         ),
       );
 
@@ -58,7 +61,14 @@ export default async function createWebpackConfig(
       {
         entry: {
           ...functions,
-          index: path.resolve("src", "index.ts"),
+          index: {
+            import: path.resolve("src", "index.ts"),
+            library: {
+              name: packageJSON.name,
+              type: "umd",
+              umdNamedDefine: true,
+            },
+          },
         },
         externals: [
           ...Object.keys(packageJSON.dependencies || {}),
@@ -89,10 +99,7 @@ export default async function createWebpackConfig(
               ? "index.js"
               : `functions${path.sep}${data.chunk?.name || "[name]"}.js`,
           globalObject: "this",
-          library: {
-            name: packageJSON.name,
-            type: "umd",
-          },
+          libraryTarget: "umd",
           path: path.resolve("dist"),
           umdNamedDefine: true,
         },
@@ -130,10 +137,19 @@ export default async function createWebpackConfig(
                 ? file.split(".tsx")[0]
                 : file.split(".json")[0];
 
-            result[fileName] = path.resolve("src", "_out", file);
+            result[fileName] = file.endsWith(".json")
+              ? path.resolve("src", "_out", file)
+              : {
+                  import: path.resolve("src", "_out", file),
+                  library: {
+                    name: `${packageJSON.name}/[name]`,
+                    type: "umd",
+                    umdNamedDefine: true,
+                  },
+                };
             return result;
           },
-          {} as Record<string, string>,
+          {} as Record<string, webpack.EntryObject[string]>,
         ),
       );
 
@@ -141,7 +157,17 @@ export default async function createWebpackConfig(
       {
         entry:
           configs?.omit !== "web"
-            ? { ...outs, index: path.resolve("src", "index.ts") }
+            ? {
+                ...outs,
+                index: {
+                  import: path.resolve("src", "index.ts"),
+                  library: {
+                    name: packageJSON.name,
+                    type: "umd",
+                    umdNamedDefine: true,
+                  },
+                },
+              }
             : {},
         externals: [
           ...Object.keys(packageJSON.peerDependencies || {}),
@@ -192,10 +218,7 @@ export default async function createWebpackConfig(
               ? `dist${path.sep}index.js`
               : `dist${path.sep}_out${path.sep}${data.chunk?.name || "[name]"}.js`,
           globalObject: "this",
-          library: {
-            name: packageJSON.name,
-            type: "umd",
-          },
+          libraryTarget: "umd",
           path: path.resolve("."),
           umdNamedDefine: true,
         },
@@ -240,7 +263,17 @@ export default async function createWebpackConfig(
       {
         entry:
           configs?.omit !== "node"
-            ? { ...outs, index: path.resolve("src", "index.ts") }
+            ? {
+                ...outs,
+                index: {
+                  import: path.resolve("src", "index.ts"),
+                  library: {
+                    name: packageJSON.name,
+                    type: "umd",
+                    umdNamedDefine: true,
+                  },
+                },
+              }
             : {},
         externals: [
           ...Object.keys(packageJSON.peerDependencies || {}),
@@ -288,10 +321,7 @@ export default async function createWebpackConfig(
               ? `dist${path.sep}index${configs?.omit === "web" ? "" : ".node"}.js`
               : `dist${path.sep}_out${path.sep}${data.chunk?.name || "[name]"}${configs?.omit === "web" ? "" : ".node"}.js`,
           globalObject: "this",
-          library: {
-            name: packageJSON.name,
-            type: "umd",
-          },
+          libraryTarget: "umd",
           path: path.resolve("."),
           umdNamedDefine: true,
         },
@@ -317,14 +347,18 @@ export default async function createWebpackConfig(
           .then((files) =>
             files.reduce(
               (result, file) => {
-                result[file.split(".ts")[0]] = path.resolve(
-                  "src",
-                  "_bin",
-                  file,
-                );
+                result[file.split(".ts")[0]] = {
+                  import: path.resolve("src", "_bin", file),
+                  library: {
+                    name: `${packageJSON.name}/_bin/[name]`,
+                    type: "umd",
+                    umdNamedDefine: true,
+                  },
+                };
+
                 return result;
               },
-              {} as Record<string, string>,
+              {} as Record<string, webpack.EntryObject[string]>,
             ),
           ),
         externals: [
@@ -366,10 +400,7 @@ export default async function createWebpackConfig(
         output: {
           filename: "[name].js",
           globalObject: "this",
-          library: {
-            name: packageJSON.name,
-            type: "umd",
-          },
+          libraryTarget: "umd",
           path: path.resolve("bin"),
           umdNamedDefine: true,
         },
@@ -440,7 +471,9 @@ export default async function createWebpackConfig(
         library: {
           name: packageJSON.name,
           type: "umd",
+          umdNamedDefine: true,
         },
+        libraryTarget: "umd",
         path: path.resolve("dist"),
         umdNamedDefine: true,
       },
