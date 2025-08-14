@@ -16,10 +16,12 @@ const MIDDLEWARE = createFileMiddleware<Record<string, any>>({
       "env",
       "jobs",
       "jobs.*.name",
+      "jobs.*.needs",
       "jobs.*.runs-on",
       "jobs.*.uses",
       "jobs.*.secrets",
       "jobs.*.with",
+      "jobs.*.outputs",
       "jobs.*.steps.*.name",
       "jobs.*.steps.*.if",
       "jobs.*.steps.*.continue-on-error",
@@ -65,12 +67,11 @@ function getTemplate(context: Context): Record<string, any> {
           group: "${{ github.workflow }}",
         },
         jobs: {
-          "deploy-app": {
-            name: "Deploy app",
+          "release-app": {
+            name: "Release app",
             secrets: {
               "github-token": "${{ secrets.GITHUB_TOKEN }}",
-              "node-auth-token":
-                "${{ secrets.NODE_AUTH_TOKEN || secrets.GITHUB_TOKEN }}",
+              "node-auth-token": "${{ secrets.GITHUB_TOKEN }}",
             },
             uses: getReusableWorkflowPath(context),
           },
@@ -92,15 +93,14 @@ function getTemplate(context: Context): Record<string, any> {
             group: "${{ github.workflow }}",
           },
           jobs: {
-            "deploy-azure-func": {
-              name: "Deploy Azure func",
+            "release-azure-func": {
+              name: "Release Azure func",
               secrets: {
                 "azure-client-id": "${{ secrets.AZURE_CLIENT_ID }}",
                 "azure-creds": "${{ secrets.AZURE_CREDS }}",
                 "azure-subscription-id": "${{ secrets.AZURE_SUBSCRIPTION_ID }}",
                 "azure-tenant-id": "${{ secrets.AZURE_TENANT_ID }}",
-                "node-auth-token":
-                  "${{ secrets.NODE_AUTH_TOKEN || secrets.GITHUB_TOKEN }}",
+                "node-auth-token": "${{ secrets.GITHUB_TOKEN }}",
               },
               uses: getReusableWorkflowPath(context),
               with: {
@@ -130,11 +130,10 @@ function getTemplate(context: Context): Record<string, any> {
               group: "${{ github.workflow }}-${{ github.ref_name }}",
             },
             jobs: {
-              "publish-lib": {
-                name: "Publish lib",
+              "release-lib": {
+                name: "Release lib",
                 secrets: {
-                  "node-auth-token":
-                    "${{ secrets.NODE_AUTH_TOKEN || secrets.GITHUB_TOKEN }}",
+                  "node-auth-token": "${{ secrets.GITHUB_TOKEN }}",
                 },
                 uses: getReusableWorkflowPath(context),
               },
@@ -154,11 +153,10 @@ function getTemplate(context: Context): Record<string, any> {
               group: "${{ github.workflow }}",
             },
             jobs: {
-              "deploy-node": {
-                name: "Deploy node",
+              "release-node": {
+                name: "Release node",
                 secrets: {
-                  "node-auth-token":
-                    "${{ secrets.NODE_AUTH_TOKEN || secrets.GITHUB_TOKEN }}",
+                  "node-auth-token": "${{ secrets.GITHUB_TOKEN }}",
                 },
                 uses: getReusableWorkflowPath(context),
               },
@@ -181,7 +179,7 @@ function getTags(context: Context): string[] {
 }
 
 function getReusableWorkflowPath(context: Context): string {
-  const path = `.github/workflows/release_${context.core}.yml`;
+  const path = `.github/workflows/release-${context.core}.yml`;
   if (context.essentialsCommands) return `./${path}`;
   return `${context.essentialsName.replace(/^@/, "")}/${path}@v${context.essentialsCommandsVersion}`;
 }

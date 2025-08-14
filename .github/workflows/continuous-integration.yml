@@ -1,0 +1,164 @@
+name: Continuous integration
+
+on:
+  workflow_call:
+    secrets:
+      node-auth-token:
+        required: true
+        description: The token to authenticate NPM
+
+    outputs:
+      artifact-id:
+        value: ${{ jobs.continuous-integration.outputs.artifact-id }}
+        description: The artifact id of the build outputs
+
+      version:
+        value: ${{ jobs.continuous-integration.outputs.version }}
+        description: The version obtained from the tag
+
+jobs:
+  continuous-integration:
+    name: Continuous integration
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-id: ${{ steps.upload-build-outputs.outputs.artifact-id }}
+      version: ${{ steps.get-version-from-tag.outputs.replaced }}
+    steps:
+      - name: Verify wether the ref_type is 'tag'
+        if: ${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' }}
+        run: |
+          echo "::error::The workflow needs to be dispatched from a tag"
+          exit 1
+        shell: bash
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify the package manager
+        run: |
+          if [ -f "package-lock.json" ]; then
+            echo "value=npm" >> "$GITHUB_OUTPUT"
+          elif [ -f "yarn.lock" ]; then
+            echo "::error::The package manager cannot be 'yarn'"
+            exit 1
+          elif [ -f "pnpm-lock.yaml" ]; then
+            echo "::error::The package manager cannot be 'pnpm'"
+            exit 1
+          fi
+        shell: bash
+
+      - name: Verify the monorepo tool
+        run: |
+          if [ -f "turbo.json" ]; then
+            echo "value=turborepo" >> "$GITHUB_OUTPUT"
+          elif [ -f "nx.json" ] || [ -d ".nx" ]; then
+            echo "::error::The monorepo tool cannot be 'nx'"
+            exit 1
+          elif [ -f "lerna.json" ]; then
+            echo "::error::The monorepo tool cannot be 'lerna'"
+            exit 1
+          elif [ -f "pnpm-workspace.yaml" ]; then
+            echo "::error::The monorepo tool cannot be 'pnpm workspaces'"
+            exit 1
+          fi
+        shell: bash
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: 22.16
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-fund
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.node-auth-token }}
+
+      - name: Get scope from tag
+        id: get-scope-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: $1
+          string: ${{ github.ref_name }}
+
+      - name: Get package location
+        if: ${{ steps.get-scope-from-tag.outputs.replaced }}
+        id: get-package-location
+        run: |
+          value=$(npm query .workspace | jq -r --arg pkg_name '${{ steps.get-scope-from-tag.outputs.replaced }}' '.[] | select(.name == $pkg_name) | .location')
+          echo "value=${value}" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Get version from tag
+        id: get-version-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: $2.$3.$4
+          string: ${{ github.ref_name }}
+
+      - name: Extract version from package
+        id: extract-version-from-package
+        run: |
+          value=$(jq .version package.json -r)
+          echo "value=${value}" >> "$GITHUB_OUTPUT"
+        shell: bash
+        working-directory: ${{ steps.get-package-location.outputs.value }}
+
+      - name: Verify versions match
+        if: ${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
+        run: |
+          echo "::error::The version from the package.json (${{ steps.extract-version-from-package.outputs.value }}) and from the tag (${{ steps.get-version-from-tag.outputs.replaced }}) needs to be equals"
+          exit 1
+        shell: bash
+
+      - name: Check
+        run: npm run check -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
+        shell: bash
+
+      - name: Test
+        run: npm test -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
+        shell: bash
+
+      - name: Build
+        run: npm run build -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
+        shell: bash
+        env:
+          APP_VERSION: ${{ steps.get-version-from-tag.outputs.replaced }}
+          BASE_PATH: /${{ github.event.repository.name }}
+
+      - name: Copy files to the root
+        run: |
+          if [ -f ".npmrc" ]; then
+            cp .npmrc ${{ steps.get-package-location.outputs.value || '.' }}
+          fi
+
+          if [ -f "package-lock.json" ]; then
+            cp package-lock.json ${{ steps.get-package-location.outputs.value || '.' }}
+          fi
+            
+          if ls ${{ steps.get-package-location.outputs.value || '.' }}/.github/**/*.md &> /dev/null; then
+            cp ${{ steps.get-package-location.outputs.value || '.' }}/.github/**/*.md ${{ steps.get-package-location.outputs.value || '.' }}
+          fi
+        shell: bash
+
+      - name: Upload build outputs
+        id: upload-build-outputs
+        uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          include-hidden-files: true
+          path: |
+            ${{ steps.get-package-location.outputs.value || '.' }}/bin
+            ${{ steps.get-package-location.outputs.value || '.' }}/dist
+            ${{ steps.get-package-location.outputs.value || '.' }}/.funcignore
+            ${{ steps.get-package-location.outputs.value || '.' }}/.gitignore
+            ${{ steps.get-package-location.outputs.value || '.' }}/.npmignore
+            ${{ steps.get-package-location.outputs.value || '.' }}/.npmrc
+            ${{ steps.get-package-location.outputs.value || '.' }}/**/*.md
+            ${{ steps.get-package-location.outputs.value || '.' }}/host.json
+            ${{ steps.get-package-location.outputs.value || '.' }}/package-lock.json
+            ${{ steps.get-package-location.outputs.value || '.' }}/package.json
+          retention-days: 1

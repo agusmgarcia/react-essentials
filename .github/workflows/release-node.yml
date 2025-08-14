@@ -1,0 +1,25 @@
+name: Release node
+
+on:
+  workflow_call:
+    secrets:
+      node-auth-token:
+        required: true
+        description: The token to authenticate NPM
+
+jobs:
+  continuous-integration:
+    name: Continuous integration
+    uses: ./.github/workflows/continuous-integration.yml
+    secrets:
+      node-auth-token: ${{ secrets.NODE_AUTH_TOKEN }}
+
+  continuous-delivery:
+    name: Continuous delivery
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build outputs
+        uses: actions/download-artifact@v5
+        with:
+          artifact-ids: ${{ needs.continuous-integration.outputs.artifact-id }}

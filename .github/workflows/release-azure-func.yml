@@ -50,19 +50,21 @@ on:
         description: The token to authenticate NPM
 
 jobs:
-  deploy-azure-func:
-    name: Deploy Azure func
+  continuous-integration:
+    name: Continuous integration
+    uses: ./.github/workflows/continuous-integration.yml
+    secrets:
+      node-auth-token: ${{ secrets.NODE_AUTH_TOKEN }}
+
+  continuous-delivery:
+    name: Continuous delivery
+    needs: continuous-integration
     runs-on: ubuntu-latest
     steps:
-      - name: Check if the type is 'tag'
-        if: ${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' }}
-        run: |
-          echo "::error::Workflow needs to be dispatched from a tag"
-          exit 1
-        shell: bash
-
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Download build outputs
+        uses: actions/download-artifact@v5
+        with:
+          artifact-ids: ${{ needs.continuous-integration.outputs.artifact-id }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -70,62 +72,11 @@ jobs:
           cache: npm
           node-version: 22.16
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts --no-fund
+      - name: Install dependencies for production
+        run: npm ci --ignore-scripts --no-audit --no-fund --omit=dev
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.node-auth-token }}
-
-      - name: Get scope from tag
-        id: get-scope-from-tag
-        uses: frabert/replace-string-action@v2
-        with:
-          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
-          replace-with: $1
-          string: ${{ github.ref_name }}
-
-      - name: Get package location
-        if: ${{ steps.get-scope-from-tag.outputs.replaced }}
-        id: get-package-location
-        run: |
-          value=$(npm query .workspace | jq -r --arg pkg_name '${{steps.get-scope-from-tag.outputs.replaced }}' '.[] | select(.name == $pkg_name) | .location')
-          echo "value=${value}" >> "$GITHUB_OUTPUT"
-        shell: bash
-
-      - name: Get version from tag
-        id: get-version-from-tag
-        uses: frabert/replace-string-action@v2
-        with:
-          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
-          replace-with: $2.$3.$4
-          string: ${{ github.ref_name }}
-
-      - name: Extract version from package
-        id: extract-version-from-package
-        run: |
-          value=$(jq .version package.json -r)
-          echo "value=${value}" >> "$GITHUB_OUTPUT"
-        shell: bash
-        working-directory: ${{ steps.get-package-location.outputs.value }}
-
-      - name: Verify versions match
-        if: ${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
-        run: |
-          echo "::error::Version in the package.json (${{ steps.extract-version-from-package.outputs.value }}) and tag (${{ steps.get-version-from-tag.outputs.replaced }}) don't match"
-          exit 1
-        shell: bash
-
-      - name: Check
-        run: npm run check -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
-        shell: bash
-
-      - name: Test
-        run: npm test -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
-        shell: bash
-
-      - name: Build
-        run: npm run build -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
-        shell: bash
 
       - name: Azure login
         id: azure-login
@@ -148,7 +99,7 @@ jobs:
             [
               {
                 "name": "APP_VERSION",
-                "value": "${{ steps.get-version-from-tag.outputs.replaced }}",
+                "value": "${{ needs.continuous-integration.outputs.version }}",
                 "slotSetting": false
               },
               {
@@ -167,12 +118,6 @@ jobs:
                 "slotSetting": false
               }
             ]
-
-      - name: Install dependencies for production
-        run: npm ci --ignore-scripts --no-audit --no-fund --omit=dev
-        shell: bash
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.node-auth-token }}
 
       - name: Deploy function
         uses: azure/functions-action@v1
