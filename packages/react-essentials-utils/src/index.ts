@@ -7,6 +7,7 @@ export { default as delay } from "./delay";
 export { default as emptyFunction } from "./emptyFunction";
 export * as equals from "./equals";
 export * as errors from "./errors";
+export { default as execute } from "./execute";
 export * as files from "./files";
 export * as filters from "./filters";
 export * as finds from "./finds";
