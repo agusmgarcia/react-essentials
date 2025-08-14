@@ -45,13 +45,15 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
   return context.core === "app"
     ? {
         ...envLocal,
-        APP_VERSION: undefined,
-        NEXT_PUBLIC_APP_VERSION: context.version,
-        NEXT_PUBLIC_BASE_PATH: "",
+        APP_VERSION: context.version,
+        BASE_PATH: "",
+        NEXT_PUBLIC_APP_VERSION: undefined,
+        NEXT_PUBLIC_BASE_PATH: undefined,
       }
     : {
         ...envLocal,
         APP_VERSION: context.version,
+        BASE_PATH: undefined,
         NEXT_PUBLIC_APP_VERSION: undefined,
         NEXT_PUBLIC_BASE_PATH: undefined,
       };

@@ -89,8 +89,8 @@ jobs:
         run: npm run build -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
         shell: bash
         env:
-          NEXT_PUBLIC_APP_VERSION: ${{ steps.get-version-from-tag.outputs.replaced }}
-          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          APP_VERSION: ${{ steps.get-version-from-tag.outputs.replaced }}
+          BASE_PATH: /${{ github.event.repository.name }}
 
       - name: Configure pages
         uses: actions/configure-pages@v5
