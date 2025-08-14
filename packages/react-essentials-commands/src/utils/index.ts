@@ -1,5 +1,6 @@
 export * as args from "./args";
 export { type default as AsyncFunc } from "./AsyncFunc.types";
+export { default as emptyFunction } from "./emptyFunction";
 export * as errors from "./errors";
 export { default as execute } from "./execute";
 export * as files from "./files";

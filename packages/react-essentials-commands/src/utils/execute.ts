@@ -1,23 +1,24 @@
 import { spawn } from "child_process";
 
+import emptyFunction from "./emptyFunction";
 import type Func from "./Func.types";
 
 export default function execute(
   command: string,
   disassociated: true,
-  options?: { excludeQuotes?: boolean },
+  options?: Partial<ExecuteOptions>,
 ): Promise<void>;
 
 export default function execute(
   command: string,
   disassociated: false,
-  options?: { excludeQuotes?: boolean },
+  options?: Partial<ExecuteOptions>,
 ): Promise<string>;
 
 export default function execute(
   command: string,
   disassociated: boolean,
-  options?: { excludeQuotes?: boolean },
+  options?: Partial<ExecuteOptions>,
 ): Promise<void | string> {
   return new Promise((resolve, reject) => {
     const [cmd, ...args] = parseCommandAndArgs(
@@ -118,4 +119,6 @@ function parseCommandAndArgs(
   return result;
 }
 
-function emptyFunction(): void {}
+type ExecuteOptions = {
+  excludeQuotes: boolean;
+};
