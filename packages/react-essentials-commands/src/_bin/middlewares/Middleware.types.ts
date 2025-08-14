@@ -6,8 +6,6 @@ export type Context = {
     | "check"
     | "deploy"
     | "format"
-    | "postpack"
-    | "prepack"
     | "regenerate"
     | "start"
     | "test";

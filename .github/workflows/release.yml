@@ -12,8 +12,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
 
 jobs:
-  publish-lib:
-    name: Publish lib
-    uses: ./.github/workflows/release_lib.yml
+  release-lib:
+    name: Release lib
+    uses: ./.github/workflows/release-lib.yml
     secrets:
       node-auth-token: ${{ secrets.NODE_AUTH_TOKEN }}

@@ -1,0 +1,44 @@
+name: Release app
+
+on:
+  workflow_call:
+    secrets:
+      github-token:
+        required: true
+        description: The token to authenticate GitHub
+
+      node-auth-token:
+        required: true
+        description: The token to authenticate NPM
+
+jobs:
+  continuous-integration:
+    name: Continuous integration
+    uses: ./.github/workflows/continuous-integration.yml
+    secrets:
+      node-auth-token: ${{ secrets.NODE_AUTH_TOKEN }}
+
+  continuous-delivery:
+    name: Continuous delivery
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build outputs
+        uses: actions/download-artifact@v5
+        with:
+          artifact-ids: ${{ needs.continuous-integration.outputs.artifact-id }}
+
+      - name: Configure pages
+        uses: actions/configure-pages@v5
+        with:
+          token: ${{ secrets.github-token }}
+
+      - name: Upload build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.github-token }}

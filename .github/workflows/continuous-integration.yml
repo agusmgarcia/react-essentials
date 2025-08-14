@@ -1,30 +1,48 @@
-name: Release app
+name: Continuous integration
 
 on:
   workflow_call:
     secrets:
-      github-token:
-        required: true
-        description: The token to authenticate GitHub
-
       node-auth-token:
         required: true
         description: The token to authenticate NPM
 
+    outputs:
+      artifact-id:
+        value: ${{ jobs.continuous-integration.outputs.artifact-id }}
+        description: The artifact id of the build outputs
+
+      version:
+        value: ${{ jobs.continuous-integration.outputs.version }}
+        description: The version obtained from the tag
+
 jobs:
-  deploy-app:
-    name: Deploy app
+  continuous-integration:
+    name: Continuous integration
     runs-on: ubuntu-latest
+    outputs:
+      artifact-id: ${{ steps.upload-build-outputs.outputs.artifact-id }}
+      version: ${{ steps.get-version-from-tag.outputs.replaced }}
     steps:
-      - name: Check if the type is 'tag'
+      - name: Verify wether the ref_type is 'tag'
         if: ${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' }}
         run: |
-          echo "::error::Workflow needs to be dispatched from a tag"
+          echo "::error::The workflow needs to be dispatched from a tag"
           exit 1
         shell: bash
 
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Verify wether the package manager is 'npm'
+        run: |
+          if [ -f "package-lock.json" ]; then
+            echo "value=npm" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::The package manager needs to be 'npm'"
+            exit 1
+          fi
+        shell: bash
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -73,7 +91,7 @@ jobs:
       - name: Verify versions match
         if: ${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
         run: |
-          echo "::error::Version in the package.json (${{ steps.extract-version-from-package.outputs.value }}) and tag (${{ steps.get-version-from-tag.outputs.replaced }}) don't match"
+          echo "::error::The version from the package.json (${{ steps.extract-version-from-package.outputs.value }}) and from the tag (${{ steps.get-version-from-tag.outputs.replaced }}) needs to be equals"
           exit 1
         shell: bash
 
@@ -92,17 +110,26 @@ jobs:
           APP_VERSION: ${{ steps.get-version-from-tag.outputs.replaced }}
           BASE_PATH: /${{ github.event.repository.name }}
 
-      - name: Configure pages
-        uses: actions/configure-pages@v5
-        with:
-          token: ${{ secrets.github-token }}
+      - name: Copy Markdown files to the root
+        run: cp .github/*.md .
+        shell: bash
+        working-directory: ${{ steps.get-package-location.outputs.value }}
 
-      - name: Upload build artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload build outputs
+        id: upload-build-outputs
+        uses: actions/upload-artifact@v4
         with:
-          path: ${{ steps.get-package-location.outputs.value || '.' }}/dist
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
-        with:
-          token: ${{ secrets.github-token }}
+          if-no-files-found: error
+          include-hidden-files: true
+          path: |
+            ${{ steps.get-package-location.outputs.value || '.' }}/bin
+            ${{ steps.get-package-location.outputs.value || '.' }}/dist
+            ${{ steps.get-package-location.outputs.value || '.' }}/.funcignore
+            ${{ steps.get-package-location.outputs.value || '.' }}/.gitignore
+            ${{ steps.get-package-location.outputs.value || '.' }}/.npmignore
+            ${{ steps.get-package-location.outputs.value || '.' }}/.npmrc
+            ${{ steps.get-package-location.outputs.value || '.' }}/*.md
+            ${{ steps.get-package-location.outputs.value || '.' }}/host.json
+            ${{ steps.get-package-location.outputs.value || '.' }}/package-lock.json
+            ${{ steps.get-package-location.outputs.value || '.' }}/package.json
+          retention-days: 1
