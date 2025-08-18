@@ -37,7 +37,10 @@ function getTemplate(context: Context): Record<string, any> {
           : `${context.essentialsCommandsName}/tsconfig.json`,
         include: ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
         "ts-node": context.essentialsCommands
-          ? { compilerOptions: { module: "commonjs" } }
+          ? {
+              compilerOptions: { module: "commonjs" },
+              require: ["tsconfig-paths/register"],
+            }
           : undefined,
       }
     : context.core === "azure-func"
@@ -60,7 +63,10 @@ function getTemplate(context: Context): Record<string, any> {
             : `${context.essentialsCommandsName}/tsconfig.json`,
           include: ["**/*.ts"],
           "ts-node": context.essentialsCommands
-            ? { compilerOptions: { module: "commonjs" } }
+            ? {
+                compilerOptions: { module: "commonjs" },
+                require: ["tsconfig-paths/register"],
+              }
             : undefined,
         }
       : context.core === "lib"
@@ -83,7 +89,10 @@ function getTemplate(context: Context): Record<string, any> {
               : `${context.essentialsCommandsName}/tsconfig.json`,
             include: ["**/*.ts", "**/*.tsx"],
             "ts-node": context.essentialsCommands
-              ? { compilerOptions: { module: "commonjs" } }
+              ? {
+                  compilerOptions: { module: "commonjs" },
+                  require: ["tsconfig-paths/register"],
+                }
               : undefined,
           }
         : {
@@ -105,7 +114,10 @@ function getTemplate(context: Context): Record<string, any> {
               : `${context.essentialsCommandsName}/tsconfig.json`,
             include: ["**/*.ts"],
             "ts-node": context.essentialsCommands
-              ? { compilerOptions: { module: "commonjs" } }
+              ? {
+                  compilerOptions: { module: "commonjs" },
+                  require: ["tsconfig-paths/register"],
+                }
               : undefined,
           };
 }

@@ -2,8 +2,9 @@ import path from "path";
 import getCustomTransformers from "ts-transform-paths";
 import { default as webpack } from "webpack";
 
+import { folders, getPackageJSON } from "#src/utils";
+
 import packageJSONEssentialsCommands from "../../../package.json";
-import { folders, getPackageJSON } from "../../utils"; // TODO: see how to convert it into #src/utils
 import { type Input, type Output } from "./createWebpackConfig.types";
 
 /**
