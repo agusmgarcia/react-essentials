@@ -138,9 +138,9 @@ jobs:
           if [ -f "package-lock.json" ]; then
             cp package-lock.json ${{ steps.get-package-location.outputs.value || '.' }}
           fi
-            
-          if ls ${{ steps.get-package-location.outputs.value || '.' }}/.github/**/*.md &> /dev/null; then
-            cp ${{ steps.get-package-location.outputs.value || '.' }}/.github/**/*.md ${{ steps.get-package-location.outputs.value || '.' }}
+
+          if ls ${{ steps.get-package-location.outputs.value || '.' }}/.github/*.md &> /dev/null; then
+            cp ${{ steps.get-package-location.outputs.value || '.' }}/.github/*.md ${{ steps.get-package-location.outputs.value || '.' }}
           fi
         shell: bash
 
@@ -157,7 +157,7 @@ jobs:
             ${{ steps.get-package-location.outputs.value || '.' }}/.gitignore
             ${{ steps.get-package-location.outputs.value || '.' }}/.npmignore
             ${{ steps.get-package-location.outputs.value || '.' }}/.npmrc
-            ${{ steps.get-package-location.outputs.value || '.' }}/**/*.md
+            ${{ steps.get-package-location.outputs.value || '.' }}/*.md
             ${{ steps.get-package-location.outputs.value || '.' }}/host.json
             ${{ steps.get-package-location.outputs.value || '.' }}/package-lock.json
             ${{ steps.get-package-location.outputs.value || '.' }}/package.json
