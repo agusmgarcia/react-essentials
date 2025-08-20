@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.10.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.10.0)
+
+> August 20, 2025
+
+### Features ✅
+
+- **execute**: add utility
+- **release.yml**: separate jobs in ci and cd
+
 ## [v0.9.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.9.0)
 
 > August 9, 2025
