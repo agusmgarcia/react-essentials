@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.10.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.10.0)
+
+> August 20, 2025
+
+### Features ✅
+
+- **release.yml**: separate jobs in ci and cd
+- **createWebpackConfig**: export a library name per output
+- **createNextConfig**: remove NEXT*PUBLIC* prefix
+
+### Chores ⚙️
+
+- use tsconfig paths for ts-node
+- **LoadEnvConfigLoader**: add doc
+- **createPrettierConfig**: adjust doc
+- **createPostCSSConfig**: adjust types
+- start using emptyFunction
+
 ## [v0.9.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.9.0)
 
 > August 9, 2025
