@@ -91,33 +91,40 @@ jobs:
           subscription-id: ${{ secrets.azure-subscription-id }}
           tenant-id: ${{ secrets.azure-tenant-id }}
 
+      - name: Transform envs into JSON
+        id: transform-envs-into-json
+        run: |
+          JSON_ARRAY="[]"
+
+          add_to_json() {
+            local key="$1"
+            local value="$(printf '%s' "$2" | sed 's/\\/\\\\/g; s/"/\\"/g')"
+            local entry="{ \"key\": \"$key\", \"value\": \"$value\", \"slotSetting\": false }"
+
+            if [[ "$JSON_ARRAY" == "[]" ]]; then
+              JSON_ARRAY="[ $entry ]"
+            else
+              JSON_ARRAY=$(echo "$JSON_ARRAY" | sed "s/]$/, $entry ]/")
+            fi
+          }
+
+          for var in "${!APP_@}"; do
+            add_to_json "$var" "${!var}"
+          done
+
+          add_to_json "APP_VERSION" "${{ needs.continuous-integration.outputs.version }}"
+          add_to_json "FUNCTIONS_EXTENSION_VERSION" "~4"
+          add_to_json "FUNCTIONS_WORKER_RUNTIME" "node"
+          add_to_json "WEBSITE_NODE_DEFAULT_VERSION" "~22.16.0"
+
+          echo "value=${JSON_ARRAY}" >> "$GITHUB_OUTPUT"
+        shell: bash
+
       - name: Add app settings
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ inputs.azure-app-name }}
-          app-settings-json: |
-            [
-              {
-                "name": "APP_VERSION",
-                "value": "${{ needs.continuous-integration.outputs.version }}",
-                "slotSetting": false
-              },
-              {
-                "name": "FUNCTIONS_EXTENSION_VERSION",
-                "value": "~4",
-                "slotSetting": false
-              },
-              {
-                "name": "FUNCTIONS_WORKER_RUNTIME",
-                "value": "node",
-                "slotSetting": false
-              },
-              {
-                "name": "WEBSITE_NODE_DEFAULT_VERSION",
-                "value": "~22.16.0",
-                "slotSetting": false
-              }
-            ]
+          app-settings-json: ${{ steps.transform-envs-into-json.outputs.value }}
 
       - name: Deploy function
         uses: azure/functions-action@v1
