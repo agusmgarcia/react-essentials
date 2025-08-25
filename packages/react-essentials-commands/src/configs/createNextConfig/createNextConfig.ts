@@ -10,13 +10,16 @@ import { type Input, type Output } from "./createNextConfig.types";
  */
 export default function createNextConfig(...[_core]: Input): Output {
   return (phase) => ({
-    basePath: process.env.BASE_PATH,
+    basePath: process.env.APP_BASE_PATH,
     devIndicators: false,
     distDir: "dist",
-    env: {
-      APP_VERSION: process.env.APP_VERSION,
-      BASE_PATH: process.env.BASE_PATH,
-    },
+    env: Object.keys(process.env).reduce(
+      (result, key) => {
+        result[key] = key.startsWith("APP_") ? process.env[key] : undefined;
+        return result;
+      },
+      {} as Record<string, string | undefined>,
+    ),
     output: phase === PHASE_PRODUCTION_BUILD ? "export" : undefined,
     reactStrictMode: true,
   });

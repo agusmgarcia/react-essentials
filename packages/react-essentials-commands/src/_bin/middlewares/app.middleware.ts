@@ -18,7 +18,7 @@ export default function App({ Component }: AppProps<any>) {
       <Head>
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <link
-          href={\`\${process.env.BASE_PATH || ""}/favicon.ico\`}
+          href={\`\${process.env.APP_BASE_PATH || ""}/favicon.ico\`}
           rel="icon"
           type="image/x-icon"
         />
