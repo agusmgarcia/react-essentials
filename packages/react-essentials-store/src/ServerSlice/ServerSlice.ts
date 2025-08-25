@@ -1,7 +1,11 @@
 import { equals, errors } from "@agusmgarcia/react-essentials-utils";
 
 import GlobalSlice from "../GlobalSlice";
-import { type BaseResponse, type BaseSlices } from "./ServerSlice.types";
+import {
+  type BaseResponse,
+  type BaseSlices,
+  type Configs,
+} from "./ServerSlice.types";
 
 /**
  * Abstract base class for managing server-side state and asynchronous data fetching in a slice-based architecture.
@@ -32,6 +36,8 @@ export default abstract class ServerSlice<
 > {
   private static readonly UNINITIALIZED: any = Symbol("UNINITIALIZED");
 
+  private readonly _excludeError: Configs["excludeError"];
+
   private _controller: AbortController;
   private _request: TRequest;
 
@@ -39,18 +45,23 @@ export default abstract class ServerSlice<
    * Creates a new instance of the ServerSlice.
    *
    * @param initialResponse - (Optional) The initial response to set in the state. If not provided, the response will be undefined and loading will be set to true.
+   * @param configs - (Optional) The configuration object to customize the ServerSlice behavior.
    *
    * @remarks
    * - Initializes the internal AbortController and request state.
    * - Sets the initial state with the provided response, or undefined if not provided.
    * - This constructor is protected and intended to be called by subclasses.
    */
-  protected constructor(initialResponse?: TResponse) {
+  protected constructor(
+    initialResponse?: TResponse,
+    configs?: Partial<Configs>,
+  ) {
     super({
       error: undefined,
       loading: true,
       response: initialResponse,
     });
+    this._excludeError = configs?.excludeError || (() => false);
 
     this._controller = new AbortController();
     this._request = ServerSlice.UNINITIALIZED;
@@ -162,8 +173,13 @@ export default abstract class ServerSlice<
       };
     } catch (error) {
       if (signal.aborted) return;
-
       this._request = request;
+
+      if (this._excludeError(error)) {
+        this.state = { error: undefined, loading: false, response: undefined };
+        throw error;
+      }
+
       this.state = {
         error: errors.getMessage(error),
         loading: false,
