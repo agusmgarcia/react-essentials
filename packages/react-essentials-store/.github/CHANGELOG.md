@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.11.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.11.0)
+
+> August 27, 2025
+
+### Features ✅
+
+- **ServerSlice**: add configs
+
+### Chores ⚙️
+
+- adjust peer dependencies
+
 ## [v0.10.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.10.1)
 
 > August 20, 2025
