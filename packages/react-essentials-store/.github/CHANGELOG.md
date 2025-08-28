@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.12.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.12.0)
+
+> August 28, 2025
+
+### Features ✅
+
+- **ServerSlice**: store raw error
+- remove protected constructor
+- **ServerSlice**: prevent setting which errors can be bypassed
+
 ## [v0.11.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.11.0)
 
 > August 27, 2025
