@@ -42,7 +42,7 @@ export default abstract class GlobalSlice<
    * internal properties required for managing global state slices. It is intended
    * to be called by subclasses that extend `GlobalSlice`.
    */
-  protected constructor(initialState: TState) {
+  constructor(initialState: TState) {
     this._subscriptions = [];
 
     this._subscriptionIndex = Number.MIN_SAFE_INTEGER;

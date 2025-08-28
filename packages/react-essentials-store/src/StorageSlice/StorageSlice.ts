@@ -31,7 +31,7 @@ export default abstract class StorageSlice<
    * This constructor is protected and intended to be called by subclasses.
    * It initializes the base ServerSlice with the provided initial data.
    */
-  protected constructor(initialData?: TData) {
+  constructor(initialData?: TData) {
     super(initialData);
   }
 

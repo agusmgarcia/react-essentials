@@ -40,7 +40,7 @@ export default abstract class LocalStorageSlice<
    * This constructor initializes the local storage slice with a specific name and optional initial data.
    * It also sets up the internal storage event handler for synchronization across browser tabs.
    */
-  protected constructor(name: string, initialData?: TData) {
+  constructor(name: string, initialData?: TData) {
     super(initialData);
 
     this._name = name;

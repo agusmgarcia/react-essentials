@@ -45,7 +45,7 @@ export default abstract class ServerSlice<
    * - Sets the initial state with the provided response, or undefined if not provided.
    * - This constructor is protected and intended to be called by subclasses.
    */
-  protected constructor(initialResponse?: TResponse) {
+  constructor(initialResponse?: TResponse) {
     super({ error: undefined, loading: true, response: initialResponse });
 
     this._controller = new AbortController();
