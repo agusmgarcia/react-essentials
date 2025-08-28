@@ -1,4 +1,4 @@
-import { equals, errors } from "@agusmgarcia/react-essentials-utils";
+import { equals } from "@agusmgarcia/react-essentials-utils";
 
 import GlobalSlice from "../GlobalSlice";
 import { type BaseResponse, type BaseSlices } from "./ServerSlice.types";
@@ -23,11 +23,7 @@ export default abstract class ServerSlice<
   TRequest = undefined,
   TSlices extends BaseSlices = {},
 > extends GlobalSlice<
-  {
-    error: string | undefined;
-    loading: boolean;
-    response: TResponse | undefined;
-  },
+  { error: any; loading: boolean; response: TResponse | undefined },
   TSlices
 > {
   private static readonly UNINITIALIZED: any = Symbol("UNINITIALIZED");
@@ -154,13 +150,9 @@ export default abstract class ServerSlice<
       this.state = { error: undefined, loading: false, response };
     } catch (error) {
       if (signal.aborted) return;
-      this._request = request;
 
-      this.state = {
-        error: errors.getMessage(error),
-        loading: false,
-        response: undefined,
-      };
+      this._request = request;
+      this.state = { error, loading: false, response: undefined };
     }
   }
 

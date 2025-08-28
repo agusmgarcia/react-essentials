@@ -1,8 +1,8 @@
 import type {} from "@redux-devtools/extension";
 
-import { isSSR } from "@agusmgarcia/react-essentials-utils";
+import { errors, isSSR } from "@agusmgarcia/react-essentials-utils";
 
-import type GlobalSlice from "../GlobalSlice";
+import ServerSlice from "../ServerSlice";
 import type Store from "./Store";
 import { type BaseSliceFactories, type StateOf } from "./Store.types";
 
@@ -55,7 +55,10 @@ function extractState<TSliceFactories extends BaseSliceFactories>(
   return Object.keys(state).reduce(
     (result, key) => {
       const slice = state[key as keyof typeof state];
-      result[key] = (slice as unknown as GlobalSlice<any>).state;
+      result[key] =
+        slice instanceof ServerSlice
+          ? { ...slice.state, error: errors.getMessage(slice.state.error) }
+          : slice.state;
       return result;
     },
     {} as Record<string, any>,
