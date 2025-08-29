@@ -50,7 +50,7 @@ export default class Cache {
       signal.throwIfAborted();
       const entry = await this.options.storage.getEntry(key, signal);
 
-      if (byPassExpiration || !entry || Date.now() >= entry.expiresAt) {
+      if (!entry || byPassExpiration || Date.now() >= entry.expiresAt) {
         try {
           const result =
             typeof factory === "function"

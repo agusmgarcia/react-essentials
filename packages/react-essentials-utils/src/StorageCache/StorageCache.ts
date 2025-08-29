@@ -3,7 +3,6 @@ import { Mutex as AsyncMutex } from "async-mutex";
 import Cache, { type CacheTypes } from "../Cache";
 import * as errors from "../errors";
 import isSSR from "../isSSR";
-import * as properties from "../properties";
 import { type Options } from "./StorageCache.types";
 
 /**
@@ -56,20 +55,12 @@ class Storage implements CacheTypes.Storage {
     if (isSSR()) return undefined;
 
     const raw = window[`${this.storageType}Storage`].getItem(this.storageName);
-    if (!raw) return undefined;
 
     try {
-      const entry = JSON.parse(raw)[key];
-      if (properties.has(entry, "error", "string"))
-        return {
-          ...entry,
-          error:
-            properties.has(entry, "from", "string") && entry.from === "message"
-              ? new Error(entry.error)
-              : entry.error,
-        } as CacheTypes.Entry;
-
-      return entry;
+      const entries = JSON.parse(raw || "{}");
+      return "error" in entries[key]
+        ? { ...entries[key], error: new Error(entries[key].error) }
+        : entries[key];
     } catch {
       return undefined;
     }
@@ -78,20 +69,14 @@ class Storage implements CacheTypes.Storage {
   setEntry(key: string, entry: CacheTypes.Entry): void {
     if (isSSR()) return;
 
-    const raw =
-      window[`${this.storageType}Storage`].getItem(this.storageName) || "{}";
+    const raw = window[`${this.storageType}Storage`].getItem(this.storageName);
 
     try {
-      const entries = JSON.parse(raw);
-
-      if (!("error" in entry) || typeof entry.error === "string")
-        entries[key] = entry;
-      else
-        entries[key] = {
-          ...entry,
-          error: errors.getMessage(entry.error),
-          from: "message",
-        };
+      const entries = JSON.parse(raw || "{}");
+      entries[key] =
+        "error" in entry
+          ? { ...entry, error: errors.getMessage(entry.error) }
+          : entry;
 
       window[`${this.storageType}Storage`].setItem(
         this.storageName,
