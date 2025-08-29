@@ -73,7 +73,7 @@ jobs:
           node-version: 22.16
 
       - name: Install dependencies for production
-        run: npm ci --ignore-scripts --no-audit --no-fund --omit=dev
+        run: npm i --ignore-scripts --no-audit --no-fund --omit=dev
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.node-auth-token }}

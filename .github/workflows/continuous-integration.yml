@@ -115,21 +115,21 @@ jobs:
         shell: bash
 
       - name: Check
-        run: npm run check -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
+        run: npm run check --if-present -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
         shell: bash
 
       - name: Test
-        run: npm test -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
+        run: npm test --if-present -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
         shell: bash
 
       - name: Build
-        run: npm run build -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
+        run: npm run build --if-present -- --filter=${{ steps.get-scope-from-tag.outputs.replaced }}
         shell: bash
         env:
           APP_BASE_PATH: /${{ github.event.repository.name }}
           APP_VERSION: ${{ steps.get-version-from-tag.outputs.replaced }}
 
-      - name: Copy files to the root
+      - name: Copy files into the root
         run: |
           if [ -f ".npmrc" ]; then
             cp .npmrc ${{ steps.get-package-location.outputs.value || '.' }}
