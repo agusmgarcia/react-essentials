@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.11.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.11.1)
+
+> August 29, 2025
+
+### Fixes 🎯
+
+- **release**: execute scripts if present
+
+### Chores ⚙️
+
+- bump dependencies
+
 ## [v0.11.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.11.0)
 
 > August 27, 2025
