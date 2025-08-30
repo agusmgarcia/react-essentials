@@ -42,7 +42,7 @@ export default abstract class QueryStringStorageSlice<
    * @param name - The unique name used to identify the slice in the query string.
    * @param configs - Optional configuration object to customize the storage behavior.
    */
-  constructor(name: string, configs?: Partial<Configs>) {
+  protected constructor(name: string, configs?: Partial<Configs>) {
     super(undefined);
 
     this._name = name;

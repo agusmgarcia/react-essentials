@@ -40,7 +40,7 @@ export default abstract class SessionStorageSlice<
    * This constructor initializes the session storage slice with a specific name and optional initial data.
    * It also sets up the internal storage event handler for synchronization across browser tabs.
    */
-  constructor(name: string, initialData?: TData) {
+  protected constructor(name: string, initialData?: TData) {
     super(initialData);
 
     this._name = name;
