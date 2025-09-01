@@ -29,9 +29,16 @@ export default async function deploy(): Promise<void> {
 
     if (!typeOfNewVersion) return;
 
-    await validatePositionOfTheTag(scope, typeOfNewVersion, lastTagMerged);
+    const requiredVersion = args.getString("version");
 
-    const newTag = await npm.getNewTag(typeOfNewVersion);
+    await validatePositionOfTheTag(
+      scope,
+      typeOfNewVersion,
+      lastTagMerged,
+      requiredVersion,
+    );
+
+    const newTag = await npm.getNewTag(requiredVersion || typeOfNewVersion);
     if (!newTag) return;
 
     await git.createCommit("chore: bump package version");
@@ -76,10 +83,21 @@ async function validatePositionOfTheTag(
   scope: string | undefined,
   typeOfNewVersion: NonNullable<ReturnType<typeof findTypeOfNewVersion>>,
   lastTagMerged: string | undefined,
+  requiredVersion: string | undefined,
 ): Promise<void> {
+  const requiredVersionInfo = !!requiredVersion
+    ? git.getTagInfo(requiredVersion)
+    : undefined;
+
+  if (!!requiredVersionInfo?.scope)
+    throw new Error(
+      `The required version ${requiredVersion} cannot contain scope`,
+    );
+
   const allTags = await git
     .getTags({ scope })
     .then((tags) => tags.map(git.getTagInfo));
+
   if (!allTags.length) return;
 
   const lastTagMergedInfo = !!lastTagMerged
@@ -96,6 +114,11 @@ async function validatePositionOfTheTag(
         `The major release needs to be created from v${lastTag.major}.x.x`,
       );
 
+    if (!!requiredVersionInfo && requiredVersionInfo.major <= lastTag.major)
+      throw new Error(
+        `The major release needs to be greater or equal than v${lastTag.major + 1}.0.0`,
+      );
+
     return;
   }
 
@@ -109,6 +132,15 @@ async function validatePositionOfTheTag(
     if (lastTagMergedInfo.minor !== lastTagOfMajor.minor)
       throw new Error(
         `The minor release needs to be created from v${lastTagOfMajor.major}.${lastTagOfMajor.minor}.x`,
+      );
+
+    if (
+      !!requiredVersionInfo &&
+      (requiredVersionInfo.major !== lastTagOfMajor.major ||
+        requiredVersionInfo.minor <= lastTagOfMajor.minor)
+    )
+      throw new Error(
+        `The minor release needs to be greater or equal than v${lastTagOfMajor.major}.${lastTagOfMajor.minor + 1}.0 and lower than v${lastTagOfMajor.major + 1}.0.0`,
       );
 
     return;
@@ -127,6 +159,16 @@ async function validatePositionOfTheTag(
   if (lastTagMergedInfo.patch !== lastTagOfMinor.patch)
     throw new Error(
       `The patch release needs to be created from v${lastTagOfMinor.major}.${lastTagOfMinor.minor}.${lastTagOfMinor.patch}`,
+    );
+
+  if (
+    !!requiredVersionInfo &&
+    (requiredVersionInfo.major !== lastTagOfMinor.major ||
+      requiredVersionInfo.minor !== lastTagOfMinor.minor ||
+      requiredVersionInfo.patch <= lastTagOfMinor.patch)
+  )
+    throw new Error(
+      `The patch release needs to be greater or equal than v${lastTagOfMinor.major}.${lastTagOfMinor.minor}.${lastTagOfMinor.patch + 1} and lower than v${lastTagOfMinor.major}.${lastTagOfMinor.minor + 1}.0`,
     );
 }
 

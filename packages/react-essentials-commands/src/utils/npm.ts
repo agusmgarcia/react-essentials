@@ -15,10 +15,10 @@ export async function getMonorepoDetails(): Promise<
 }
 
 export async function getNewTag(
-  typeOfNewVersion: "major" | "minor" | "patch",
+  typeOfNewVersionOrTag: "major" | "minor" | "patch" | (string & {}),
 ): Promise<string | undefined> {
   let tag = await execute(
-    `npm version --no-git-tag-version ${typeOfNewVersion}`,
+    `npm version --no-git-tag-version ${typeOfNewVersionOrTag}`,
     false,
   ).then((tag) => tag.replace(EOL, ""));
 
