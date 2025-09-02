@@ -70,7 +70,7 @@ function getTemplate(context: Context): Record<string, any> {
           "release-app": {
             name: "Release app",
             secrets: {
-              "github-token": "${{ secrets.GITHUB_TOKEN }}",
+              "github-auth-token": "${{ secrets.GITHUB_TOKEN }}",
               "node-auth-token": "${{ secrets.GITHUB_TOKEN }}",
             },
             uses: getReusableWorkflowPath(context),
