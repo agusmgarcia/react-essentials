@@ -1,3 +1,5 @@
+import semver from "semver";
+
 import { files, properties } from "#src/utils";
 
 import createFileMiddleware from "./createFileMiddleware";
@@ -181,5 +183,16 @@ function getTags(context: Context): string[] {
 function getReusableWorkflowPath(context: Context): string {
   const path = `.github/workflows/release-${context.core}.yml`;
   if (context.essentialsCommands) return `./${path}`;
-  return `${context.essentialsName.replace(/^@/, "")}/${path}@v${context.essentialsCommandsVersion}`;
+
+  const major = semver.major(context.essentialsCommandsVersion);
+  const minor = semver.minor(context.essentialsCommandsVersion);
+  const patch = semver.patch(context.essentialsCommandsVersion);
+
+  const version = !!major
+    ? `${major}`
+    : !!minor
+      ? `${major}.${minor}`
+      : `${major}.${minor}.${patch}`;
+
+  return `${context.essentialsName.replace(/^@/, "")}/${path}@v${version}`;
 }

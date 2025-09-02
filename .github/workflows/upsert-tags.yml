@@ -1,0 +1,117 @@
+name: Upsert tags
+run-name: Upsert tags for ${{ github.ref_name }}
+permissions: write-all
+
+on:
+  push:
+    tags:
+      - "@agusmgarcia/react-essentials-commands@v[0-9]+.[0-9]+.[0-9]+"
+
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  create-tag:
+    name: Create tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.get-version-from-tag.outputs.replaced }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Get version from tag
+        id: get-version-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: v$2.$3.$4
+          string: ${{ github.ref_name }}
+
+      - name: Create tag
+        if: ${{ steps.get-version-from-tag.outputs.replaced != 'v0.0.0' }}
+        run: |
+          TAG_NAME=${{ steps.get-version-from-tag.outputs.replaced }}
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+        shell: bash
+
+  upsert-minor-tag:
+    name: Upsert minor tag
+    needs: create-tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Get minor version from tag
+        id: get-minor-version-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: v$2.$3
+          string: ${{ github.ref_name }}
+
+      - name: Get regular expression
+        id: get-regular-expression
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: v$2.$3.*
+          string: ${{ github.ref_name }}
+
+      - name: Upsert minor tag
+        if: ${{ steps.get-minor-version-from-tag.outputs.replaced != 'v0.0' }}
+        run: |
+          TAG_CURRENT=${{ needs.create-tag.outputs.tag }}
+          TAG_LAST=$(git tag --list --sort=v:refname "${{ steps.get-regular-expression.outputs.replaced }}" | tail -n 1)
+
+          if [ $TAG_CURRENT == $TAG_LAST ]; then
+            TAG_NAME=${{ steps.get-minor-version-from-tag.outputs.replaced }}
+            git tag -f $TAG_NAME
+            git push -f origin $TAG_NAME
+          fi
+        shell: bash
+
+  upsert-major-tag:
+    name: Upsert major tag
+    needs: [create-tag, upsert-minor-tag]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Get major version from tag
+        id: get-major-version-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: v$2
+          string: ${{ github.ref_name }}
+
+      - name: Get regular expression
+        id: get-regular-expression
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)$
+          replace-with: v$2.*.*
+          string: ${{ github.ref_name }}
+
+      - name: Upsert major tag
+        if: ${{ steps.get-major-version-from-tag.outputs.replaced != 'v0' }}
+        run: |
+          TAG_CURRENT=${{ needs.create-tag.outputs.tag }}
+          TAG_LAST=$(git tag --list --sort=v:refname "${{ steps.get-regular-expression.outputs.replaced }}" | tail -n 1)
+
+          if [ $TAG_CURRENT == $TAG_LAST ]; then
+            TAG_NAME=${{ steps.get-major-version-from-tag.outputs.replaced }}
+            git tag -f $TAG_NAME
+            git push -f origin $TAG_NAME
+          fi
+        shell: bash
