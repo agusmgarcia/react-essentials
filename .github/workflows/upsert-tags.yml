@@ -46,6 +46,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          fetch-tags: true
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Get minor version from tag
@@ -85,6 +86,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          fetch-tags: true
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Get major version from tag
