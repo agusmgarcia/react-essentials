@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.11.2](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.11.2)
+
+> September 3, 2025
+
+### Fixes 🎯
+
+- **release**: adjust input parameters
+
 ## [v0.11.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.11.1)
 
 > August 29, 2025
