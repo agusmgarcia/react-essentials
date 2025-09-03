@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.12.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.12.0)
+
+> September 3, 2025
+
+### Features ✅
+
+- **release**: update tag when new lower version has created
+- **release**: rename github-token by github-auth-token
+- **deploy**: add ability to set custom version
+
 ## [v0.11.2](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.11.2)
 
 > September 3, 2025
