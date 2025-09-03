@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.12.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.12.1)
+
+> September 3, 2025
+
+### Fixes 🎯
+
+- **upsert-tags**: fetch tags before creating new ones
+
 ## [v0.12.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.12.0)
 
 > September 3, 2025
