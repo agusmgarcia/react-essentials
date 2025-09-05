@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.12.3](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.12.3)
+
+> September 5, 2025
+
+### Fixes 🎯
+
+- **release**: adjust if conditions to create the artifact
+
 ## [v0.12.2](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.12.2)
 
 > September 3, 2025
