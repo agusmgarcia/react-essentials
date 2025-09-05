@@ -36,12 +36,14 @@ jobs:
 
       - name: Verify the package manager
         run: |
-          if [ -f "package-lock.json" ]; then
+          if [[ -f "package-lock.json" ]]; then
             echo "value=npm" >> "$GITHUB_OUTPUT"
-          elif [ -f "yarn.lock" ]; then
+
+          elif [[ -f "yarn.lock" ]]; then
             echo "::error::The package manager cannot be 'yarn'"
             exit 1
-          elif [ -f "pnpm-lock.yaml" ]; then
+
+          elif [[ -f "pnpm-lock.yaml" ]]; then
             echo "::error::The package manager cannot be 'pnpm'"
             exit 1
           fi
@@ -49,15 +51,18 @@ jobs:
 
       - name: Verify the monorepo tool
         run: |
-          if [ -f "turbo.json" ]; then
+          if [[ -f "turbo.json" ]]; then
             echo "value=turborepo" >> "$GITHUB_OUTPUT"
-          elif [ -f "nx.json" ] || [ -d ".nx" ]; then
+
+          elif [[ -f "nx.json" || -d ".nx" ]]; then
             echo "::error::The monorepo tool cannot be 'nx'"
             exit 1
-          elif [ -f "lerna.json" ]; then
+
+          elif [[ -f "lerna.json" ]]; then
             echo "::error::The monorepo tool cannot be 'lerna'"
             exit 1
-          elif [ -f "pnpm-workspace.yaml" ]; then
+
+          elif [[ -f "pnpm-workspace.yaml" ]]; then
             echo "::error::The monorepo tool cannot be 'pnpm workspaces'"
             exit 1
           fi
@@ -131,11 +136,11 @@ jobs:
 
       - name: Copy files into the root
         run: |
-          if [ -f ".npmrc" ]; then
+          if [[ -f ".npmrc" && ${{ steps.get-package-location.outputs.value || '.' }} != "." ]]; then
             cp .npmrc ${{ steps.get-package-location.outputs.value || '.' }}
           fi
 
-          if [ -f "package-lock.json" ]; then
+          if [[ -f "package-lock.json" && ${{ steps.get-package-location.outputs.value || '.' }} != "." ]]; then
             cp package-lock.json ${{ steps.get-package-location.outputs.value || '.' }}
           fi
 

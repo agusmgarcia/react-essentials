@@ -72,7 +72,7 @@ jobs:
           TAG_CURRENT=${{ needs.create-tag.outputs.tag }}
           TAG_LAST=$(git tag --list --sort=v:refname "${{ steps.get-regular-expression.outputs.replaced }}" | tail -n 1)
 
-          if [ $TAG_CURRENT == $TAG_LAST ]; then
+          if [[ $TAG_CURRENT == $TAG_LAST ]]; then
             TAG_NAME=${{ steps.get-minor-version-from-tag.outputs.replaced }}
             git tag -f $TAG_NAME
             git push -f origin $TAG_NAME
@@ -113,7 +113,7 @@ jobs:
           TAG_CURRENT=${{ needs.create-tag.outputs.tag }}
           TAG_LAST=$(git tag --list --sort=v:refname "${{ steps.get-regular-expression.outputs.replaced }}" | tail -n 1)
 
-          if [ $TAG_CURRENT == $TAG_LAST ]; then
+          if [[ $TAG_CURRENT == $TAG_LAST ]]; then
             TAG_NAME=${{ steps.get-major-version-from-tag.outputs.replaced }}
             git tag -f $TAG_NAME
             git push -f origin $TAG_NAME
