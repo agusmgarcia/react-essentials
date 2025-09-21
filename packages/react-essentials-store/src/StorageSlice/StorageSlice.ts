@@ -21,7 +21,7 @@ import { type BaseData, type BaseSlices } from "./StorageSlice.types";
 export default abstract class StorageSlice<
   TData extends BaseData,
   TSlices extends BaseSlices = {},
-> extends ServerSlice<TData, undefined, TSlices> {
+> extends ServerSlice<TData | undefined, undefined, TSlices> {
   /**
    * Creates a new instance of the StorageSlice class.
    *

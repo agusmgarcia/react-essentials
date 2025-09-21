@@ -23,7 +23,7 @@ export default abstract class ServerSlice<
   TRequest = undefined,
   TSlices extends BaseSlices = {},
 > extends GlobalSlice<
-  { error: any; loading: boolean; response: TResponse | undefined },
+  { error: any; loading: boolean; response: TResponse },
   TSlices
 > {
   private static readonly UNINITIALIZED: any = Symbol("UNINITIALIZED");
@@ -34,14 +34,14 @@ export default abstract class ServerSlice<
   /**
    * Creates a new instance of the ServerSlice.
    *
-   * @param initialResponse - (Optional) The initial response to set in the state. If not provided, the response will be undefined and loading will be set to true.
+   * @param initialResponse - The initial response to set in the state. Loading will be set to true.
    *
    * @remarks
    * - Initializes the internal AbortController and request state.
-   * - Sets the initial state with the provided response, or undefined if not provided.
+   * - Sets the initial state with the provided response.
    * - This constructor is protected and intended to be called by subclasses.
    */
-  protected constructor(initialResponse?: TResponse) {
+  protected constructor(initialResponse: TResponse) {
     super({ error: undefined, loading: true, response: initialResponse });
 
     this._controller = new AbortController();
@@ -51,28 +51,27 @@ export default abstract class ServerSlice<
   /**
    * Gets the current response from the server slice state.
    *
-   * @returns The current response of type `TResponse`, or `undefined` if no response is available.
+   * @returns The current response of type `TResponse`.
    *
    * @remarks
    * - This getter provides access to the latest response stored in the slice's state.
    * - The response is updated when a fetch operation completes successfully.
-   * - If no response has been fetched yet, or if an error occurred, this may be `undefined`.
    */
-  get response(): TResponse | undefined {
+  get response(): TResponse {
     return this.state.response;
   }
 
   /**
    * Sets the response in the server slice state.
    *
-   * @param response - The new response of type `TResponse` or `undefined` to set in the state.
+   * @param response - The new response of type `TResponse` to set in the state.
    *
    * @remarks
    * - This protected setter updates the state with the provided response.
    * - It also resets the error to `undefined` and sets `loading` to `false`.
    * - Intended to be used by subclasses to update the response after a fetch operation.
    */
-  protected set response(response: TResponse | undefined) {
+  protected set response(response: TResponse) {
     this.state = { error: undefined, loading: false, response };
   }
 
@@ -119,7 +118,7 @@ export default abstract class ServerSlice<
    *
    * @param request - The request object of type `TRequest` to be used for the fetch operation.
    * @param signal - An `AbortSignal` that can be used to cancel the fetch operation if needed.
-   * @returns The response of type `TResponse`, a promise resolving to `TResponse` or `undefined`, or `undefined` if no response is available.
+   * @returns The response of type `TResponse` or a promise resolving to `TResponse`.
    *
    * @remarks
    * - This method must be implemented by subclasses to define how data is fetched from the server.
@@ -130,7 +129,7 @@ export default abstract class ServerSlice<
   protected abstract onFetch(
     request: TRequest,
     signal: AbortSignal,
-  ): TResponse | Promise<TResponse | undefined> | undefined;
+  ): TResponse | Promise<TResponse>;
 
   private async _reload(request: TRequest, force: boolean): Promise<void> {
     if (!force && equals.deep(this._request, request)) return;
