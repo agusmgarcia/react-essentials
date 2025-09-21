@@ -109,9 +109,9 @@ export type SlicesOf<TSliceFactories extends BaseSliceFactories> = {
  * @typeParam TSliceFactories - The mapping of slice names to their factory constructors.
  */
 export type StateOf<TSliceFactories extends BaseSliceFactories> = {
-  [TKey in keyof SlicesOf<TSliceFactories>]: Omit<
-    SlicesOf<TSliceFactories>[TKey],
-    "subscribe"
+  [TKey in keyof SlicesOf<TSliceFactories>]: RemoveLastParameter<
+    Omit<SlicesOf<TSliceFactories>[TKey], "subscribe">,
+    AbortSignal
   >;
 };
 
@@ -133,3 +133,17 @@ export type Listener<TSliceFactories extends BaseSliceFactories> = Func<
  * allowing the caller to remove the listener when it is no longer needed.
  */
 export type Unsubscribe = Func;
+
+type RemoveLastParameter<TData, TParameter> = {
+  [TKey in keyof TData]: TData[TKey] extends (
+    ...args: [...infer TArgs, TParameter]
+  ) => infer TResult
+    ? (...args: TArgs) => TResult
+    : TData[TKey] extends (
+          ...args: [...infer TArgs, infer TLastArg]
+        ) => infer TResult
+      ? TLastArg extends TParameter
+        ? (...args: TArgs) => TResult
+        : TData[TKey]
+      : TData[TKey];
+};

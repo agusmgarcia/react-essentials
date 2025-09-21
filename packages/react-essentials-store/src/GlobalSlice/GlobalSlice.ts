@@ -27,6 +27,7 @@ export default abstract class GlobalSlice<
 > {
   private readonly _subscriptions: Subscription<TState, any>[];
 
+  private _controller: AbortController;
   private _subscriptionIndex: number;
   private _initialized: boolean;
   private _slices: TSlices | undefined;
@@ -45,6 +46,7 @@ export default abstract class GlobalSlice<
   protected constructor(initialState: TState) {
     this._subscriptions = [];
 
+    this._controller = new AbortController();
     this._subscriptionIndex = Number.MIN_SAFE_INTEGER;
     this._initialized = false;
     this._slices = undefined;
@@ -209,5 +211,11 @@ export default abstract class GlobalSlice<
 
     return () =>
       this._subscriptions.splice(this._subscriptions.indexOf(subscription), 1);
+  }
+
+  private regenerateSignal(): AbortSignal {
+    this._controller.abort("New signal created");
+    this._controller = new AbortController();
+    return this._controller.signal;
   }
 }

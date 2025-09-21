@@ -203,7 +203,10 @@ class EnhancedSliceProxyHandler<
 
     const boundValue = value.bind(target);
     const method = (...args: any) =>
-      this.middleware(() => boundValue(...args), this.state);
+      this.middleware(
+        () => boundValue(...args, (target as TSlice)["regenerateSignal"]()),
+        this.state,
+      );
 
     this.metods[property] = method;
     return method;
