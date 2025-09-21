@@ -152,7 +152,7 @@ export default abstract class ServerSlice<
       if (signal.aborted) return;
 
       this._request = request;
-      this.state = { error, loading: false, response: undefined };
+      this.state = { ...this.state, error, loading: false };
     }
   }
 
