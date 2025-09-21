@@ -34,14 +34,13 @@ export default abstract class LocalStorageSlice<
    * Creates a new instance of the LocalStorageSlice.
    *
    * @param name - The unique key used to store and retrieve data from localStorage.
-   * @param initialData - (Optional) The initial data to populate the slice with.
    *
    * @remarks
-   * This constructor initializes the local storage slice with a specific name and optional initial data.
+   * This constructor initializes the local storage slice with a specific name.
    * It also sets up the internal storage event handler for synchronization across browser tabs.
    */
-  protected constructor(name: string, initialData?: TData) {
-    super(initialData);
+  protected constructor(name: string) {
+    super();
 
     this._name = name;
 

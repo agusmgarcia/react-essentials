@@ -43,7 +43,7 @@ export default abstract class QueryStringStorageSlice<
    * @param configs - Optional configuration object to customize the storage behavior.
    */
   protected constructor(name: string, configs?: Partial<Configs>) {
-    super(undefined);
+    super();
 
     this._name = name;
     this._mode = configs?.mode || "replace";

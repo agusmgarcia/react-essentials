@@ -25,14 +25,12 @@ export default abstract class StorageSlice<
   /**
    * Creates a new instance of the StorageSlice class.
    *
-   * @param initialData - Optional initial data to populate the slice.
-   *
    * @remarks
    * This constructor is protected and intended to be called by subclasses.
-   * It initializes the base ServerSlice with the provided initial data.
+   * It initializes the base ServerSlice.
    */
-  protected constructor(initialData?: TData) {
-    super(initialData);
+  protected constructor() {
+    super(undefined);
   }
 
   protected override onInit(): void {
