@@ -76,13 +76,21 @@ export default abstract class ServerSlice<
     super.onInit();
 
     Object.values(this.slices).forEach((slice) =>
-      slice.subscribe(() => this._reload(this.onBuildRequest(), false)),
+      slice.subscribe(
+        () => {
+          const request = this.onBuildRequest();
+          if (!equals.deep(this._request, request)) return request;
+          throw GlobalSlice.SELECTOR_SKIPPED_ERROR;
+        },
+        (request, _, signal) => this._reload(request, signal),
+        () => false,
+      ),
     );
 
     const request = this.onBuildRequest();
     if (request === ServerSlice.UNINITIALIZED)
       this.state = { ...this.state, loading: false };
-    else this._reload(request, false);
+    else this._reload(request, this["_controller"].signal);
   }
 
   /**
@@ -119,13 +127,9 @@ export default abstract class ServerSlice<
 
   private async _reload(
     request: TRequest | symbol,
-    force: boolean,
-    signal?: AbortSignal,
+    signal: AbortSignal,
   ): Promise<void> {
-    if (!force && equals.deep(this._request, request)) return;
     this._request = request;
-
-    signal = signal || this["regenerateSignal"]();
     this.state = { ...this.state, loading: true };
 
     try {
@@ -183,7 +187,6 @@ export default abstract class ServerSlice<
 
     return this._reload(
       arguments.length === 1 ? this._request : (requestOrSignal as TRequest),
-      true,
       (arguments.length === 1 ? requestOrSignal : signal) as AbortSignal,
     );
   }

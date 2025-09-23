@@ -32,16 +32,23 @@ export type Subscription<TState extends BaseState, TSelection = TState> = {
     boolean,
     [newSelection: TSelection, prevSelection: TSelection]
   >;
-
   /**
    * A function that is called when the selection changes, receiving the new and previous selection.
    */
-  listener: Func<void, [newSelection: TSelection, prevSelection: TSelection]>;
+  listener: Func<
+    void,
+    [newSelection: TSelection, prevSelection: TSelection, signal: AbortSignal]
+  >;
 
   /**
    * A function that selects a portion of the state to subscribe to.
    */
   selector: Func<TSelection, [state: TState]>;
+
+  /**
+   * The signal of the slice to which it belongs.
+   */
+  slice: GlobalSlice<any, any>;
 };
 
 /**

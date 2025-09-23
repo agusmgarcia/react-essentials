@@ -1,4 +1,4 @@
-import { equals } from "@agusmgarcia/react-essentials-utils";
+import { emptyFunction, equals } from "@agusmgarcia/react-essentials-utils";
 
 import {
   type BaseSlices,
@@ -25,6 +25,8 @@ export default abstract class GlobalSlice<
   TState extends BaseState,
   TSlices extends BaseSlices = {},
 > {
+  static readonly SELECTOR_SKIPPED_ERROR = new Error("Selector skipped");
+
   private readonly _subscriptions: Subscription<TState, any>[];
 
   private _controller: AbortController;
@@ -76,7 +78,7 @@ export default abstract class GlobalSlice<
     if (!!this._slices)
       throw new Error(`'${this.constructor.name}' has been already set`);
 
-    this._slices = slices;
+    this._slices = new Proxy(slices, new AddProxyHandler(this));
   }
 
   /**
@@ -115,11 +117,25 @@ export default abstract class GlobalSlice<
     this._subscriptions.forEach((subscription) => {
       if (subscriptionIndex !== this._subscriptionIndex) return;
 
-      const prevSelection = subscription.selector(prevState);
-      const newSelection = subscription.selector(this.state);
+      let prevSelection;
+      let newSelection;
+
+      try {
+        prevSelection = subscription.selector(prevState);
+        newSelection = subscription.selector(this.state);
+      } catch (error) {
+        if (error === GlobalSlice.SELECTOR_SKIPPED_ERROR) return;
+        throw error;
+      }
 
       if (!subscription.equality(newSelection, prevSelection))
-        subscription.listener(newSelection, prevSelection);
+        subscription.listener(
+          newSelection,
+          prevSelection,
+          this === subscription.slice
+            ? this._controller.signal
+            : subscription.slice._regenerateSignal(),
+        );
     });
   }
 
@@ -176,7 +192,7 @@ export default abstract class GlobalSlice<
   /**
    * Subscribes to state changes of the global slice.
    *
-   * @param selector - A selector function to select a part of the state.
+   * @param selector - A selector function to select a part of the state. If the {@link GlobalSlice.SELECTOR_SKIPPED_ERROR} error is thrown, the evaluation is skipped.
    * @param listener - (Optional) A listener function to be called when the selected part of the state changes.
    * @param equality - (Optional) A function to compare the previous and new selection. Defaults to strict equality.
    * @returns An `Unsubscribe` function that removes the subscription when called.
@@ -189,33 +205,143 @@ export default abstract class GlobalSlice<
     equality?: Subscription<TState, TSelection>["equality"],
   ): Unsubscribe;
 
-  subscribe<TSelection extends TState>(
-    listenerOrSelector:
-      | Subscription<TState>["listener"]
-      | Subscription<TState, TSelection>["selector"],
-    listener?: Subscription<TState, TSelection>["listener"],
-    equality?: Subscription<TState, TSelection>["equality"],
-  ): Unsubscribe {
-    const subscription: Subscription<TState, TSelection> = {
-      equality: equality || equals.strict,
-      listener:
-        listener ||
-        (listenerOrSelector as Subscription<TState, TSelection>["listener"]),
-      selector:
-        arguments.length > 1
-          ? (listenerOrSelector as Subscription<TState, TSelection>["selector"])
-          : (state) => state as TSelection,
-    };
-
+  subscribe(...rest: any[]): Unsubscribe {
+    const subscription = extractSubscriptionParameters<TState>(this, ...rest);
     this._subscriptions.push(subscription);
 
     return () =>
       this._subscriptions.splice(this._subscriptions.indexOf(subscription), 1);
   }
 
-  private regenerateSignal(): AbortSignal {
+  private _regenerateSignal(): AbortSignal {
     this._controller.abort("New signal created");
     this._controller = new AbortController();
     return this._controller.signal;
+  }
+}
+
+function extractSubscriptionParameters<TState extends BaseState>(
+  defaultSlice: GlobalSlice<TState, any>,
+  ...rest: any[]
+): Subscription<TState, TState> {
+  if (!rest.length)
+    return {
+      equality: equals.strict,
+      listener: emptyFunction,
+      selector: (state) => state,
+      slice: defaultSlice,
+    };
+
+  if (rest.length === 1 && rest[0] instanceof GlobalSlice)
+    return {
+      equality: equals.strict,
+      listener: emptyFunction,
+      selector: (state) => state,
+      slice: rest[0],
+    };
+
+  if (rest.length === 1 && !(rest[0] instanceof GlobalSlice))
+    return {
+      equality: equals.strict,
+      listener: rest[0],
+      selector: (state) => state,
+      slice: defaultSlice,
+    };
+
+  if (rest.length === 2 && rest[1] instanceof GlobalSlice)
+    return {
+      equality: equals.strict,
+      listener: rest[0],
+      selector: (state) => state,
+      slice: rest[1],
+    };
+
+  if (rest.length === 2 && !(rest[1] instanceof GlobalSlice))
+    return {
+      equality: equals.strict,
+      listener: rest[1],
+      selector: rest[0],
+      slice: defaultSlice,
+    };
+
+  if (rest.length === 3 && rest[2] instanceof GlobalSlice)
+    return {
+      equality: equals.strict,
+      listener: rest[1],
+      selector: rest[0],
+      slice: rest[2],
+    };
+
+  if (rest.length === 3 && !(rest[2] instanceof GlobalSlice))
+    return {
+      equality: rest[2],
+      listener: rest[1],
+      selector: rest[0],
+      slice: defaultSlice,
+    };
+
+  return {
+    equality: rest[2],
+    listener: rest[1],
+    selector: rest[0],
+    slice: rest[3],
+  };
+}
+
+class AddProxyHandler<TState extends BaseState, TSlices extends BaseSlices>
+  implements ProxyHandler<TSlices>
+{
+  private readonly slices: Record<string, GlobalSlice<any, any>>;
+  private readonly slice: GlobalSlice<TState, TSlices>;
+
+  constructor(slice: GlobalSlice<TState, TSlices>) {
+    this.slices = {};
+    this.slice = slice;
+  }
+
+  get(target: any, property: string) {
+    if (!!this.slices[property]) return this.slices[property];
+
+    const maybeSlice = target[property];
+    if (!(maybeSlice instanceof GlobalSlice)) return maybeSlice;
+
+    const slice = new Proxy(
+      maybeSlice,
+      new AddSliceIntoSubscribeProxyHandler(this.slice),
+    );
+
+    this.slices[property] = slice;
+    return slice;
+  }
+}
+
+class AddSliceIntoSubscribeProxyHandler<
+  TState extends BaseState,
+  TSlices extends BaseSlices,
+> implements ProxyHandler<GlobalSlice<any, any>>
+{
+  private readonly methods: Record<string, (...args: any) => any>;
+  private readonly slice: GlobalSlice<TState, TSlices>;
+
+  constructor(slice: GlobalSlice<TState, TSlices>) {
+    this.methods = {};
+    this.slice = slice;
+  }
+
+  get(target: any, property: string): any {
+    if (!!this.methods[property]) return this.methods[property];
+
+    const value = target[property];
+    if (typeof value !== "function") return value;
+
+    const boundValue = value.bind(target);
+
+    const method = (...args: any) =>
+      property === "subscribe"
+        ? boundValue(...args, this.slice)
+        : boundValue(...args);
+
+    this.methods[property] = method;
+    return method;
   }
 }

@@ -72,7 +72,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
     this._state = Object.keys(this._slices).reduce((result, key) => {
       result[key as keyof typeof result] = new Proxy(
         this._slices[key],
-        new EnhancedSliceProxyHandler(
+        new WrapIntoMiddlewareProxyHandler(
           this._slices as StateOf<TSliceFactories>,
           middleware,
         ),
@@ -177,12 +177,12 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
   }
 }
 
-class EnhancedSliceProxyHandler<
+class WrapIntoMiddlewareProxyHandler<
   TSlice extends GlobalSlice<any, any>,
   TSliceFactories extends BaseSliceFactories,
 > implements ProxyHandler<TSlice>
 {
-  private readonly metods: Record<string, any>;
+  private readonly methods: Record<string, any>;
   private readonly state: StateOf<TSliceFactories>;
   private readonly middleware: Middleware<TSliceFactories>;
 
@@ -190,13 +190,13 @@ class EnhancedSliceProxyHandler<
     state: StateOf<TSliceFactories>,
     middleware: Middleware<TSliceFactories>,
   ) {
-    this.metods = {};
+    this.methods = {};
     this.state = state;
     this.middleware = middleware;
   }
 
   get(target: any, property: string): any {
-    if (!!this.metods[property]) return this.metods[property];
+    if (!!this.methods[property]) return this.methods[property];
 
     const value = target[property];
     if (typeof value !== "function") return value;
@@ -204,11 +204,11 @@ class EnhancedSliceProxyHandler<
     const boundValue = value.bind(target);
     const method = (...args: any) =>
       this.middleware(
-        () => boundValue(...args, (target as TSlice)["regenerateSignal"]()),
+        () => boundValue(...args, (target as TSlice)["_regenerateSignal"]()),
         this.state,
       );
 
-    this.metods[property] = method;
+    this.methods[property] = method;
     return method;
   }
 }
