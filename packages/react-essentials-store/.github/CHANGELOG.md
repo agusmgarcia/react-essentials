@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.14.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.14.0)
+
+> September 23, 2025
+
+### Features ✅
+
+- add signal to all the public methods
+- **StorageSlice**: stop receiving initial data
+- **ServerSlice**: make initial response explicit
+- **ServerSlice**: keep last response on error
+
 ## [v0.13.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.13.0)
 
 > September 3, 2025
