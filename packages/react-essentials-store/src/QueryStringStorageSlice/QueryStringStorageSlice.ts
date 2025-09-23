@@ -52,8 +52,8 @@ export default abstract class QueryStringStorageSlice<
     this._clearIntervalHandler = emptyFunction;
   }
 
-  protected override onInit(): void {
-    super.onInit();
+  protected override onInit(signal: AbortSignal): void {
+    super.onInit(signal);
 
     if (isSSR()) return;
     let prevSearch = location.search;

@@ -116,7 +116,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
     Object.keys(this._slices).forEach((key) => {
       const slice = this._slices[key];
 
-      slice["onInit"]();
+      slice["onInit"](slice["_regenerateSignal"]());
 
       if (!slice["_initialized"])
         throw new Error(`'${slice.constructor.name}' must call super.onInit()`);

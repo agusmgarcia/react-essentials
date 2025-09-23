@@ -47,8 +47,8 @@ export default abstract class SessionStorageSlice<
     this._removeStorageEventHandler = emptyFunction;
   }
 
-  protected override onInit(): void {
-    super.onInit();
+  protected override onInit(signal: AbortSignal): void {
+    super.onInit(signal);
 
     if (isSSR()) return;
 

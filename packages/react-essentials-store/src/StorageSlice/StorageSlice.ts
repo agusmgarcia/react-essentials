@@ -33,8 +33,8 @@ export default abstract class StorageSlice<
     super(undefined);
   }
 
-  protected override onInit(): void {
-    super.onInit();
+  protected override onInit(signal: AbortSignal): void {
+    super.onInit(signal);
 
     this.subscribe(
       (state) => state.response,

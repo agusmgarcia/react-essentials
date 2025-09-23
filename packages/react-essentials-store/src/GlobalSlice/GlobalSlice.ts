@@ -142,6 +142,8 @@ export default abstract class GlobalSlice<
   /**
    * Lifecycle hook invoked during the initialization phase of the global slice.
    *
+   * @param signal - An AbortSignal that can be used to handle cancellation.
+   *
    * @protected
    * @remarks
    * This method is intended to be called when the global slice is being initialized.
@@ -152,7 +154,8 @@ export default abstract class GlobalSlice<
    *
    * @throws {Error} Throws an error if the slice has already been initialized.
    */
-  protected onInit(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected onInit(signal: AbortSignal): void {
     if (this._initialized)
       throw new Error(`'${this.constructor.name}' has been initialized`);
 

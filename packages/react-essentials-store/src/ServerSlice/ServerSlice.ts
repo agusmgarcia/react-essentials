@@ -72,8 +72,8 @@ export default abstract class ServerSlice<
     this.state = { error: undefined, loading: false, response };
   }
 
-  protected override onInit(): void {
-    super.onInit();
+  protected override onInit(signal: AbortSignal): void {
+    super.onInit(signal);
 
     Object.values(this.slices).forEach((slice) =>
       slice.subscribe(
@@ -90,7 +90,7 @@ export default abstract class ServerSlice<
     const request = this.onBuildRequest();
     if (request === ServerSlice.UNINITIALIZED)
       this.state = { ...this.state, loading: false };
-    else this._reload(request, this["_controller"].signal);
+    else this._reload(request, signal);
   }
 
   /**
