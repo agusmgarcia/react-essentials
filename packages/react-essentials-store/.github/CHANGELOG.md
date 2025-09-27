@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.15.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.15.0)
+
+> September 27, 2025
+
+### Features ✅
+
+- add signal to the onInit method
+- add signal into the subscribe method
+
 ## [v0.14.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.14.0)
 
 > September 23, 2025
