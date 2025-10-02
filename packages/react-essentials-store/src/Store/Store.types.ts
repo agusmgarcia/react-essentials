@@ -24,7 +24,16 @@ export type BaseSliceFactories = Record<
  */
 export type Middleware<TSliceFactories extends BaseSliceFactories> = Func<
   any,
-  [callback: Func<any>, state: StateOf<TSliceFactories>]
+  [
+    callback: Func<any>,
+    state: {
+      [TKey in keyof SlicesOf<TSliceFactories>]: Omit<
+        SlicesOf<TSliceFactories>[TKey],
+        "subscribe"
+      >;
+    },
+    signal: AbortSignal,
+  ]
 >;
 
 /**

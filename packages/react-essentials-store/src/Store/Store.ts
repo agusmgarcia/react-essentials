@@ -72,10 +72,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
     this._state = Object.keys(this._slices).reduce((result, key) => {
       result[key as keyof typeof result] = new Proxy(
         this._slices[key],
-        new WrapIntoMiddlewareProxyHandler(
-          this._slices as StateOf<TSliceFactories>,
-          middleware,
-        ),
+        new WrapIntoMiddlewareProxyHandler(this._slices, middleware),
       );
       return result;
     }, {} as StateOf<TSliceFactories>);
@@ -183,11 +180,11 @@ class WrapIntoMiddlewareProxyHandler<
 > implements ProxyHandler<TSlice>
 {
   private readonly methods: Record<string, any>;
-  private readonly state: StateOf<TSliceFactories>;
+  private readonly state: SlicesOf<TSliceFactories>;
   private readonly middleware: Middleware<TSliceFactories>;
 
   constructor(
-    state: StateOf<TSliceFactories>,
+    state: SlicesOf<TSliceFactories>,
     middleware: Middleware<TSliceFactories>,
   ) {
     this.methods = {};
@@ -202,11 +199,14 @@ class WrapIntoMiddlewareProxyHandler<
     if (typeof value !== "function") return value;
 
     const boundValue = value.bind(target);
-    const method = (...args: any) =>
-      this.middleware(
-        () => boundValue(...args, (target as TSlice)["_regenerateSignal"]()),
+    const method = (...args: any) => {
+      const signal = (target as TSlice)["_regenerateSignal"]();
+      return this.middleware(
+        () => boundValue(...args, signal),
         this.state,
+        signal,
       );
+    };
 
     this.methods[property] = method;
     return method;
