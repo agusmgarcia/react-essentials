@@ -1,6 +1,6 @@
 import { equals } from "@agusmgarcia/react-essentials-utils";
 
-import GlobalSlice from "../GlobalSlice";
+import { GlobalSlice } from "../GlobalSlice";
 import { type BaseResponse, type BaseSlices } from "./ServerSlice.types";
 
 /**

@@ -1,4 +1,4 @@
-import delay from "../delay";
+import { delay } from "../delay";
 import Cache from "./Cache";
 
 describe("Cache", () => {

@@ -1,7 +1,6 @@
 import { Mutex as AsyncMutex } from "async-mutex";
 
-import type AsyncFunc from "../AsyncFunc.types";
-import type Func from "../Func.types";
+import { type AsyncFunc, type Func } from "../types";
 import {
   type Entry,
   type Mutex,

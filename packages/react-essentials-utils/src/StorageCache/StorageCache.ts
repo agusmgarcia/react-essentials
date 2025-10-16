@@ -1,8 +1,8 @@
 import { Mutex as AsyncMutex } from "async-mutex";
 
-import Cache, { type CacheTypes } from "../Cache";
-import * as errors from "../errors";
-import isSSR from "../isSSR";
+import { Cache, type CacheTypes } from "../Cache";
+import { errors } from "../errors";
+import { isSSR } from "../isSSR";
 import { type Options } from "./StorageCache.types";
 
 /**

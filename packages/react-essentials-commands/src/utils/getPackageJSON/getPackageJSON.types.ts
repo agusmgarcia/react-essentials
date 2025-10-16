@@ -1,0 +1,21 @@
+export type Response = {
+  author?: string;
+  bin?: Record<string, string>;
+  core?: "app" | "azure-func" | "lib" | "node";
+  dependencies?: Record<string, string>;
+  description?: string;
+  devDependencies?: Record<string, string>;
+  engines?: Record<string, string>;
+  exports?: Record<string, { default?: string; node?: string; types?: string }>;
+  files?: string[];
+  main?: string;
+  name?: string;
+  optionalDependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+  private?: boolean | string;
+  publishConfig?: { access?: "public" | "restricted" };
+  repository?: { directory?: string; type?: string; url?: string };
+  scripts?: Record<string, string>;
+  types?: string;
+  version?: string;
+};

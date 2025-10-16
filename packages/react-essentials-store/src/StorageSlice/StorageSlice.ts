@@ -1,6 +1,6 @@
 import { equals } from "@agusmgarcia/react-essentials-utils";
 
-import ServerSlice from "../ServerSlice";
+import { ServerSlice } from "../ServerSlice";
 import { type BaseData, type BaseSlices } from "./StorageSlice.types";
 
 /**

@@ -1,6 +1,6 @@
 import { type Func } from "@agusmgarcia/react-essentials-utils";
 
-import type GlobalSlice from "../GlobalSlice";
+import { type GlobalSlice } from "../GlobalSlice";
 
 /**
  * Represents a mapping of string keys to slice factory constructors.

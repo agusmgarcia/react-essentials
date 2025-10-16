@@ -1,5 +1,4 @@
-import type AsyncFunc from "../AsyncFunc.types";
-import type Func from "../Func.types";
+import { type AsyncFunc, type Func } from "../types";
 
 /**
  * Configuration options for initializing the cache.

@@ -3,7 +3,7 @@ import {
   type Serializable,
 } from "@agusmgarcia/react-essentials-utils";
 
-import { type StorageSliceTypes } from "#src/StorageSlice";
+import { type StorageSliceTypes } from "../StorageSlice";
 
 /**
  * Represents the base state type for the global slice.

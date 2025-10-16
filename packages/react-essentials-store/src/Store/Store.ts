@@ -1,4 +1,4 @@
-import type GlobalSlice from "../GlobalSlice";
+import { type GlobalSlice } from "../GlobalSlice";
 import createMiddleware from "./Store.createMiddleware";
 import setupDevTools from "./Store.setupDevtools";
 import {

@@ -4,7 +4,7 @@ import {
   isSSR,
 } from "@agusmgarcia/react-essentials-utils";
 
-import StorageSlice from "../StorageSlice";
+import { StorageSlice } from "../StorageSlice";
 import { type BaseData, type BaseSlices } from "./LocalStorageSlice.types";
 
 /**

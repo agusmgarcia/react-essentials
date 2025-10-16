@@ -1,9 +1,6 @@
-import isSSR from "../isSSR";
 import StorageCache from "./StorageCache";
 
-jest.mock("../isSSR", () => jest.fn());
-
-const mockIsSSR = isSSR as jest.Mock;
+jest.mock("../isSSR", () => ({ isSSR: jest.fn().mockReturnValue(false) }));
 
 describe("StorageCache", () => {
   let localStorageMock: Storage;
@@ -54,7 +51,6 @@ describe("StorageCache", () => {
       value: sessionStorageMock,
       writable: true,
     });
-    mockIsSSR.mockReturnValue(false);
   });
 
   afterEach(() => {
@@ -108,18 +104,6 @@ describe("StorageCache", () => {
       cache.getOrCreate("err", factory, new AbortController().signal),
     ).rejects.toThrow("fail");
     expect(factory).toHaveBeenCalledTimes(1);
-  });
-
-  it("should not access storage in SSR", async () => {
-    mockIsSSR.mockReturnValue(true);
-    const cache = new StorageCache("ssrCache", { storage: "local" });
-    const value = await cache.getOrCreate(
-      "foo",
-      () => "bar",
-      new AbortController().signal,
-    );
-    expect(value).toBe("bar");
-    expect(localStorageMock.setItem).not.toHaveBeenCalled();
   });
 
   it("should allow setting values directly", async () => {

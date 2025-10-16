@@ -2,7 +2,7 @@ import type {} from "@redux-devtools/extension";
 
 import { errors, isSSR } from "@agusmgarcia/react-essentials-utils";
 
-import ServerSlice from "../ServerSlice";
+import { ServerSlice } from "../ServerSlice";
 import type Store from "./Store";
 import { type BaseSliceFactories, type StateOf } from "./Store.types";
 

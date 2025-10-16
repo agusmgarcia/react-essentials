@@ -4,7 +4,7 @@ import {
   useContextSelector,
 } from "use-context-selector";
 
-import Store, { type StoreTypes } from "../Store";
+import { Store, type StoreTypes } from "../Store";
 import {
   type BaseSliceFactories,
   type Input,
