@@ -11,7 +11,7 @@
 export function first<TElement>(
   _element: TElement,
   index: number,
-  _array: TElement[],
+  _array: ReadonlyArray<TElement>,
 ): boolean {
   return !index;
 }
@@ -30,7 +30,7 @@ export function first<TElement>(
 export function single<TElement>(
   _element: TElement,
   index: number,
-  array: TElement[],
+  array: ReadonlyArray<TElement>,
 ): boolean {
   if (array.length > 1)
     throw new Error("There are more than one element in the array");
@@ -51,7 +51,7 @@ export function single<TElement>(
 export function singleOrDefault<TElement>(
   _element: TElement,
   index: number,
-  array: TElement[],
+  array: ReadonlyArray<TElement>,
 ): boolean {
   if (array.length > 1) return false;
   return !index;
