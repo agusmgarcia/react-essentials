@@ -1,5 +1,3 @@
-import { type CacheTypes } from "../Cache";
-
 /**
  * Options for configuring the storage cache behavior.
  *
@@ -40,12 +38,3 @@ export type Options = {
    */
   version: string;
 };
-
-declare global {
-  interface Window {
-    __REACT_ESSENTIALS_STORAGE_CACHES__?: Record<
-      string,
-      Record<string, CacheTypes.Mutex>
-    >;
-  }
-}

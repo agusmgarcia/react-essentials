@@ -3,6 +3,7 @@ import { Mutex as AsyncMutex } from "async-mutex";
 import { Cache, type CacheTypes } from "../Cache";
 import { errors } from "../errors";
 import { isSSR } from "../isSSR";
+import { type AsyncFunc } from "../types";
 import { type Options } from "./StorageCache.types";
 
 /**
@@ -18,6 +19,8 @@ import { type Options } from "./StorageCache.types";
  * @extends Cache
  */
 export default class StorageCache extends Cache {
+  private readonly mutex: CacheTypes.Mutex;
+
   /**
    * Creates an instance of the `StorageCache` class.
    *
@@ -28,33 +31,47 @@ export default class StorageCache extends Cache {
     super({
       maxCacheTime: options?.maxCacheTime,
       maxErrorTime: options?.maxErrorTime,
-      mutexFactory: (key) => mutexFactory(storageName, key),
+      mutexFactory: () => this.mutex,
       storage: new Storage(
-        `${storageName}${!!options?.version ? `.${options.version}` : ""}`,
+        storageName,
         options?.storage || "session",
+        options?.version || "",
       ),
     });
+
+    this.mutex = isSSR()
+      ? new AsyncMutex()
+      : new StorageMutex(
+          storageName,
+          options?.storage || "session",
+          options?.version || "",
+        );
+
     deleteOlderStorages(
-      options?.storage || "session",
       storageName,
+      options?.storage || "session",
       options?.version || "",
     );
   }
 }
 
 class Storage implements CacheTypes.Storage {
-  private readonly storageName: string;
-  private readonly storageType: "local" | "session";
+  private readonly name: string;
+  private readonly type: "local" | "session";
 
-  constructor(storageName: string, storageType: "local" | "session") {
-    this.storageName = storageName;
-    this.storageType = storageType;
+  constructor(
+    storageName: string,
+    storageType: "local" | "session",
+    version: string,
+  ) {
+    this.name = `${storageName}${!!version ? `.${version}` : ""}`;
+    this.type = storageType;
   }
 
   getEntry(key: string): CacheTypes.Entry | undefined {
     if (isSSR()) return undefined;
 
-    const raw = window[`${this.storageType}Storage`].getItem(this.storageName);
+    const raw = window[`${this.type}Storage`].getItem(this.name);
 
     try {
       const entries = JSON.parse(raw || "{}");
@@ -69,7 +86,7 @@ class Storage implements CacheTypes.Storage {
   setEntry(key: string, entry: CacheTypes.Entry): void {
     if (isSSR()) return;
 
-    const raw = window[`${this.storageType}Storage`].getItem(this.storageName);
+    const raw = window[`${this.type}Storage`].getItem(this.name);
 
     try {
       const entries = JSON.parse(raw || "{}");
@@ -78,40 +95,62 @@ class Storage implements CacheTypes.Storage {
           ? { ...entry, error: errors.getMessage(entry.error) }
           : entry;
 
-      window[`${this.storageType}Storage`].setItem(
-        this.storageName,
-        JSON.stringify(entries),
-      );
+      window[`${this.type}Storage`].setItem(this.name, JSON.stringify(entries));
     } catch {
       return;
     }
   }
 }
 
-function mutexFactory(storageName: string, key: string): CacheTypes.Mutex {
-  if (isSSR()) return new AsyncMutex();
+class StorageMutex implements CacheTypes.Mutex {
+  private readonly name: string;
 
-  return (((window.__REACT_ESSENTIALS_STORAGE_CACHES__ ||= {})[storageName] ||=
-    {})[key] ||= new AsyncMutex());
+  constructor(name: string);
+
+  constructor(
+    storageName: string,
+    storageType: "local" | "session",
+    version: string,
+  );
+
+  constructor(
+    storageNameOrName: string,
+    storageType?: "local" | "session",
+    version?: string,
+  ) {
+    this.name = !storageType
+      ? storageNameOrName
+      : `${storageType}.${storageNameOrName}${!!version ? `.${version}` : ""}`;
+  }
+
+  async runExclusive<TResult>(callback: AsyncFunc<TResult>): Promise<TResult> {
+    return await window.navigator.locks.request(this.name, callback);
+  }
 }
 
-function deleteOlderStorages(
-  storage: "local" | "session",
+async function deleteOlderStorages(
   storageName: string,
+  storageType: "local" | "session",
   version: string,
-): void {
+): Promise<void> {
   if (isSSR()) return;
 
-  const realStorageName = `${storageName}${!!version ? `.${version}` : ""}`;
+  const name = `${storageName}${!!version ? `.${version}` : ""}`;
   const keysToDelete = new Array<string>();
 
-  for (let i = 0; i < window[`${storage}Storage`].length; i++) {
-    const key = window[`${storage}Storage`].key(i);
+  for (let i = 0; i < window[`${storageType}Storage`].length; i++) {
+    const key = window[`${storageType}Storage`].key(i);
     if (!key) continue;
-    if (key === realStorageName) continue;
+    if (key === name) continue;
     if (!key.startsWith(storageName)) continue;
     keysToDelete.push(key);
   }
 
-  keysToDelete.forEach((key) => window[`${storage}Storage`].removeItem(key));
+  await Promise.all(
+    keysToDelete.map((key) =>
+      new StorageMutex(`${storageType}.${key}`).runExclusive(async () =>
+        window[`${storageType}Storage`].removeItem(key),
+      ),
+    ),
+  );
 }
