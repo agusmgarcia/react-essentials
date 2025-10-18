@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.16.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.16.1)
+
+> October 18, 2025
+
+### Chores ⚙️
+
+- adjust folder structure
+
 ## [v0.16.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.16.0)
 
 > October 2, 2025
