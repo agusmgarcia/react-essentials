@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.12.4](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.12.4)
+
+> October 18, 2025
+
+### Chores ⚙️
+
+- adjust folder structure
+
 ## [v0.12.3](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.12.3)
 
 > September 5, 2025
