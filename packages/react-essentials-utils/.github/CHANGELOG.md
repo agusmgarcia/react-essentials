@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.10.3](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.10.3)
+
+> October 18, 2025
+
+### Fixes 🎯
+
+- **finds**: add support to ReadonlyArray
+- **filters**: add support to ReadonlyArray
+- **StorageCache**: use navigator.locks
+
+### Chores ⚙️
+
+- adjust folder structure
+
 ## [v0.10.2](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.10.2)
 
 > August 29, 2025
