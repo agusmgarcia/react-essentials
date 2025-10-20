@@ -34,7 +34,7 @@ export async function getDefaultBranch(): Promise<string | undefined> {
 }
 
 export async function isCurrentBranchSynced(): Promise<boolean> {
-  return await execute("git fetch -p -P", true)
+  return await execute("git fetch -p -P -f", true)
     .then(() => execute("git diff @{upstream}", false))
     .then((diffs) => !diffs)
     .catch(() => true);
@@ -78,7 +78,7 @@ export async function getDetailedCommits(
         : []
   ).join(" ");
 
-  return await execute("git fetch -p -P", true)
+  return await execute("git fetch -p -P -f", true)
     .then(() =>
       execute(
         !!options?.initial
@@ -191,7 +191,7 @@ export async function getTags(
 export async function getDetailedTags(
   options?: Partial<{ merged: boolean; scope: string }>,
 ): Promise<{ sha: string; tag: string }[]> {
-  const tags = await execute("git fetch -p -P", true)
+  const tags = await execute("git fetch -p -P -f", true)
     .then(() =>
       execute(`git tag ${!!options?.merged ? " --merged" : ""}`, false),
     )
