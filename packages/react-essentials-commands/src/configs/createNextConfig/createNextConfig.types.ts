@@ -8,6 +8,11 @@ export type Input = [
    * - "app": for web applications
    */
   core: Extract<NonNullable<GetPackageJSONTypes.Response["core"]>, "app">,
+
+  /**
+   * Optional configurations for the webpack setup.
+   */
+  configs?: Partial<Pick<NextConfig, "webpack">>,
 ];
 
 export type Output = Func<NextConfig, [phase: string]>;

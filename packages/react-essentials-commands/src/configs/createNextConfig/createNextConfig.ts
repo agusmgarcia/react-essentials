@@ -8,7 +8,7 @@ import { type Input, type Output } from "./createNextConfig.types";
  * @param core - The core type of the project, which determines specific Jest settings.
  * @returns A function that takes the current Next.js build phase and returns a configuration object.
  */
-export default function createNextConfig(...[_core]: Input): Output {
+export default function createNextConfig(...[_core, configs]: Input): Output {
   return (phase) => ({
     basePath: process.env.APP_BASE_PATH,
     devIndicators: false,
@@ -22,5 +22,6 @@ export default function createNextConfig(...[_core]: Input): Output {
     ),
     output: phase === PHASE_PRODUCTION_BUILD ? "export" : undefined,
     reactStrictMode: true,
+    webpack: configs?.webpack,
   });
 }
