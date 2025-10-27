@@ -1,6 +1,6 @@
 import { type Configuration } from "webpack";
 
-import { type Func } from "#src/utils";
+import { type Func, type GetPackageJSONTypes } from "#src/utils";
 
 export type Input =
   | [
@@ -8,7 +8,7 @@ export type Input =
        * The core type of the package, which can be one of:
        * - "lib": for libraries that can be used in both Node.js and browser environments
        */
-      core: "lib",
+      core: Extract<NonNullable<GetPackageJSONTypes.Response["core"]>, "lib">,
 
       /**
        * Optional configurations for the webpack setup.
@@ -58,7 +58,10 @@ export type Input =
        * - "azure-func": for Azure Functions
        * - "node": for Node.js applications
        */
-      core: "azure-func" | "node",
+      core: Extract<
+        NonNullable<GetPackageJSONTypes.Response["core"]>,
+        "azure-func" | "node"
+      >,
 
       /**
        * Optional configurations for the webpack setup.

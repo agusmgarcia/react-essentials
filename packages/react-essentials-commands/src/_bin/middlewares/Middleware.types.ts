@@ -1,4 +1,8 @@
-import { type AsyncFunc, type Func, type getPackageJSON } from "#src/utils";
+import {
+  type AsyncFunc,
+  type Func,
+  type GetPackageJSONTypes,
+} from "#src/utils";
 
 export type Context = {
   command:
@@ -9,7 +13,7 @@ export type Context = {
     | "regenerate"
     | "start"
     | "test";
-  core: NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>;
+  core: NonNullable<GetPackageJSONTypes.Response["core"]>;
   defer: Func<void, [callback: Func | AsyncFunc]>;
   essentialsCommands: boolean;
   essentialsCommandsName: string;

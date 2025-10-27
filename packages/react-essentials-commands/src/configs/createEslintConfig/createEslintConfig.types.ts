@@ -1,4 +1,4 @@
-import { type getPackageJSON } from "#src/utils";
+import { type GetPackageJSONTypes } from "#src/utils";
 
 export type Input = [
   /**
@@ -8,7 +8,7 @@ export type Input = [
    * - "azure-func": for Azure Functions
    * - "node": for Node.js applications
    */
-  core: NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>,
+  core: NonNullable<GetPackageJSONTypes.Response["core"]>,
 ];
 
 export type Output = {
