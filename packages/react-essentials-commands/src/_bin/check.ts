@@ -10,7 +10,7 @@ export default async function check(): Promise<void> {
       "check",
       () =>
         execute(
-          "next lint --cache-location ./node_modules/.eslintcache --cache-strategy content --max-warnings 0 --dir .",
+          "eslint --cache --cache-location ./node_modules/.eslintcache --cache-strategy content --max-warnings 0 .",
           true,
         ),
       () => execute("tsc --pretty --noEmit", true),

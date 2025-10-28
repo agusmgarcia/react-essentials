@@ -8,7 +8,7 @@ export default async function format(): Promise<void> {
   try {
     await run("format", () =>
       execute(
-        "next lint --cache-location ./node_modules/.eslintcache --cache-strategy content --dir . --fix",
+        "eslint --cache --cache-location ./node_modules/.eslintcache --cache-strategy content --fix .",
         true,
       ),
     );
