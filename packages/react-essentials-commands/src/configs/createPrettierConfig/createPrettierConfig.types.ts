@@ -1,4 +1,5 @@
 import { type Config } from "prettier";
+import { type PluginOptions } from "prettier-plugin-tailwindcss";
 
 import { type GetPackageJSONTypes } from "#src/utils";
 
@@ -11,6 +12,16 @@ export type Input = [
    * - "node": for Node.js applications
    */
   core: NonNullable<GetPackageJSONTypes.Response["core"]>,
+
+  /**
+   * Optional configurations for the webpack setup.
+   */
+  configs?: Partial<{
+    /**
+     * To disable tailwind plugin.
+     */
+    disableTailwind: boolean;
+  }>,
 ];
 
-export type Output = Config;
+export type Output = Config & PluginOptions;
