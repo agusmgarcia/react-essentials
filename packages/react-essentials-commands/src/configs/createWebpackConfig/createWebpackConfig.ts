@@ -98,7 +98,7 @@ export default async function createWebpackConfig(
           filename: (data) =>
             data.chunk?.name === "index"
               ? "index.js"
-              : `functions${path.sep}${data.chunk?.name || "[name]"}.js`,
+              : path.join("functions", `${data.chunk?.name || "[name]"}.js`),
           globalObject: "this",
           libraryTarget: "umd",
           path: path.resolve("dist"),
@@ -203,7 +203,7 @@ export default async function createWebpackConfig(
             {
               exclude: /node_modules/,
               generator: {
-                filename: `dist${path.sep}_out${path.sep}[name].json`,
+                filename: path.join("dist", "_out", "[name].json"),
               },
               test: /src\/_out\/.+?\.json$/,
               type: "asset/resource",
@@ -216,8 +216,8 @@ export default async function createWebpackConfig(
         output: {
           filename: (data) =>
             data.chunk?.name === "index"
-              ? `dist${path.sep}index.js`
-              : `dist${path.sep}_out${path.sep}${data.chunk?.name || "[name]"}.js`,
+              ? path.join("dist", "index.js")
+              : path.join("dist", "_out", `${data.chunk?.name || "[name]"}.js`),
           globalObject: "this",
           libraryTarget: "umd",
           path: path.resolve("."),
@@ -309,7 +309,7 @@ export default async function createWebpackConfig(
             {
               exclude: /node_modules/,
               generator: {
-                filename: `dist${path.sep}_out${path.sep}[name].json`,
+                filename: path.join("dist", "_out", "[name].json"),
               },
               test: /src\/_out\/.+?\.json$/,
               type: "asset/resource",
@@ -319,8 +319,15 @@ export default async function createWebpackConfig(
         output: {
           filename: (data) =>
             data.chunk?.name === "index"
-              ? `dist${path.sep}index${configs?.omit === "web" ? "" : ".node"}.js`
-              : `dist${path.sep}_out${path.sep}${data.chunk?.name || "[name]"}${configs?.omit === "web" ? "" : ".node"}.js`,
+              ? path.join(
+                  "dist",
+                  `index${configs?.omit === "web" ? "" : ".node"}.js`,
+                )
+              : path.join(
+                  "dist",
+                  "_out",
+                  `${data.chunk?.name || "[name]"}${configs?.omit === "web" ? "" : ".node"}.js`,
+                ),
           globalObject: "this",
           libraryTarget: "umd",
           path: path.resolve("."),
