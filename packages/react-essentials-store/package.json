@@ -30,7 +30,7 @@
     "@agusmgarcia/react-essentials-commands": "*",
     "@agusmgarcia/react-essentials-utils": "*",
     "@redux-devtools/extension": "^3.3.0",
-    "react": "^19.1.1",
+    "react": "^19.2.0",
     "use-context-selector": "^2.0.0"
   },
   "files": [
