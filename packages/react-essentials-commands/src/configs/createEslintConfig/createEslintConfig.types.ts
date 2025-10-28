@@ -1,3 +1,5 @@
+import { type ESLint } from "eslint";
+
 import { type GetPackageJSONTypes } from "#src/utils";
 
 export type Input = [
@@ -11,12 +13,4 @@ export type Input = [
   core: NonNullable<GetPackageJSONTypes.Response["core"]>,
 ];
 
-export type Output = {
-  extends: string[];
-  ignorePatterns: string[];
-  plugins: string[];
-  rules: Record<
-    string,
-    "error" | "warning" | "off" | ["error" | "off" | "warning", ...any[]]
-  >;
-};
+export type Output = ESLint.ConfigData;
