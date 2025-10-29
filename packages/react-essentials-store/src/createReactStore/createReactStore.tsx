@@ -24,7 +24,11 @@ StateContext.displayName = "StateContext";
  */
 export default function createReactStore<
   TSliceFactories extends BaseSliceFactories,
->({ middlewares, slices }: Input<TSliceFactories>): Output<TSliceFactories> {
+>({
+  devTools,
+  middlewares,
+  slices,
+}: Input<TSliceFactories>): Output<TSliceFactories> {
   return {
     StoreProvider: (props) => {
       const storeRef = useRef<Store<TSliceFactories>>(null);
@@ -33,7 +37,7 @@ export default function createReactStore<
         storeRef.current = new Store<TSliceFactories>(
           ...([
             slices,
-            { devTools: props.devTools, middlewares, params: props.params },
+            { devTools, middlewares, params: props.params },
           ] as StoreTypes.Input<TSliceFactories>),
         );
 

@@ -18,7 +18,13 @@ export type BaseSliceFactories = StoreTypes.BaseSliceFactories;
  */
 export type Input<TSliceFactories extends BaseSliceFactories> = {
   /**
-   * [middlewares] - Optional array of middleware functions to enhance the store.
+   * Enables Redux DevTools integration. Can be a boolean to
+   * enable/disable, a string to specify a name or a configuration object.
+   */
+  devTools?: StoreTypes.Configs<TSliceFactories>["devTools"];
+
+  /**
+   * Optional array of middleware functions to enhance the store.
    */
   middlewares?: StoreTypes.Configs<TSliceFactories>["middlewares"];
 
@@ -36,14 +42,15 @@ export type Input<TSliceFactories extends BaseSliceFactories> = {
 export type Output<TSliceFactories extends BaseSliceFactories> = {
   /**
    * A React component that provides the store context to its children.
-   * Accepts props including `children` and any additional store configuration except for `middlewares`.
+   * Accepts props including `children` and any additional store configuration
+   * except for `devTools` and `middlewares`.
    */
   StoreProvider: Func<
     React.ReactElement,
     [
       props: {
         children?: React.ReactNode;
-      } & Omit<StoreTypes.Configs<TSliceFactories>, "middlewares">,
+      } & Omit<StoreTypes.Configs<TSliceFactories>, "devTools" | "middlewares">,
     ]
   >;
 
