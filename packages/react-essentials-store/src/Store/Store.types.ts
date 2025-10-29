@@ -43,9 +43,29 @@ export type Middleware<TSliceFactories extends BaseSliceFactories> = Func<
  */
 export type Configs<TSliceFactories extends BaseSliceFactories> = {
   /**
-   * Enables Redux DevTools integration. Can be a boolean to enable/disable, or a string to specify a name.
+   * Enables Redux DevTools integration. Can be a boolean to enable/disable,
+   * a string to specify a name or a configuration object.
    */
-  devTools?: boolean | string;
+  devTools?:
+    | boolean
+    | string
+    | {
+        /**
+         * A function that determines wether a new state has to be considered.
+         * If not defined, a deep comparing function will be used.
+         */
+        equality?: Func<
+          boolean,
+          [
+            newState: ReduxStateOf<TSliceFactories>,
+            prevState: ReduxStateOf<TSliceFactories>,
+          ]
+        >;
+        /**
+         * The name of the Redux store.
+         */
+        name?: string;
+      };
 
   /**
    * A single middleware or an array of middlewares to intercept or modify state changes.
@@ -122,6 +142,18 @@ export type StateOf<TSliceFactories extends BaseSliceFactories> = {
     Omit<SlicesOf<TSliceFactories>[TKey], "subscribe">,
     AbortSignal
   >;
+};
+
+/**
+ * Represents the state shape of the Redux store, derived from the provided slice factories.
+ *
+ * This type maps each slice name to its corresponding state. The resulting type is a plain object
+ * containing only the stateful properties.
+ *
+ * @typeParam TSliceFactories - The mapping of slice names to their factory constructors.
+ */
+export type ReduxStateOf<TSliceFactories extends BaseSliceFactories> = {
+  [TKey in keyof SlicesOf<TSliceFactories>]: SlicesOf<TSliceFactories>[TKey]["state"];
 };
 
 /**

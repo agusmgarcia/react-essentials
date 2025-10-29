@@ -93,7 +93,10 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
    * @throws {Error} If a slice does not call `super.onInit()` during its initialization.
    */
   init(): void {
-    setupDevTools(this, this._configs?.devTools);
+    setupDevTools(
+      this,
+      this._configs?.devTools as Configs<TSliceFactories>["devTools"],
+    );
 
     Object.keys(this._slices).forEach((key) => {
       const slice = this._slices[key];
