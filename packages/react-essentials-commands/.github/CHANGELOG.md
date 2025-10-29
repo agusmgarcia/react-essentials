@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.13.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.13.0)
+
+> October 29, 2025
+
+### Features ✅
+
+- stop using next-lint
+- **createPrettierConfig**: add ability to disable tw plugin
+- **createNextConfig**: add webpack
+
+### Fixes 🎯
+
+- **git**: clear existing tags on fetch
+
+### Chores ⚙️
+
+- disable tw plugin
+- **createWebpackConfig**: adjust path calculation
+- **createEslintConfig**: adjust output type
+- start using GetPackageJSONTypes
+- bump dependencies
+
 ## [v0.12.4](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.12.4)
 
 > October 18, 2025
