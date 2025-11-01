@@ -21,9 +21,11 @@ export type Options = {
    * This allows for fine-grained locking mechanisms on cache operations per key.
    *
    * @param key - The unique identifier for the cache entry that requires a mutex.
+   *   In case of global mutex, the key is `undefined`.
+   *
    * @returns An instance of `IMutex` associated with the specified key.
    */
-  mutexFactory: Func<Mutex, [key: string]>;
+  mutexFactory: Func<Mutex, [key: string | undefined]>;
 
   /**
    * The storage mechanism used for persisting cache entries.
@@ -38,43 +40,73 @@ export type Options = {
  * Provides methods to get and set cache entries, supporting both synchronous and asynchronous
  * implementations. The methods may optionally accept an AbortSignal for cancellation support.
  */
-export type Storage = {
+export interface Storage {
   /**
-   * Retrieves a cache entry. Can be a synchronous or asynchronous function.
-   * If asynchronous, it may accept an AbortSignal to support cancellation.
+   * Deletes a cache entry.
+   *
+   * @param key - The unique identifier for the cache entry to delete.
+   * @param signal - An AbortSignal to support cancellation of the operation.
    */
-  getEntry:
-    | Func<Entry | undefined, [key: string]>
-    | AsyncFunc<Entry | undefined, [key: string, signal: AbortSignal]>;
+  deleteEntry(key: string, signal: AbortSignal): Promise<void>;
 
   /**
-   * Stores a cache entry. Can be a synchronous or asynchronous function.
-   * If asynchronous, it may accept the entry and an AbortSignal to support cancellation.
+   * Retrieves a cache entry.
+   *
+   * @param key - The unique identifier for the cache entry to retrieve.
+   * @param signal - An AbortSignal to support cancellation of the operation.
    */
-  setEntry:
-    | Func<void, [key: string, entry: Entry]>
-    | AsyncFunc<void, [key: string, entry: Entry, signal: AbortSignal]>;
-};
+  getEntry(key: string, signal: AbortSignal): Promise<Entry | undefined>;
+
+  /**
+   * Retrieves all cache keys.
+   *
+   * @param signal - An AbortSignal to support cancellation of the operation.
+   */
+  getKeys(signal: AbortSignal): Promise<string[]>;
+
+  /**
+   * Stores a cache entry.
+   *
+   * @param key - The unique identifier for the cache entry to store.
+   * @param entry - The cache entry to store.
+   * @param signal - An AbortSignal to support cancellation of the operation.
+   */
+  setEntry(key: string, entry: Entry, signal: AbortSignal): Promise<void>;
+}
 
 /**
  * Represents a mutual exclusion lock interface for running asynchronous functions exclusively.
  * @template TResult The result type returned by the callback function.
  */
-export type Mutex = {
+export interface Mutex {
   /**
    * Runs the provided callback function exclusively, ensuring no other operations
    * are running concurrently within the mutex.
+   *
    * @param callback - An asynchronous function to execute exclusively.
    * @returns A promise that resolves with the result of the callback.
    */
   runExclusive<TResult>(callback: AsyncFunc<TResult>): Promise<TResult>;
-};
+
+  /**
+   * Runs the provided callback function in shared mode, allowing concurrent access.
+   *
+   * @param callback - An asynchronous function to execute in shared mode.
+   * @returns A promise that resolves with the result of the callback.
+   */
+  runShared<TResult>(callback: AsyncFunc<TResult>): Promise<TResult>;
+}
 
 /**
  * Represents a cache entry, which can either store a successful result or an error,
  * along with its expiration timestamp.
  */
 export type Entry = {
+  /**
+   * The timestamp (in milliseconds since epoch) when the entry has been created.
+   */
+  createdAt: number;
+
   /**
    * The timestamp (in milliseconds since epoch) when the entry expires.
    */
