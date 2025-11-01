@@ -1,8 +1,8 @@
-import { Mutex as AsyncMutex } from "async-mutex";
+import { v4 as createUUID } from "uuid";
 
 import { Cache, type CacheTypes } from "../Cache";
 import { errors } from "../errors";
-import { isSSR } from "../isSSR";
+import { strings } from "../strings";
 import { type AsyncFunc } from "../types";
 import { type Options } from "./StorageCache.types";
 
@@ -14,143 +14,139 @@ import { type Options } from "./StorageCache.types";
  *
  * @remarks
  * This class is designed to work in environments where browser storage is available.
- * It gracefully handles server-side rendering (SSR) scenarios by avoiding storage access.
  *
  * @extends Cache
  */
 export default class StorageCache extends Cache {
-  private readonly mutex: CacheTypes.Mutex;
-
   /**
    * Creates an instance of the `StorageCache` class.
    *
-   * @param storageName - The name of the storage to be used for caching.
    * @param options - Optional configuration options for the cache.
    */
-  constructor(storageName: string, options?: Partial<Options>) {
+  constructor(options?: Partial<Options>) {
     super({
       maxCacheTime: options?.maxCacheTime,
       maxErrorTime: options?.maxErrorTime,
-      mutexFactory: () => this.mutex,
-      storage: new Storage(
-        storageName,
-        options?.storage || "session",
-        options?.version || "",
-      ),
+      mutexFactory: (key) => new Mutex(options?.storage || "session", key),
+      storage: new Storage(options?.storage || "session"),
     });
+  }
+}
 
-    this.mutex = isSSR()
-      ? new AsyncMutex()
-      : new StorageMutex(
-          storageName,
-          options?.storage || "session",
-          options?.version || "",
-        );
+class Mutex implements CacheTypes.Mutex {
+  private readonly storage: Options["storage"];
+  private readonly key: string;
 
-    deleteOlderStorages(
-      storageName,
-      options?.storage || "session",
-      options?.version || "",
+  constructor(storage: Options["storage"], key: string | undefined) {
+    this.storage = storage;
+    this.key = key || "";
+  }
+
+  async runShared<TResult>(callback: AsyncFunc<TResult>): Promise<TResult> {
+    return await window.navigator.locks.request(
+      `${this.key}__${await this.getStorageId()}`,
+      { mode: "shared" },
+      callback,
+    );
+  }
+
+  async runExclusive<TResult>(callback: AsyncFunc<TResult>): Promise<TResult> {
+    return await window.navigator.locks.request(
+      `${this.key}__${await this.getStorageId()}`,
+      { mode: "exclusive" },
+      callback,
+    );
+  }
+
+  private async getStorageId(): Promise<string> {
+    const storageIdKey = `${strings.capitalize(this.storage)}StorageId`;
+
+    return (
+      (await window.navigator.locks.request(
+        storageIdKey,
+        { mode: "shared" },
+        () =>
+          window[`${this.storage}Storage`].getItem(storageIdKey) || undefined,
+      )) ||
+      (await window.navigator.locks.request(
+        storageIdKey,
+        { mode: "exclusive" },
+        () => {
+          const id =
+            window[`${this.storage}Storage`].getItem(storageIdKey) ||
+            createUUID();
+
+          window[`${this.storage}Storage`].setItem(storageIdKey, id);
+
+          return id;
+        },
+      ))
     );
   }
 }
 
 class Storage implements CacheTypes.Storage {
-  private readonly name: string;
-  private readonly type: "local" | "session";
+  private readonly storage: Options["storage"];
 
-  constructor(
-    storageName: string,
-    storageType: "local" | "session",
-    version: string,
-  ) {
-    this.name = `${storageName}${!!version ? `.${version}` : ""}`;
-    this.type = storageType;
+  constructor(storage: Options["storage"]) {
+    this.storage = storage;
   }
 
-  getEntry(key: string): CacheTypes.Entry | undefined {
-    if (isSSR()) return undefined;
+  async deleteEntry(key: string): Promise<void> {
+    window[`${this.storage}Storage`].removeItem(key);
+  }
 
-    const raw = window[`${this.type}Storage`].getItem(this.name);
+  async getKeys(): Promise<string[]> {
+    const keys = new Array<string>();
+
+    for (let i = 0; i < window[`${this.storage}Storage`].length; i++) {
+      const key = window[`${this.storage}Storage`].key(i);
+      if (!!key) keys.push(key);
+    }
+
+    return keys;
+  }
+
+  async getEntry(key: string): Promise<CacheTypes.Entry | undefined> {
+    const item = window[`${this.storage}Storage`].getItem(key);
+    if (!item) return undefined;
 
     try {
-      const entries = JSON.parse(raw || "{}");
-      return "error" in entries[key]
-        ? { ...entries[key], error: new Error(entries[key].error) }
-        : entries[key];
+      const entry: unknown = JSON.parse(item);
+
+      if (typeof entry !== "object") return undefined;
+
+      if (!entry) return undefined;
+
+      if (!("createdAt" in entry) || typeof entry.createdAt !== "number")
+        return undefined;
+
+      if (!("expiresAt" in entry) || typeof entry.expiresAt !== "number")
+        return undefined;
+
+      if ("result" in entry) return entry as CacheTypes.Entry;
+
+      if (!("error" in entry) || typeof entry.error !== "string")
+        return undefined;
+
+      return { ...entry, error: new Error(entry.error) } as CacheTypes.Entry;
     } catch {
       return undefined;
     }
   }
 
-  setEntry(key: string, entry: CacheTypes.Entry): void {
-    if (isSSR()) return;
-
-    const raw = window[`${this.type}Storage`].getItem(this.name);
+  async setEntry(key: string, entry: CacheTypes.Entry): Promise<void> {
+    const raw =
+      "error" in entry
+        ? { ...entry, error: errors.getMessage(entry.error) }
+        : entry;
 
     try {
-      const entries = JSON.parse(raw || "{}");
-      entries[key] =
-        "error" in entry
-          ? { ...entry, error: errors.getMessage(entry.error) }
-          : entry;
-
-      window[`${this.type}Storage`].setItem(this.name, JSON.stringify(entries));
-    } catch {
-      return;
+      window[`${this.storage}Storage`].setItem(key, JSON.stringify(raw));
+    } catch (error) {
+      if (!(error instanceof DOMException)) throw error;
+      if (error.code !== DOMException.QUOTA_EXCEEDED_ERR) throw error;
+      throw Cache.NOT_ENOUGH_SPACE_ERROR;
     }
   }
-}
-
-class StorageMutex implements CacheTypes.Mutex {
-  private readonly name: string;
-
-  constructor(name: string);
-
-  constructor(
-    storageName: string,
-    storageType: "local" | "session",
-    version: string,
-  );
-
-  constructor(
-    storageNameOrName: string,
-    storageType?: "local" | "session",
-    version?: string,
-  ) {
-    this.name = !storageType
-      ? storageNameOrName
-      : `${storageType}.${storageNameOrName}${!!version ? `.${version}` : ""}`;
-  }
-
-  async runExclusive<TResult>(callback: AsyncFunc<TResult>): Promise<TResult> {
-    return await window.navigator.locks.request(this.name, callback);
-  }
-}
-
-async function deleteOlderStorages(
-  storageName: string,
-  storageType: "local" | "session",
-  version: string,
-): Promise<void> {
-  if (isSSR()) return;
-
-  const name = `${storageName}${!!version ? `.${version}` : ""}`;
-  const keysToDelete = new Array<string>();
-
-  for (let i = 0; i < window[`${storageType}Storage`].length; i++) {
-    const key = window[`${storageType}Storage`].key(i);
-    if (!key) continue;
-    if (key === name) continue;
-    if (!key.startsWith(storageName)) continue;
-    keysToDelete.push(key);
-  }
-
-  await Promise.all(
-    keysToDelete.map((key) =>
-      new StorageMutex(`${storageType}.${key}`).runExclusive(async () =>
-        window[`${storageType}Storage`].removeItem(key),
-      ),
-    ),
-  );
 }
