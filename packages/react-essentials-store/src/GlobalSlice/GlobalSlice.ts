@@ -25,6 +25,9 @@ export default abstract class GlobalSlice<
   TState extends BaseState,
   TSlices extends BaseSlices = {},
 > {
+  /**
+   * It is a known error to throw when the subscription evaluation wants to be skipped.
+   */
   static readonly SELECTOR_SKIPPED_ERROR = new Error("Selector skipped");
 
   private readonly _subscriptions: Subscription<TState, any>[];
