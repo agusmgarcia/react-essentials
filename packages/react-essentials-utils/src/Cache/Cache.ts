@@ -1,5 +1,6 @@
 import { Mutex as AsyncMutex } from "async-mutex";
 
+import { errors } from "../errors";
 import { type AsyncFunc, type Func } from "../types";
 import {
   type Entry,
@@ -12,6 +13,11 @@ import {
  * A utility class for caching asynchronous operations with expiration times.
  */
 export default class Cache {
+  /**
+   * Error thrown when there is not enough space to store a cache entry.
+   */
+  static readonly NOT_ENOUGH_SPACE_ERROR = new Error("Not enough space");
+
   private readonly options: Options;
   private readonly mutexes: Record<string, Mutex>;
   private readonly signal: AbortSignal;
@@ -25,7 +31,7 @@ export default class Cache {
     this.options = {
       maxCacheTime: options?.maxCacheTime || 900_000,
       maxErrorTime: options?.maxErrorTime || 1_000,
-      mutexFactory: options?.mutexFactory || defaultMutexFactory,
+      mutexFactory: options?.mutexFactory || ((key) => new DefaultMutex(key)),
       storage: options?.storage || new DefaultStorage(),
     };
     this.mutexes = {};
@@ -43,48 +49,95 @@ export default class Cache {
     expiresAt: number | Func<number, [result: TResult]> | undefined,
   ): Promise<Entry> {
     if (!this.mutexes[key]) this.mutexes[key] = this.options.mutexFactory(key);
+
+    if (!this.mutexes[""])
+      this.mutexes[""] = this.options.mutexFactory(undefined);
+
     signal = signal || this.signal;
+    let newEntry: Entry;
 
-    return this.mutexes[key].runExclusive(async () => {
-      signal.throwIfAborted();
-      const entry = await this.options.storage.getEntry(key, signal);
-
-      if (!entry || byPassExpiration || Date.now() >= entry.expiresAt) {
-        try {
-          const result =
-            typeof factory === "function"
-              ? await (
-                  factory as
-                    | Func<TResult>
-                    | AsyncFunc<TResult, [signal: AbortSignal]>
-                )(signal)
-              : factory;
-
+    try {
+      return this.mutexes[""].runShared(() =>
+        this.mutexes[key].runExclusive(async () => {
           signal.throwIfAborted();
-          expiresAt =
-            typeof expiresAt === "undefined"
-              ? Date.now() + this.options.maxCacheTime
-              : typeof expiresAt === "number"
-                ? expiresAt
-                : expiresAt(result);
+          const entry = await this.options.storage.getEntry(key, signal);
 
-          const newEntry = { expiresAt, result };
-          await this.options.storage.setEntry(key, newEntry, signal);
+          if (!entry || byPassExpiration || Date.now() >= entry.expiresAt) {
+            try {
+              const result =
+                typeof factory === "function"
+                  ? await (
+                      factory as
+                        | Func<TResult>
+                        | AsyncFunc<TResult, [signal: AbortSignal]>
+                    )(signal)
+                  : factory;
 
-          return newEntry;
-        } catch (error) {
-          signal.throwIfAborted();
-          expiresAt = Date.now() + this.options.maxErrorTime;
+              signal.throwIfAborted();
+              const now = Date.now();
 
-          const newEntry = { error, expiresAt };
-          await this.options.storage.setEntry(key, newEntry, signal);
+              newEntry = {
+                createdAt: now,
+                expiresAt:
+                  typeof expiresAt === "undefined"
+                    ? now + this.options.maxCacheTime
+                    : typeof expiresAt === "number"
+                      ? expiresAt
+                      : expiresAt(result),
+                result,
+              };
 
-          return newEntry;
-        }
-      }
+              if (Date.now() < newEntry.expiresAt)
+                await this.options.storage.setEntry(key, newEntry, signal);
 
-      return entry;
-    });
+              return newEntry;
+            } catch (error) {
+              signal.throwIfAborted();
+              if (error === Cache.NOT_ENOUGH_SPACE_ERROR) throw error;
+
+              const now = Date.now();
+
+              newEntry = {
+                createdAt: now,
+                error,
+                expiresAt: now + this.options.maxErrorTime,
+              };
+
+              if (Date.now() < newEntry.expiresAt)
+                await this.options.storage.setEntry(key, newEntry, signal);
+
+              return newEntry;
+            }
+          }
+
+          return entry;
+        }),
+      );
+    } catch (error) {
+      if (error !== Cache.NOT_ENOUGH_SPACE_ERROR) throw error;
+
+      return await this.mutexes[""].runExclusive(async () => {
+        const entry = await this.options.storage.getEntry(key, this.signal);
+
+        const keys = await this.options.storage.getKeys(this.signal);
+        await Promise.all(
+          keys.map(async (key) => {
+            const entry = await this.options.storage.getEntry(key, this.signal);
+            if (!entry) return;
+
+            if (Date.now() < entry.expiresAt) return;
+            await this.options.storage.deleteEntry(key, this.signal);
+          }),
+        );
+
+        if (!!entry && entry.createdAt > newEntry.createdAt) return entry;
+
+        if (Date.now() < newEntry.expiresAt)
+          await this.options.storage.setEntry(key, newEntry, this.signal);
+
+        return newEntry;
+      });
+    }
   }
 
   /**
@@ -142,8 +195,24 @@ export default class Cache {
   }
 }
 
-function defaultMutexFactory(): Mutex {
-  return new AsyncMutex();
+class DefaultMutex implements Mutex {
+  private readonly key: string | undefined;
+  private readonly mutex: AsyncMutex;
+
+  constructor(key: string | undefined) {
+    this.key = key;
+    this.mutex = new AsyncMutex();
+  }
+
+  runExclusive<TResult>(callback: AsyncFunc<TResult>): Promise<TResult> {
+    return !!this.key
+      ? this.mutex.runExclusive(callback)
+      : errors.emit("Method not supported");
+  }
+
+  runShared<TResult>(callback: AsyncFunc<TResult>): Promise<TResult> {
+    return !!this.key ? errors.emit("Method not supported") : callback();
+  }
 }
 
 class DefaultStorage implements Storage {
@@ -153,11 +222,19 @@ class DefaultStorage implements Storage {
     this.entries = {};
   }
 
-  getEntry(key: string): Entry | undefined {
+  async deleteEntry(key: string): Promise<void> {
+    delete this.entries[key];
+  }
+
+  async getKeys(): Promise<string[]> {
+    return Object.keys(this.entries);
+  }
+
+  async getEntry(key: string): Promise<Entry | undefined> {
     return this.entries[key];
   }
 
-  setEntry(key: string, entry: Entry): void {
+  async setEntry(key: string, entry: Entry): Promise<void> {
     this.entries[key] = entry;
   }
 }
