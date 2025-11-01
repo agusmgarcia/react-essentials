@@ -228,6 +228,7 @@ properties.sort({ b: 2, a: { y: 2, x: 1 }, c: 3 }, [
 import { strings } from "@agusmgarcia/react-essentials-utils";
 
 strings.capitalize("foo"); // => "Foo"
+strings.uncapitalize("Foo"); // => "foo"
 strings.replace("This is the ${value} test", { value: "third" }); // => "This is the third test"
 strings.replace("${nights} ${nights?night:nights}", { nights: 1 }); // => "1 night"
 strings.replace("${nights} ${nights?night:nights}", { nights: 2 }); // => "2 nights"

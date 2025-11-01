@@ -12,6 +12,20 @@ export function capitalize<TString extends string>(
     string.slice(1)) as Capitalize<TString>;
 }
 
+/**
+ * Uncapitalizes the first letter of a given string and returns the modified string.
+ *
+ * @template TString - A string type that represents the input string.
+ * @param string - The input string to be uncapitalized.
+ * @returns The input string with its first letter converted to lowercase.
+ */
+export function uncapitalize<TString extends string>(
+  string: TString,
+): Uncapitalize<TString> {
+  return (string.charAt(0).toLowerCase() +
+    string.slice(1)) as Uncapitalize<TString>;
+}
+
 const searchValue = /\$\{(.+?)\}/g;
 const multipleValues = /^(.+?)\?(.+?)\:(.+?)$/;
 
