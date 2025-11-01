@@ -30,6 +30,35 @@ describe("strings", () => {
     });
   });
 
+  describe("uncapitalize", () => {
+    it("should uncapitalize the first letter of an uppercase string", () => {
+      expect(strings.uncapitalize("Hello")).toBe("hello");
+    });
+
+    it("should not change the first letter if it is already uncapitalized", () => {
+      expect(strings.uncapitalize("world")).toBe("world");
+    });
+
+    it("should handle single-character strings", () => {
+      expect(strings.uncapitalize("A")).toBe("a");
+      expect(strings.uncapitalize("b")).toBe("b");
+    });
+
+    it("should return an empty string if input is an empty string", () => {
+      expect(strings.uncapitalize("")).toBe("");
+    });
+
+    it("should handle strings with special characters", () => {
+      expect(strings.uncapitalize("!hello")).toBe("!hello");
+      expect(strings.uncapitalize("123abc")).toBe("123abc");
+    });
+
+    it("should handle strings with spaces", () => {
+      expect(strings.uncapitalize(" hello")).toBe(" hello");
+      expect(strings.uncapitalize(" world")).toBe(" world");
+    });
+  });
+
   describe("replace", () => {
     it("should replace single placeholders with corresponding values", () => {
       const result = strings.replace("Hello, ${name}!", { name: "John" });
