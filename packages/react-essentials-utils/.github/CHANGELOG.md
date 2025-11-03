@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.11.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.11.0)
+
+> November 3, 2025
+
+### Features ✅
+
+- **strings**: add uncapitalize feature
+- **StorageCache**: adjust to the new API of the Cache
+- **Cache**: handle NotEnoughSpaceError
+
 ## [v0.10.4](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.10.4)
 
 > October 29, 2025
