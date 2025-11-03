@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.17.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.17.0)
+
+> November 3, 2025
+
+### Features ✅
+
+- **createReactStore**: configure devTools when invoking the function
+- **Store**: add equality function to filter devtools states
+
+### Chores ⚙️
+
+- adjust peers
+- **GlobalSlice**: document the SELECTOR_SKIPPED_ERROR
+
 ## [v0.16.2](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.16.2)
 
 > October 29, 2025
