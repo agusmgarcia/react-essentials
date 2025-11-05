@@ -174,7 +174,7 @@ export default class Cache {
    * @typeParam TValue - The type of the value to be cached.
    *
    * @param key - The unique key identifying the cached item.
-   * @param value - The value to store in the cache.
+   * @param value - The value to store in the cache or a function that produces the value to be cached.
    * @param signal - An AbortSignal to cancel the operation if needed.
    * @param expiresAt - Optional. Specifies the expiration time for the cached item. It can be:
    *   - A number representing the absolute expiration timestamp.
@@ -185,7 +185,7 @@ export default class Cache {
    */
   async set<TValue>(
     key: string,
-    value: TValue,
+    value: TValue | Func<TValue> | AsyncFunc<TValue, [signal: AbortSignal]>,
     signal?: AbortSignal,
     expiresAt?: number | Func<number, [value: TValue]>,
   ): Promise<void> {
