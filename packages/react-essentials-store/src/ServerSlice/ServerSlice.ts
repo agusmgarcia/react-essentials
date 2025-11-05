@@ -160,34 +160,10 @@ export default abstract class ServerSlice<
    * - Updates the slice's state to reflect loading, success, or error based on the fetch result.
    * - Intended to be called by consumers or subclasses to manually trigger a data refresh.
    */
-  protected async reload(signal: AbortSignal): Promise<void>;
-
-  /**
-   * Reloads the server slice by fetching data from the server or remote source.
-   *
-   * @param request - The request object of type `TRequest` to use for the fetch operation.
-   * @param signal - An `AbortSignal` that can be used to cancel the fetch operation if needed.
-   * @returns A promise that resolves when the reload operation is complete.
-   *
-   * @throws {Error} If called before the slice has been initialized with a request.
-   *
-   * @remarks
-   * - Forces a reload even if the request has not changed.
-   * - Updates the slice's state to reflect loading, success, or error based on the fetch result.
-   * - Intended to be called by consumers or subclasses to manually trigger a data refresh.
-   */
-  protected async reload(request: TRequest, signal: AbortSignal): Promise<void>;
-
-  protected async reload(
-    requestOrSignal: TRequest | AbortSignal,
-    signal?: AbortSignal,
-  ): Promise<void> {
-    if (arguments.length === 1 && this._request === ServerSlice.UNINITIALIZED)
+  protected async reload(signal: AbortSignal): Promise<void> {
+    if (this._request === ServerSlice.UNINITIALIZED)
       throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
 
-    return this._reload(
-      arguments.length === 1 ? this._request : (requestOrSignal as TRequest),
-      (arguments.length === 1 ? requestOrSignal : signal) as AbortSignal,
-    );
+    return this._reload(this._request, signal);
   }
 }
