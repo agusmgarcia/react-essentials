@@ -138,7 +138,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
     Object.keys(this._slices).forEach((key) => {
       const slice = this._slices[key];
 
-      slice["onDestroy"]();
+      slice["onDestroy"](slice["_regenerateSignal"]());
 
       if (slice["_initialized"])
         throw new Error(

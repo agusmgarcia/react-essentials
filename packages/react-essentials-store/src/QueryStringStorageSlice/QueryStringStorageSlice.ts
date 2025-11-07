@@ -70,9 +70,9 @@ export default abstract class QueryStringStorageSlice<
     this._clearIntervalHandler = () => clearInterval(handler);
   }
 
-  protected override onDestroy(): void {
+  protected override onDestroy(signal: AbortSignal): void {
     this._clearIntervalHandler();
-    super.onDestroy();
+    super.onDestroy(signal);
   }
 
   protected override getDataFromStorage(): TData | undefined {

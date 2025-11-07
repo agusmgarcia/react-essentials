@@ -76,9 +76,9 @@ export default abstract class LocalStorageSlice<
       window.removeEventListener("storage", handleStorageEvent);
   }
 
-  protected override onDestroy(): void {
+  protected override onDestroy(signal: AbortSignal): void {
     this._removeStorageEventHandler();
-    super.onDestroy();
+    super.onDestroy(signal);
   }
 
   protected override getDataFromStorage(): TData | undefined {

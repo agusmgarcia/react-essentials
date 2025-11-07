@@ -107,7 +107,6 @@ export default abstract class GlobalSlice<
   /**
    * Updates the internal state of the global slice and notifies all relevant subscribers.
    *
-   * @protected
    * @param state - The new state to set for the global slice.
    *
    * @remarks
@@ -154,7 +153,6 @@ export default abstract class GlobalSlice<
    *
    * @param signal - An AbortSignal that can be used to handle cancellation.
    *
-   * @protected
    * @remarks
    * This method is intended to be called when the global slice is being initialized.
    * It ensures that the slice is only initialized once by checking the internal `_initialized` flag.
@@ -175,7 +173,8 @@ export default abstract class GlobalSlice<
   /**
    * Lifecycle hook invoked during the destruction phase of the global slice.
    *
-   * @protected
+   * @param signal - An AbortSignal that can be used to handle cancellation.
+   *
    * @remarks
    * This method is intended to be called when the global slice is being destroyed or cleaned up.
    * It clears all active subscriptions and marks the slice as uninitialized.
@@ -185,7 +184,8 @@ export default abstract class GlobalSlice<
    *
    * @throws {Error} Throws an error if the slice has not been initialized.
    */
-  protected onDestroy(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected onDestroy(signal: AbortSignal): void {
     this._subscriptions.splice(0, this._subscriptions.length);
 
     this._intervals.forEach((unsubscribe) => unsubscribe());
