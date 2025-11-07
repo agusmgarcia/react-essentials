@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.18.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.18.0)
+
+> November 7, 2025
+
+### Features ✅
+
+- **ServerSlice**: remove reload with request args method
+
+### Chores ⚙️
+
+- adjust peers
+
 ## [v0.17.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.17.0)
 
 > November 3, 2025
