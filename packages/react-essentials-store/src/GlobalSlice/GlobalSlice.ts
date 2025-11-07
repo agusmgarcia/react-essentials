@@ -9,6 +9,7 @@ import {
   type BaseState,
   type IntervalCallback,
   type Subscription,
+  type TimeoutCallback,
 } from "./GlobalSlice.types";
 
 /**
@@ -194,6 +195,17 @@ export default abstract class GlobalSlice<
       throw new Error(`'${this.constructor.name}' hasn't been initialized`);
 
     this._initialized = false;
+  }
+
+  /**
+   * Sets up a one-time timeout to execute a callback function.
+   *
+   * @param callback - The function to be executed after the timeout.
+   * @param duration - The duration in milliseconds to wait before executing the callback.
+   * @returns An `Unsubscribe` function that stops the timeout when called.
+   */
+  protected setTimeout(callback: TimeoutCallback, duration: number): Func {
+    return this._setInterval(callback, true, duration);
   }
 
   /**
