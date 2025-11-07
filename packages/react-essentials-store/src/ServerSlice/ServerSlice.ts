@@ -161,6 +161,9 @@ export default abstract class ServerSlice<
    * - Intended to be called by consumers or subclasses to manually trigger a data refresh.
    */
   protected async reload(signal: AbortSignal): Promise<void> {
+    if (signal !== this["_controller"].signal)
+      throw new Error("You must pass the signal from the parent method");
+
     if (this._request === ServerSlice.UNINITIALIZED)
       throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
 

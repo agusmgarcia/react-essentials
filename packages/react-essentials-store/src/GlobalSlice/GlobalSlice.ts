@@ -155,15 +155,16 @@ export default abstract class GlobalSlice<
    *
    * @remarks
    * This method is intended to be called when the global slice is being initialized.
-   * It ensures that the slice is only initialized once by checking the internal `_initialized` flag.
    * If the slice has already been initialized, an error is thrown to prevent duplicate initialization.
    * Subclasses may override this method to perform additional setup logic during initialization,
    * but should call `super.onInit()` to preserve the base class behavior.
    *
    * @throws {Error} Throws an error if the slice has already been initialized.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected onInit(signal: AbortSignal): void {
+    if (signal !== this._controller.signal)
+      throw new Error("You must pass the signal from the parent method");
+
     if (this._initialized)
       throw new Error(`'${this.constructor.name}' has been initialized`);
 
@@ -184,7 +185,6 @@ export default abstract class GlobalSlice<
    *
    * @throws {Error} Throws an error if the slice has not been initialized.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected onDestroy(signal: AbortSignal): void {
     this._subscriptions.splice(0, this._subscriptions.length);
 
@@ -195,6 +195,9 @@ export default abstract class GlobalSlice<
       throw new Error(`'${this.constructor.name}' hasn't been initialized`);
 
     this._initialized = false;
+
+    if (signal !== this._controller.signal)
+      throw new Error("You must pass the signal from the parent method");
   }
 
   /**
@@ -202,9 +205,17 @@ export default abstract class GlobalSlice<
    *
    * @param callback - The function to be executed after the timeout.
    * @param duration - The duration in milliseconds to wait before executing the callback.
+   * @param signal - An AbortSignal to manage cancellation of the timeout.
    * @returns An `Unsubscribe` function that stops the timeout when called.
    */
-  protected setTimeout(callback: TimeoutCallback, duration: number): Func {
+  protected setTimeout(
+    callback: TimeoutCallback,
+    duration: number,
+    signal: AbortSignal,
+  ): Func {
+    if (signal !== this._controller.signal)
+      throw new Error("You must pass the signal from the parent method");
+
     return this._setInterval(callback, true, duration);
   }
 
@@ -213,9 +224,17 @@ export default abstract class GlobalSlice<
    *
    * @param callback - The function to be executed at each interval.
    * @param duration - The duration in milliseconds between each execution of the callback.
+   * @param signal - An AbortSignal to manage cancellation of the interval.
    * @returns An `Unsubscribe` function that stops the interval when called.
    */
-  protected setInterval(callback: IntervalCallback, duration: number): Func {
+  protected setInterval(
+    callback: IntervalCallback,
+    duration: number,
+    signal: AbortSignal,
+  ): Func {
+    if (signal !== this._controller.signal)
+      throw new Error("You must pass the signal from the parent method");
+
     return this._setInterval(callback, false, duration);
   }
 
