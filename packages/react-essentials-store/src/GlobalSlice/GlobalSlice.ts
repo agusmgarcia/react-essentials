@@ -1,10 +1,13 @@
-import { emptyFunction, equals } from "@agusmgarcia/react-essentials-utils";
+import {
+  emptyFunction,
+  equals,
+  type Func,
+} from "@agusmgarcia/react-essentials-utils";
 
 import {
   type BaseSlices,
   type BaseState,
   type Subscription,
-  type Unsubscribe,
 } from "./GlobalSlice.types";
 
 /**
@@ -193,7 +196,7 @@ export default abstract class GlobalSlice<
    * @param listener - A listener function to be called when the selected part of the state changes.
    * @returns An `Unsubscribe` function that removes the subscription when called.
    */
-  subscribe(listener: Subscription<TState>["listener"]): Unsubscribe;
+  subscribe(listener: Subscription<TState>["listener"]): Func;
 
   /**
    * Subscribes to state changes of the global slice.
@@ -209,9 +212,9 @@ export default abstract class GlobalSlice<
     selector: Subscription<TState, TSelection>["selector"],
     listener: Subscription<TState, TSelection>["listener"],
     equality?: Subscription<TState, TSelection>["equality"],
-  ): Unsubscribe;
+  ): Func;
 
-  subscribe(...rest: any[]): Unsubscribe {
+  subscribe(...rest: any[]): Func {
     const subscription = extractSubscriptionParameters<TState>(this, ...rest);
     this._subscriptions.push(subscription);
 
