@@ -7,6 +7,7 @@ import {
 import {
   type BaseSlices,
   type BaseState,
+  type IntervalCallback,
   type Subscription,
 } from "./GlobalSlice.types";
 
@@ -34,6 +35,7 @@ export default abstract class GlobalSlice<
   static readonly SELECTOR_SKIPPED_ERROR = new Error("Selector skipped");
 
   private readonly _subscriptions: Subscription<TState, any>[];
+  private readonly _intervals: Func[];
 
   private _controller: AbortController;
   private _subscriptionIndex: number;
@@ -53,6 +55,7 @@ export default abstract class GlobalSlice<
    */
   protected constructor(initialState: TState) {
     this._subscriptions = [];
+    this._intervals = [];
 
     this._controller = new AbortController();
     this._subscriptionIndex = Number.MIN_SAFE_INTEGER;
@@ -184,10 +187,64 @@ export default abstract class GlobalSlice<
   protected onDestroy(): void {
     this._subscriptions.splice(0, this._subscriptions.length);
 
+    this._intervals.forEach((unsubscribe) => unsubscribe());
+    this._intervals.splice(0, this._intervals.length);
+
     if (!this._initialized)
       throw new Error(`'${this.constructor.name}' hasn't been initialized`);
 
     this._initialized = false;
+  }
+
+  /**
+   * Sets up a recurring interval to execute a callback function.
+   *
+   * @param callback - The function to be executed at each interval.
+   * @param duration - The duration in milliseconds between each execution of the callback.
+   * @returns An `Unsubscribe` function that stops the interval when called.
+   */
+  protected setInterval(callback: IntervalCallback, duration: number): Func {
+    return this._setInterval(callback, false, duration);
+  }
+
+  private _setInterval(
+    callback: IntervalCallback,
+    once: boolean,
+    duration: number,
+  ): Func {
+    const controller = new AbortController();
+
+    const cb = async () => {
+      const start = Date.now();
+
+      const signal = AbortSignal.any([
+        controller.signal,
+        this._regenerateSignal(),
+      ]);
+
+      try {
+        await callback(signal);
+      } catch (error) {
+        if (!signal.aborted) throw error;
+      }
+
+      if (once) return;
+      if (controller.signal.aborted) return;
+
+      const elapsed = Date.now() - start;
+      handler = setTimeout(cb, Math.max(duration - elapsed, 0));
+    };
+
+    let handler = setTimeout(cb, duration);
+
+    const unsubscribe = () => {
+      clearTimeout(handler);
+      this._intervals.splice(this._intervals.indexOf(unsubscribe), 1);
+      controller.abort();
+    };
+
+    this._intervals.push(unsubscribe);
+    return unsubscribe;
   }
 
   /**

@@ -1,4 +1,5 @@
 import {
+  type AsyncFunc,
   type Func,
   type Serializable,
 } from "@agusmgarcia/react-essentials-utils";
@@ -17,6 +18,13 @@ export type BaseState = Serializable;
  * instance parameterized with any state and action types.
  */
 export type BaseSlices = Record<string, GlobalSlice<any, any>>;
+
+/**
+ * A function that is called at specified intervals.
+ */
+export type IntervalCallback =
+  | Func<void, [signal: AbortSignal]>
+  | AsyncFunc<void, [signal: AbortSignal]>;
 
 /**
  * Represents a subscription to a slice of state.
