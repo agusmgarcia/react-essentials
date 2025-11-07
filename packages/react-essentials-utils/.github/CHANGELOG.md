@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.12.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.12.0)
+
+> November 7, 2025
+
+### Features ✅
+
+- **Cache**: add ability to set values using functions
+
+### Chores ⚙️
+
+- **StorageCache**: restore tests
+
 ## [v0.11.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.11.0)
 
 > November 3, 2025
