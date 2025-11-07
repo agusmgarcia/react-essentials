@@ -178,7 +178,7 @@ export default abstract class GlobalSlice<
    *
    * @throws {Error} Throws an error if the slice has not been initialized.
    */
-  protected onDestroy() {
+  protected onDestroy(): void {
     this._subscriptions.splice(0, this._subscriptions.length);
 
     if (!this._initialized)

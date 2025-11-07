@@ -13,7 +13,7 @@ export default function delay(ms: number, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
     let timeoutHandler: NodeJS.Timeout | number = 0;
 
-    function signalHandler() {
+    function signalHandler(): void {
       clearTimeout(timeoutHandler);
       if (!signal) return;
 

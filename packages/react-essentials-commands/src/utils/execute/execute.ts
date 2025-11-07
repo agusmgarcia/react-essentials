@@ -38,7 +38,7 @@ export default function execute(
     let error: Error | undefined = undefined;
 
     listeners.push(
-      (function () {
+      (function (): Func {
         if (!child.stdout) return emptyFunction;
         const handle = (data: Buffer) => (stdout += data.toString());
         const listener = child.stdout.on("data", handle);
@@ -47,7 +47,7 @@ export default function execute(
     );
 
     listeners.push(
-      (function () {
+      (function (): Func {
         if (!child.stderr) return emptyFunction;
         const handle = (data: Buffer) => (stderr += data.toString());
         const listener = child.stderr.on("data", handle);
@@ -56,7 +56,7 @@ export default function execute(
     );
 
     listeners.push(
-      (function () {
+      (function (): Func {
         const handle = (e: Error) => (error = e);
         const listener = child.on("error", handle);
         return () => listener.removeListener("error", handle);
@@ -64,7 +64,7 @@ export default function execute(
     );
 
     listeners.push(
-      (function () {
+      (function (): Func {
         function handle(code: number) {
           listeners.forEach((unlisten) => unlisten());
           if (!code) resolve(!!stdout ? stdout : undefined);

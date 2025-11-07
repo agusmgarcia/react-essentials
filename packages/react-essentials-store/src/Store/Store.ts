@@ -58,6 +58,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
 
       result[key as keyof TSliceFactories] =
         slice as SlicesOf<TSliceFactories>[string];
+
       return result;
     }, {} as SlicesOf<TSliceFactories>);
 

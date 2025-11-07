@@ -6,7 +6,7 @@ export default createFileMiddleware<string>({
   valid: ["app"],
 });
 
-function getTemplate() {
+function getTemplate(): string {
   return `@import "tailwindcss";
 `;
 }
