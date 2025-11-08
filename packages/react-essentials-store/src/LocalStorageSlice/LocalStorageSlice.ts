@@ -56,6 +56,7 @@ export default abstract class LocalStorageSlice<
       if (event.storageArea !== localStorage) return;
 
       if (typeof event.key === "object") {
+        this["_regenerateSignal"]();
         this.response = undefined;
         return;
       }
@@ -63,11 +64,17 @@ export default abstract class LocalStorageSlice<
       if (event.key !== this._name) return;
 
       if (typeof event.newValue === "object") {
+        this["_regenerateSignal"]();
         this.response = undefined;
         return;
       }
 
-      this.response = JSON.parse(event.newValue);
+      this["_regenerateSignal"]();
+      try {
+        this.response = JSON.parse(event.newValue);
+      } catch (error) {
+        this.state = { ...this.state, error, loading: false };
+      }
     };
 
     window.addEventListener("storage", handleStorageEvent);

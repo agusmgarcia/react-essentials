@@ -54,8 +54,8 @@ export default abstract class QueryStringStorageSlice<
 
   protected override onInit(signal: AbortSignal): void {
     super.onInit(signal);
-
     if (isSSR()) return;
+
     let prevSearch = location.search;
 
     const handler = setInterval(() => {
@@ -64,7 +64,12 @@ export default abstract class QueryStringStorageSlice<
       if (prevSearch === search) return;
       prevSearch = search;
 
-      this.response = deserialize(this._name, new URLSearchParams(search));
+      this["_regenerateSignal"]();
+      try {
+        this.response = deserialize(this._name, new URLSearchParams(search));
+      } catch (error) {
+        this.state = { ...this.state, error, loading: false };
+      }
     }, this._interval);
 
     this._clearIntervalHandler = () => clearInterval(handler);
