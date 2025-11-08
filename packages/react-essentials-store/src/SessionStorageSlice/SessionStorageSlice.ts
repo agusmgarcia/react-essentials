@@ -1,10 +1,4 @@
-import {
-  emptyFunction,
-  type Func,
-  isSSR,
-} from "@agusmgarcia/react-essentials-utils";
-
-import { StorageSlice } from "../StorageSlice";
+import { BrowserStorageSlice } from "../BrowserStorageSlice";
 import { type BaseData, type BaseSlices } from "./SessionStorageSlice.types";
 
 /**
@@ -25,11 +19,7 @@ import { type BaseData, type BaseSlices } from "./SessionStorageSlice.types";
 export default abstract class SessionStorageSlice<
   TData extends BaseData,
   TSlices extends BaseSlices = {},
-> extends StorageSlice<TData, TSlices> {
-  private readonly _name: string;
-
-  private _removeStorageEventHandler: Func;
-
+> extends BrowserStorageSlice<TData, TSlices> {
   /**
    * Creates a new instance of the SessionStorageSlice.
    *
@@ -40,64 +30,6 @@ export default abstract class SessionStorageSlice<
    * It also sets up the internal storage event handler for synchronization across browser tabs.
    */
   protected constructor(name: string) {
-    super();
-
-    this._name = name;
-
-    this._removeStorageEventHandler = emptyFunction;
-  }
-
-  protected override onInit(signal: AbortSignal): void {
-    super.onInit(signal);
-
-    if (isSSR()) return;
-
-    const handleStorageEvent = (event: StorageEvent) => {
-      if (event.storageArea !== sessionStorage) return;
-
-      if (typeof event.key === "object") {
-        this["_regenerateSignal"]();
-        this.response = undefined;
-        return;
-      }
-
-      if (event.key !== this._name) return;
-
-      if (typeof event.newValue === "object") {
-        this["_regenerateSignal"]();
-        this.response = undefined;
-        return;
-      }
-
-      this["_regenerateSignal"]();
-      try {
-        this.response = JSON.parse(event.newValue);
-      } catch (error) {
-        this.state = { ...this.state, error, loading: false };
-      }
-    };
-
-    window.addEventListener("storage", handleStorageEvent);
-
-    this._removeStorageEventHandler = () =>
-      window.removeEventListener("storage", handleStorageEvent);
-  }
-
-  protected override onDestroy(signal: AbortSignal): void {
-    this._removeStorageEventHandler();
-    super.onDestroy(signal);
-  }
-
-  protected override getDataFromStorage(): TData | undefined {
-    if (isSSR()) return undefined;
-    const item = sessionStorage.getItem(this._name);
-    if (typeof item === "object") return undefined;
-    return JSON.parse(item);
-  }
-
-  protected override setDataIntoStorage(data: TData | undefined): void {
-    if (isSSR()) return undefined;
-    if (typeof data === "undefined") sessionStorage.removeItem(this._name);
-    else sessionStorage.setItem(this._name, JSON.stringify(data));
+    super(name, "session");
   }
 }
