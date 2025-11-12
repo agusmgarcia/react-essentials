@@ -125,13 +125,9 @@ export default abstract class ServerSlice<
 
     Object.values(this.slices).forEach((slice) =>
       slice.subscribe(
-        () => {
-          const request = this.onRequestBuild();
-          if (!equals.deep(this._request, request)) return request;
-          throw GlobalSlice.SELECTOR_SKIPPED_ERROR;
-        },
+        () => this.onRequestBuild(),
         (request, _, signal) => this._reload(request, signal),
-        () => false,
+        (request) => equals.deep(this._request, request),
       ),
     );
 

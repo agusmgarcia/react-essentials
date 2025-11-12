@@ -62,7 +62,7 @@ export type Subscription<TState extends BaseState, TSelection = TState> = {
   selector: Func<TSelection, [state: TState]>;
 
   /**
-   * The signal of the slice to which it belongs.
+   * The slice from where the subscribe has been invoked.
    */
   slice: GlobalSlice<any, any>;
 };

@@ -30,11 +30,6 @@ export default abstract class GlobalSlice<
   TState extends BaseState,
   TSlices extends BaseSlices = {},
 > {
-  /**
-   * It is a known error to throw when the subscription evaluation wants to be skipped.
-   */
-  static readonly SELECTOR_SKIPPED_ERROR = new Error("Selector skipped");
-
   private readonly _subscriptions: Subscription<TState, any>[];
   private readonly _intervals: Func[];
 
@@ -128,16 +123,8 @@ export default abstract class GlobalSlice<
     this._subscriptions.forEach((subscription) => {
       if (subscriptionIndex !== this._subscriptionIndex) return;
 
-      let prevSelection;
-      let newSelection;
-
-      try {
-        prevSelection = subscription.selector(prevState);
-        newSelection = subscription.selector(this.state);
-      } catch (error) {
-        if (error === GlobalSlice.SELECTOR_SKIPPED_ERROR) return;
-        throw error;
-      }
+      const prevSelection = subscription.selector(prevState);
+      const newSelection = subscription.selector(this.state);
 
       if (!subscription.equality(newSelection, prevSelection))
         subscription.listener(
@@ -301,7 +288,7 @@ export default abstract class GlobalSlice<
   /**
    * Subscribes to state changes of the global slice.
    *
-   * @param selector - A selector function to select a part of the state. If the {@link GlobalSlice.SELECTOR_SKIPPED_ERROR} error is thrown, the evaluation is skipped.
+   * @param selector - A selector function to select a part of the state.
    * @param listener - (Optional) A listener function to be called when the selected part of the state changes.
    * @param equality - (Optional) A function to compare the previous and new selection. Defaults to strict equality.
    * @returns An `Unsubscribe` function that removes the subscription when called.
