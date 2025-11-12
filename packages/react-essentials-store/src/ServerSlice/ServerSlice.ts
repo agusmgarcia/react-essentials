@@ -26,7 +26,7 @@ export default abstract class ServerSlice<
   { error: any; loading: boolean; response: TResponse },
   TSlices
 > {
-  private static readonly UNINITIALIZED = Symbol("uninitialized");
+  private static readonly UNINITIALIZED = Symbol("UNINITIALIZED");
 
   private _request: TRequest | symbol;
 
@@ -43,6 +43,54 @@ export default abstract class ServerSlice<
     super({ error: undefined, loading: true, response: initialResponse });
 
     this._request = ServerSlice.UNINITIALIZED;
+  }
+
+  override get state(): { error: any; loading: boolean; response: TResponse } {
+    return super.state;
+  }
+
+  /**
+   * Gets the current error from the server slice state.
+   *
+   * @returns The current error, or `undefined` if there is no error.
+   *
+   * @remarks
+   * - This getter provides access to the latest error stored in the slice's state.
+   * - The error is updated when a fetch operation fails.
+   */
+  get error(): unknown {
+    return this.state.error;
+  }
+
+  /**
+   * Sets the error in the server slice state.
+   *
+   * @param error - The new error to set in the state.
+   *
+   * @remarks
+   * - This setter updates the state with the provided error.
+   * - It also sets `loading` to `false`.
+   * - Intended to be used by subclasses to update the error after a failed fetch operation.
+   */
+  protected set error(error: unknown) {
+    super.state = { ...this.state, error, loading: false };
+  }
+
+  /**
+   * Gets the loading state of the server slice.
+   *
+   * @returns A boolean indicating whether a fetch operation is currently in progress.
+   *
+   * @remarks
+   * - This getter provides access to the loading status stored in the slice's state.
+   * - The loading state is set to `true` when a fetch operation starts and `false` when it completes.
+   */
+  get loading(): boolean {
+    return this.state.loading;
+  }
+
+  private set loading(loading: boolean) {
+    super.state = { ...this.state, loading };
   }
 
   /**
@@ -69,7 +117,7 @@ export default abstract class ServerSlice<
    * - Intended to be used by subclasses to update the response after a fetch operation.
    */
   protected set response(response: TResponse) {
-    this.state = { error: undefined, loading: false, response };
+    super.state = { error: undefined, loading: false, response };
   }
 
   protected override onInit(signal: AbortSignal): void {
@@ -88,8 +136,7 @@ export default abstract class ServerSlice<
     );
 
     const request = this.onBuildRequest();
-    if (request === ServerSlice.UNINITIALIZED)
-      this.state = { ...this.state, loading: false };
+    if (request === ServerSlice.UNINITIALIZED) this.loading = false;
     else this._reload(request, signal);
   }
 
@@ -130,19 +177,19 @@ export default abstract class ServerSlice<
     signal: AbortSignal,
   ): Promise<void> {
     this._request = request;
-    this.state = { ...this.state, loading: true };
+    this.loading = true;
 
     try {
       const response = await this.onFetch(request as TRequest, signal);
       signal.throwIfAborted();
 
       this._request = request;
-      this.state = { error: undefined, loading: false, response };
+      this.response = response;
     } catch (error) {
       if (signal.aborted) return;
 
       this._request = request;
-      this.state = { ...this.state, error, loading: false };
+      this.error = error;
     }
   }
 

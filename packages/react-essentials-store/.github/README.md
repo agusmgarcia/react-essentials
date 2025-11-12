@@ -12,13 +12,13 @@ This is the state that is going to be consumed globally across the app. It is ha
 import { GlobalSlice } from "@agusmgarcia/react-essentials-store";
 import { type Func } from "@agusmgarcia/react-essentials-utils";
 
-export type FormSearch = {
+export type State = {
   asc: boolean;
   clear: Func;
   name: string;
 };
 
-export default class FormSearchSlice extends GlobalSlice<FormSearch> {
+export default class FormSearchSlice extends GlobalSlice<State> {
   constructor() {
     super({ asc: false, name: "" });
   }
@@ -50,24 +50,21 @@ import { type Func } from "@agusmgarcia/react-essentials-utils";
 import type FormSearchSlice from "./FormSearchSlice";
 import { type FormSearch } from "./FormSearchSlice";
 
-export type FormResult = {
+export type Request = Pick<FormSearch, "asc", "name">;
+
+export type Response = {
   age: number;
   name: string;
   surname: string;
 }[];
 
-export type Request = {
-  asc: boolean;
-  name: string;
-};
-
 export default class FormResultSlice extends ServerSlice<
-  FormResult,
+  Response | undefined,
   Request,
   { formSearch: FormSearchSlice }
 > {
   constructor() {
-    super();
+    super(undefined);
   }
 
   protected override onBuildRequest(): Request {
@@ -77,10 +74,7 @@ export default class FormResultSlice extends ServerSlice<
     };
   }
 
-  protected override onFetch(
-    request: Request,
-    signal: AbortSignal,
-  ): FormResult {
+  protected override onFetch(request: Request, signal: AbortSignal): Response {
     return fetch(`/api/search?asc=${request.asc}&name=${request.name}`, {
       signal,
     }).then((result) => result.json());
@@ -122,8 +116,8 @@ export function useFormSearch() {
 export function useFormResult() {
   return {
     formResult: useSelector((state) => state.formResult.response),
-    formResultError: useSelector((state) => state.formResult.state.error),
-    formResultLoading: useSelector((state) => state.formResult.state.loading),
+    formResultError: useSelector((state) => state.formResult.error),
+    formResultLoading: useSelector((state) => state.formResult.loading),
     formResultReload: useSelector((state) => state.formResult.reload),
   };
 }

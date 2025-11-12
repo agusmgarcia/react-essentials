@@ -68,7 +68,7 @@ export default abstract class QueryStringStorageSlice<
       try {
         this.response = deserialize(this._name, new URLSearchParams(search));
       } catch (error) {
-        this.state = { ...this.state, error, loading: false };
+        this.error = error;
       }
     }, this._interval);
 

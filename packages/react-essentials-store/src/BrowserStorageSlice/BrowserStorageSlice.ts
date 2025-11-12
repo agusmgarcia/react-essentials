@@ -79,7 +79,7 @@ export default abstract class BrowserStorageSlice<
       try {
         this.response = JSON.parse(event.newValue);
       } catch (error) {
-        this.state = { ...this.state, error, loading: false };
+        this.error = error;
       }
     };
 
