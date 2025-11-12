@@ -115,7 +115,6 @@ export default abstract class GlobalSlice<
    * sent for the most recent state update, preventing race conditions from multiple rapid updates.
    */
   protected set state(state: TState) {
-    const prevState = this._state;
     this._state = state;
 
     const subscriptionIndex = ++this._subscriptionIndex;
@@ -123,8 +122,9 @@ export default abstract class GlobalSlice<
     this._subscriptions.forEach((subscription) => {
       if (subscriptionIndex !== this._subscriptionIndex) return;
 
-      const prevSelection = subscription.selector(prevState);
+      const prevSelection = subscription.prevSelection;
       const newSelection = subscription.selector(this.state);
+      subscription.prevSelection = newSelection;
 
       if (!subscription.equality(newSelection, prevSelection))
         subscription.listener(
@@ -288,7 +288,7 @@ export default abstract class GlobalSlice<
    * Subscribes to state changes of the global slice.
    *
    * @param selector - A selector function to select a part of the state.
-   * @param listener - (Optional) A listener function to be called when the selected part of the state changes.
+   * @param listener - A listener function to be called when the selected part of the state changes.
    * @param equality - (Optional) A function to compare the previous and new selection. Defaults to strict equality.
    * @returns An `Unsubscribe` function that removes the subscription when called.
    *
@@ -301,7 +301,7 @@ export default abstract class GlobalSlice<
   ): Func;
 
   subscribe(...rest: any[]): Func {
-    const subscription = extractSubscriptionParameters<TState>(this, ...rest);
+    const subscription = extractSubscriptionParameters(this, ...rest);
     this._subscriptions.push(subscription);
 
     return () =>
@@ -323,6 +323,7 @@ function extractSubscriptionParameters<TState extends BaseState>(
     return {
       equality: equals.strict,
       listener: emptyFunction,
+      prevSelection: defaultSlice.state,
       selector: (state) => state,
       slice: defaultSlice,
     };
@@ -331,6 +332,7 @@ function extractSubscriptionParameters<TState extends BaseState>(
     return {
       equality: equals.strict,
       listener: emptyFunction,
+      prevSelection: defaultSlice.state,
       selector: (state) => state,
       slice: rest[0],
     };
@@ -339,6 +341,7 @@ function extractSubscriptionParameters<TState extends BaseState>(
     return {
       equality: equals.strict,
       listener: rest[0],
+      prevSelection: defaultSlice.state,
       selector: (state) => state,
       slice: defaultSlice,
     };
@@ -347,6 +350,7 @@ function extractSubscriptionParameters<TState extends BaseState>(
     return {
       equality: equals.strict,
       listener: rest[0],
+      prevSelection: defaultSlice.state,
       selector: (state) => state,
       slice: rest[1],
     };
@@ -355,6 +359,7 @@ function extractSubscriptionParameters<TState extends BaseState>(
     return {
       equality: equals.strict,
       listener: rest[1],
+      prevSelection: rest[0](defaultSlice.state),
       selector: rest[0],
       slice: defaultSlice,
     };
@@ -363,21 +368,24 @@ function extractSubscriptionParameters<TState extends BaseState>(
     return {
       equality: equals.strict,
       listener: rest[1],
+      prevSelection: rest[0](defaultSlice.state),
       selector: rest[0],
       slice: rest[2],
     };
 
   if (rest.length === 3 && !(rest[2] instanceof GlobalSlice))
     return {
-      equality: rest[2],
+      equality: rest[2] || equals.strict,
       listener: rest[1],
+      prevSelection: rest[0](defaultSlice.state),
       selector: rest[0],
       slice: defaultSlice,
     };
 
   return {
-    equality: rest[2],
+    equality: rest[2] || equals.strict,
     listener: rest[1],
+    prevSelection: rest[0](defaultSlice.state),
     selector: rest[0],
     slice: rest[3],
   };

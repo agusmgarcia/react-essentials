@@ -54,6 +54,11 @@ export type Subscription<TState extends BaseState, TSelection = TState> = {
   listener: Func<void, [newSelection: TSelection, signal: AbortSignal]>;
 
   /**
+   * The last selection.
+   */
+  prevSelection: TSelection;
+
+  /**
    * A function that selects a portion of the state to subscribe to.
    */
   selector: Func<TSelection, [state: TState]>;
