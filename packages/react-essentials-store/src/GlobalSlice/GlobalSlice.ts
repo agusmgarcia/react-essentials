@@ -86,7 +86,9 @@ export default abstract class GlobalSlice<
 
   private set slices(slices: TSlices) {
     if (!!this._slices)
-      throw new Error(`'${this.constructor.name}' has been already set`);
+      throw new Error(
+        `'${this.constructor.name}' has been already set its slices`,
+      );
 
     this._slices = new Proxy(slices, new SlicesProxyHandler(this));
   }
@@ -163,10 +165,14 @@ export default abstract class GlobalSlice<
    */
   protected onInit(signal: AbortSignal): void {
     if (signal !== this._controller.signal)
-      throw new Error("You must pass the signal from the parent method");
+      throw new Error(
+        `'${this.constructor.name}'.onInit: You must pass the signal from the parent method`,
+      );
 
     if (this._initialized)
-      throw new Error(`'${this.constructor.name}' has been initialized`);
+      throw new Error(
+        `'${this.constructor.name}' has been already initialized`,
+      );
 
     this._initialized = true;
   }
@@ -192,12 +198,14 @@ export default abstract class GlobalSlice<
     this._intervals.splice(0, this._intervals.length);
 
     if (!this._initialized)
-      throw new Error(`'${this.constructor.name}' hasn't been initialized`);
+      throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
 
     this._initialized = false;
 
     if (signal !== this._controller.signal)
-      throw new Error("You must pass the signal from the parent method");
+      throw new Error(
+        `'${this.constructor.name}'.onDestroy: You must pass the signal from the parent method`,
+      );
   }
 
   /**
@@ -214,7 +222,9 @@ export default abstract class GlobalSlice<
     signal: AbortSignal,
   ): Func {
     if (signal !== this._controller.signal)
-      throw new Error("You must pass the signal from the parent method");
+      throw new Error(
+        `'${this.constructor.name}'.setTimeout: You must pass the signal from the parent method`,
+      );
 
     return this._setInterval(callback, true, duration);
   }
@@ -233,7 +243,9 @@ export default abstract class GlobalSlice<
     signal: AbortSignal,
   ): Func {
     if (signal !== this._controller.signal)
-      throw new Error("You must pass the signal from the parent method");
+      throw new Error(
+        `'${this.constructor.name}'.setInterval: You must pass the signal from the parent method`,
+      );
 
     return this._setInterval(callback, false, duration);
   }

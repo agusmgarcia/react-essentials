@@ -163,7 +163,7 @@ function serialize(
   ) {
     if (!key)
       throw new Error(
-        `'${sliceName}' must specified a name if the data is of type '${typeof instance}'`,
+        `'${sliceName}' must specify a name if the data is of type '${typeof instance}'`,
       );
 
     params.set(key, instance.toString());
@@ -173,20 +173,17 @@ function serialize(
   if (typeof instance === "undefined") {
     if (!key)
       throw new Error(
-        `'${sliceName}' must specified a name if the data is of type 'undefined'`,
+        `'${sliceName}' must specify a name if the data is of type 'undefined'`,
       );
 
     params.delete(key);
     return;
   }
 
-  if (typeof instance !== "object")
-    throw new Error(`${typeof instance} not supported`);
-
   if (!instance) {
     if (!key)
       throw new Error(
-        `'${sliceName}' must specified a name if the data is of type 'null'`,
+        `'${sliceName}' must specify a name if the data is of type 'null'`,
       );
 
     params.delete(key);
@@ -194,7 +191,10 @@ function serialize(
   }
 
   if (Array.isArray(instance)) {
-    if (!key) throw new Error(`'${sliceName}' can't be of type 'array'`);
+    if (!key)
+      throw new Error(
+        `'${sliceName}' must specify a name if the data is of type 'array'`,
+      );
 
     instance.map((child, childIndex) =>
       serialize(sliceName, child, `${key}[${childIndex}]`, params),

@@ -209,7 +209,9 @@ export default abstract class ServerSlice<
    */
   protected async reload(signal: AbortSignal): Promise<void> {
     if (signal !== this["_controller"].signal)
-      throw new Error("You must pass the signal from the parent method");
+      throw new Error(
+        `'${this.constructor.name}'.reload: You must pass the signal from the parent method`,
+      );
 
     if (this._request === ServerSlice.UNINITIALIZED)
       throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);

@@ -70,7 +70,9 @@ export default function createReactStore<
     useSelector: (selector) => {
       const store = useContext(StoreContext);
       if (!store)
-        throw new Error("You should wrap your component within StoreProvider");
+        throw new Error(
+          "You should wrap your component within <StoreProvider>",
+        );
 
       return useContextSelector(StateContext, () =>
         selector(store.state as any),
