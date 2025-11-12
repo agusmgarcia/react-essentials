@@ -4,10 +4,10 @@ import { type GlobalSlice } from "../GlobalSlice";
 
 type ProtectedMethods =
   | "getDataFromStorage"
-  | "onBuildRequest"
   | "onDestroy"
   | "onFetch"
   | "onInit"
+  | "onRequestBuild"
   | "setDataIntoStorage"
   | "subscribe";
 

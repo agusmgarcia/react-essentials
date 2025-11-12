@@ -67,7 +67,7 @@ export default class FormResultSlice extends ServerSlice<
     super(undefined);
   }
 
-  protected override onBuildRequest(): Request {
+  protected override onRequestBuild(): Request {
     return {
       asc: this.slices.formSearch.state.asc,
       name: this.slices.formSearch.state.name,

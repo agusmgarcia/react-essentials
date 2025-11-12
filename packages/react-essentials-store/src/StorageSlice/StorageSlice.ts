@@ -43,7 +43,7 @@ export default abstract class StorageSlice<
     );
   }
 
-  protected override onBuildRequest(): undefined {
+  protected override onRequestBuild(): undefined {
     return undefined;
   }
 

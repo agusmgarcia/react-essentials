@@ -126,7 +126,7 @@ export default abstract class ServerSlice<
     Object.values(this.slices).forEach((slice) =>
       slice.subscribe(
         () => {
-          const request = this.onBuildRequest();
+          const request = this.onRequestBuild();
           if (!equals.deep(this._request, request)) return request;
           throw GlobalSlice.SELECTOR_SKIPPED_ERROR;
         },
@@ -135,7 +135,7 @@ export default abstract class ServerSlice<
       ),
     );
 
-    const request = this.onBuildRequest();
+    const request = this.onRequestBuild();
     if (request === ServerSlice.UNINITIALIZED) this.loading = false;
     else this._reload(request, signal);
   }
@@ -150,7 +150,7 @@ export default abstract class ServerSlice<
    * - By default, it returns the previous request unchanged.
    * - Useful for cases where the request depends on the state of the slice or its dependencies.
    */
-  protected onBuildRequest(): TRequest {
+  protected onRequestBuild(): TRequest {
     return this._request as TRequest;
   }
 
