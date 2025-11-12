@@ -129,7 +129,6 @@ export default abstract class GlobalSlice<
       if (!subscription.equality(newSelection, prevSelection))
         subscription.listener(
           newSelection,
-          prevSelection,
           this === subscription.slice
             ? this._controller.signal
             : subscription.slice._regenerateSignal(),

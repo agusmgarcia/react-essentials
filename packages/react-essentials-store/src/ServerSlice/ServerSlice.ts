@@ -126,7 +126,7 @@ export default abstract class ServerSlice<
     Object.values(this.slices).forEach((slice) =>
       slice.subscribe(
         () => this.onRequestBuild(),
-        (request, _, signal) => this._reload(request, signal),
+        (request, signal) => this._reload(request, signal),
         (request) => equals.deep(this._request, request),
       ),
     );

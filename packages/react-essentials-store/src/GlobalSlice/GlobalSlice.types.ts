@@ -49,12 +49,9 @@ export type Subscription<TState extends BaseState, TSelection = TState> = {
   >;
 
   /**
-   * A function that is called when the selection changes, receiving the new and previous selection.
+   * A function that is called when the selection changes, receiving the new selection.
    */
-  listener: Func<
-    void,
-    [newSelection: TSelection, prevSelection: TSelection, signal: AbortSignal]
-  >;
+  listener: Func<void, [newSelection: TSelection, signal: AbortSignal]>;
 
   /**
    * A function that selects a portion of the state to subscribe to.
