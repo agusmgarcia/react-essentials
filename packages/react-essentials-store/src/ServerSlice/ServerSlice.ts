@@ -120,6 +120,24 @@ export default abstract class ServerSlice<
     super.state = { error: undefined, loading: false, response };
   }
 
+  /**
+   * Gets the current request used for fetching data.
+   *
+   * @returns The current request of type `TRequest`.
+   *
+   * @throws {Error} If the slice has not been initialized with a request.
+   *
+   * @remarks
+   * - This getter provides access to the latest request used for data fetching.
+   * - If the slice has not been initialized, an error is thrown to indicate that the request is unavailable.
+   */
+  protected get request(): TRequest {
+    if (this._request === ServerSlice.UNINITIALIZED)
+      throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
+
+    return this._request as TRequest;
+  }
+
   protected override onInit(signal: AbortSignal): void {
     super.onInit(signal);
 
@@ -214,4 +232,65 @@ export default abstract class ServerSlice<
 
     return this._reload(this._request, signal);
   }
+
+  /**
+   * Reloads the server slice with a specific request by fetching data from the server or remote source.
+   *
+   * @param request - The request object of type `TRequest` to be used for the fetch operation.
+   * @param signal - An `AbortSignal` that can be used to cancel the fetch operation if needed.
+   * @returns A promise that resolves when the reload operation is complete.
+   *
+   * @throws {Error} If the `onRequestBuild` method has been overridden in a subclass.
+   *
+   * @remarks
+   * - Forces a reload with the provided request, regardless of the current state.
+   * - If the `onRequestBuild` method has been overridden, an error is thrown to prevent inconsistencies.
+   * - Updates the slice's state to reflect loading, success, or error based on the fetch result.
+   * - Intended to be called by consumers or subclasses to manually trigger a data refresh with a new request.
+   */
+  protected async reloadWithRequest(
+    request: TRequest,
+    signal: AbortSignal,
+  ): Promise<void> {
+    if (signal !== this["_controller"].signal)
+      throw new Error(
+        `'${this.constructor.name}'.reloadWithRequest: You must pass the signal from the parent method`,
+      );
+
+    const prototype = isMethodOverridden(this, "onRequestBuild");
+    if (!!prototype)
+      throw new Error(
+        `'${this.constructor.name}'.reloadWithRequest: you cannot override method. It has been overridden at ${prototype.constructor.name}`,
+      );
+
+    await this._reload(request, signal);
+  }
+}
+
+function isMethodOverridden<
+  TResponse extends BaseResponse,
+  TRequest,
+  TSlices extends BaseSlices,
+>(
+  instance: ServerSlice<TResponse, TRequest, TSlices>,
+  method: string,
+): object | undefined {
+  let prototype = Object.getPrototypeOf(instance);
+
+  let prototypeOwner: object | undefined = undefined;
+  let prototypeLastImplementation: object | undefined = undefined;
+
+  while (prototype !== null) {
+    if (Object.getOwnPropertyNames(prototype).includes(method)) {
+      prototypeOwner ||= prototype;
+      prototypeLastImplementation = prototype;
+    }
+
+    prototype = Object.getPrototypeOf(prototype);
+  }
+
+  if (!prototypeOwner || prototypeOwner === prototypeLastImplementation)
+    return undefined;
+
+  return prototypeLastImplementation;
 }
