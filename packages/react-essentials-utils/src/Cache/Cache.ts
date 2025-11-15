@@ -174,23 +174,32 @@ export default class Cache {
    * @typeParam TValue - The type of the value to be cached.
    *
    * @param key - The unique key identifying the cached item.
-   * @param value - The value to store in the cache or a function that produces the value to be cached.
+   * @param factoryOrValue - The value to store in the cache or a function that produces the value to be cached.
    * @param signal - An AbortSignal to cancel the operation if needed.
    * @param expiresAt - Optional. Specifies the expiration time for the cached item. It can be:
    *   - A number representing the absolute expiration timestamp.
    *   - A function that takes the value as input and returns the expiration timestamp.
    *   - If not provided, the default `maxCacheTime` will be used.
    *
-   * @returns A Promise that resolves when the value has been stored in the cache.
+   * @returns A Promise resolving to the newly created value.
    */
   async set<TValue>(
     key: string,
-    value: TValue | Func<TValue> | AsyncFunc<TValue, [signal: AbortSignal]>,
+    factoryOrValue:
+      | TValue
+      | Func<TValue>
+      | AsyncFunc<TValue, [signal: AbortSignal]>,
     signal?: AbortSignal,
     expiresAt?: number | Func<number, [value: TValue]>,
-  ): Promise<void> {
-    const item = await this.rawSet(key, value, true, signal, expiresAt);
-    if ("result" in item) return;
+  ): Promise<TValue> {
+    const item = await this.rawSet(
+      key,
+      factoryOrValue,
+      true,
+      signal,
+      expiresAt,
+    );
+    if ("result" in item) return item.result;
     throw item.error;
   }
 }
