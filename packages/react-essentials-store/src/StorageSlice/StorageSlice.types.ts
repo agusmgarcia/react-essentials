@@ -2,7 +2,7 @@ import { type ServerSliceTypes } from "../ServerSlice";
 
 /**
  * Represents the base state type for the global slice.
- * This type should be serializable to ensure state can be persisted or transferred.
+ * This type should be serializable to ensure state can be persisted.
  */
 export type BaseData = ServerSliceTypes.BaseResponse;
 

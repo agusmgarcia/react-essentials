@@ -1,16 +1,11 @@
-import {
-  type AsyncFunc,
-  type Func,
-  type Serializable,
-} from "@agusmgarcia/react-essentials-utils";
+import { type AsyncFunc, type Func } from "@agusmgarcia/react-essentials-utils";
 
 import type GlobalSlice from "./GlobalSlice";
 
 /**
  * Represents the base state type for the global slice.
- * This type should be serializable to ensure state can be persisted or transferred.
  */
-export type BaseState = Serializable;
+export type BaseState = any;
 
 /**
  * Represents a mapping of slice names to their corresponding GlobalSlice instances.

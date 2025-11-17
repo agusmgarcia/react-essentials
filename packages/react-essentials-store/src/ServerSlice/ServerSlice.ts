@@ -23,7 +23,7 @@ export default abstract class ServerSlice<
   TRequest = undefined,
   TSlices extends BaseSlices = {},
 > extends GlobalSlice<
-  { error: any; loading: boolean; response: TResponse },
+  { error: unknown; loading: boolean; response: TResponse },
   TSlices
 > {
   private static readonly UNINITIALIZED = Symbol("UNINITIALIZED");
@@ -45,7 +45,11 @@ export default abstract class ServerSlice<
     this._request = ServerSlice.UNINITIALIZED;
   }
 
-  override get state(): { error: any; loading: boolean; response: TResponse } {
+  override get state(): {
+    error: unknown;
+    loading: boolean;
+    response: TResponse;
+  } {
     return super.state;
   }
 

@@ -1,10 +1,12 @@
+import { type Serializable } from "@agusmgarcia/react-essentials-utils";
+
 import { type GlobalSliceTypes } from "../GlobalSlice";
 
 /**
  * Represents the base state type for the global slice.
- * This type should be serializable to ensure state can be persisted or transferred.
+ * This type should be serializable to ensure state can be persisted.
  */
-export type BaseResponse = GlobalSliceTypes.BaseState;
+export type BaseResponse = Serializable;
 
 /**
  * Represents a mapping of slice names to their corresponding GlobalSlice instances.
