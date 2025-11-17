@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.12.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.12.1)
+
+> November 17, 2025
+
+### Fixes 🎯
+
+- **Cache**: return value when setting it
+
+### Chores ⚙️
+
+- add missing return types
+
 ## [v0.12.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.12.0)
 
 > November 7, 2025
