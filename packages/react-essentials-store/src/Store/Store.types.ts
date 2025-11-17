@@ -2,6 +2,15 @@ import { type Func } from "@agusmgarcia/react-essentials-utils";
 
 import { type GlobalSlice } from "../GlobalSlice";
 
+type ProtectedMethods =
+  | "getDataFromStorage"
+  | "onBuildRequest"
+  | "onDestroy"
+  | "onFetch"
+  | "onInit"
+  | "setDataIntoStorage"
+  | "subscribe";
+
 /**
  * Represents a mapping of string keys to slice factory constructors.
  * Each value is a constructor function that creates an instance of a GlobalSlice.
@@ -29,7 +38,7 @@ export type Middleware<TSliceFactories extends BaseSliceFactories> = Func<
     state: {
       [TKey in keyof SlicesOf<TSliceFactories>]: Omit<
         SlicesOf<TSliceFactories>[TKey],
-        "subscribe"
+        ProtectedMethods
       >;
     },
     signal: AbortSignal,
@@ -132,14 +141,14 @@ export type SlicesOf<TSliceFactories extends BaseSliceFactories> = {
 /**
  * Represents the state shape of the store, derived from the provided slice factories.
  *
- * This type maps each slice name to its corresponding instance type, omitting the "subscribe" property
- * from each slice instance. The resulting type is a plain object containing only the stateful properties of each slice.
+ * This type maps each slice name to its corresponding instance type.
+ * The resulting type is a plain object containing only the stateful properties of each slice.
  *
  * @typeParam TSliceFactories - The mapping of slice names to their factory constructors.
  */
 export type StateOf<TSliceFactories extends BaseSliceFactories> = {
   [TKey in keyof SlicesOf<TSliceFactories>]: RemoveLastParameter<
-    Omit<SlicesOf<TSliceFactories>[TKey], "subscribe">,
+    Omit<SlicesOf<TSliceFactories>[TKey], ProtectedMethods>,
     AbortSignal
   >;
 };

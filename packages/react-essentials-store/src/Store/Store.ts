@@ -73,7 +73,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
     this._state = Object.keys(this._slices).reduce((result, key) => {
       result[key as keyof typeof result] = new Proxy(
         this._slices[key],
-        new WrapIntoMiddlewareProxyHandler(this._slices, middleware),
+        new SliceProxyHandler(this._slices, middleware),
       );
       return result;
     }, {} as StateOf<TSliceFactories>);
@@ -178,7 +178,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
   }
 }
 
-class WrapIntoMiddlewareProxyHandler<
+class SliceProxyHandler<
   TSlice extends GlobalSlice<any, any>,
   TSliceFactories extends BaseSliceFactories,
 > implements ProxyHandler<TSlice>
