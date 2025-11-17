@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.13.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.13.1)
+
+> November 17, 2025
+
+### Chores ⚙️
+
+- bump dependencies
+- add missing return types
+
 ## [v0.13.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.13.0)
 
 > October 29, 2025
