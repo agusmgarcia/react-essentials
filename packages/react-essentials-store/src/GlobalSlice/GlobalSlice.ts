@@ -88,7 +88,7 @@ export default abstract class GlobalSlice<
     if (!!this._slices)
       throw new Error(`'${this.constructor.name}' has been already set`);
 
-    this._slices = new Proxy(slices, new AddProxyHandler(this));
+    this._slices = new Proxy(slices, new SlicesProxyHandler(this));
   }
 
   /**
@@ -366,7 +366,7 @@ function extractSubscriptionParameters<TState extends BaseState>(
   };
 }
 
-class AddProxyHandler<TState extends BaseState, TSlices extends BaseSlices>
+class SlicesProxyHandler<TState extends BaseState, TSlices extends BaseSlices>
   implements ProxyHandler<TSlices>
 {
   private readonly slices: Record<string, GlobalSlice<any, any>>;
@@ -377,26 +377,21 @@ class AddProxyHandler<TState extends BaseState, TSlices extends BaseSlices>
     this.slice = slice;
   }
 
-  get(target: any, property: string) {
+  get(target: TSlices, property: string) {
     if (!!this.slices[property]) return this.slices[property];
 
     const maybeSlice = target[property];
     if (!(maybeSlice instanceof GlobalSlice)) return maybeSlice;
 
-    const slice = new Proxy(
-      maybeSlice,
-      new AddSliceIntoSubscribeProxyHandler(this.slice),
-    );
+    const slice = new Proxy(maybeSlice, new SliceProxyHandler(this.slice));
 
     this.slices[property] = slice;
     return slice;
   }
 }
 
-class AddSliceIntoSubscribeProxyHandler<
-  TState extends BaseState,
-  TSlices extends BaseSlices,
-> implements ProxyHandler<GlobalSlice<any, any>>
+class SliceProxyHandler<TState extends BaseState, TSlices extends BaseSlices>
+  implements ProxyHandler<GlobalSlice<any, any>>
 {
   private readonly methods: Record<string, (...args: any) => any>;
   private readonly slice: GlobalSlice<TState, TSlices>;
@@ -406,18 +401,32 @@ class AddSliceIntoSubscribeProxyHandler<
     this.slice = slice;
   }
 
-  get(target: any, property: string): any {
+  get(
+    target: GlobalSlice<any, any>,
+    property: keyof GlobalSlice<any, any>,
+  ): any {
     if (!!this.methods[property]) return this.methods[property];
 
     const value = target[property];
     if (typeof value !== "function") return value;
 
     const boundValue = value.bind(target);
+    const method = (...args: any[]) => {
+      if (property === "subscribe") return boundValue(...args, this.slice);
 
-    const method = (...args: any) =>
-      property === "subscribe"
-        ? boundValue(...args, this.slice)
-        : boundValue(...args);
+      const signalFromTargetSlice = target["_regenerateSignal"]();
+      const signalFromCurrentSlice: unknown = args.at(-1);
+
+      if (!(signalFromCurrentSlice instanceof AbortSignal))
+        return boundValue(...args);
+
+      return boundValue(
+        ...[
+          ...args.slice(0, -1),
+          AbortSignal.any([signalFromCurrentSlice, signalFromTargetSlice]),
+        ],
+      );
+    };
 
     this.methods[property] = method;
     return method;
