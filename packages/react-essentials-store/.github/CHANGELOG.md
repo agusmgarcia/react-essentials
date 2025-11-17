@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.19.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.19.0)
+
+> November 17, 2025
+
+### Features ✅
+
+- **GlobalSlice**: remove BaseState restriction
+- **ServerSlice**: add reloadWithRequest method
+- **GlobalSlice**: keep reference of last subscription selection
+- **GlobalSlice**: remove prevSelection from listener
+- **GlobalSlice**: stop using SELECTOR_SKIPPED_ERROR
+- **ServerSlice**: rename onBuildRequest by onRequestBuild
+- validate whether signal is the current one
+- **Store**: protect slice methods
+- **GlobalSlice**: regenerate signal when invoking a method from other slice
+- **GlobalSlice**: add signal to onDestroy method
+- **GlobalSlice**: add setTimeout method
+- **GlobalSlice**: add setInterval method
+- **GlobalSlice**: remove Unsubscribe type
+
+### Fixes 🎯
+
+- **StorageSlice**: set error on deserialize
+
+### Chores ⚙️
+
+- improve error messaging
+- super(ServerSlice): expose error and loading properties
+- **BrowserStorageSlice**: encapsulate logic into a single class
+- add missing return types
+
 ## [v0.18.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.18.0)
 
 > November 7, 2025
