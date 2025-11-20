@@ -48,8 +48,6 @@ const MyComponent = () => (
   </div>
 );
 
-const inputChildren = children.getOfType(input, MyComponent); // => React.ReactElement<InputProps, input>[]
-
 const children = children.mapOfType(input, MyComponent, (child) => (
   <p>input replaced</p>
 )); // => <div><p>input replaced</p></div>
