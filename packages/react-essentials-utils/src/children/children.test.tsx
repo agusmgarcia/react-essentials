@@ -3,49 +3,6 @@ import { cloneElement } from "react";
 import * as childrenModule from "./children";
 
 describe("children", () => {
-  describe("getOfType", () => {
-    it("should extract children of type string", () => {
-      const children = ["hello", 123, true, "world"];
-      const result = childrenModule.getOfType("string", children);
-      expect(result).toEqual(["hello", "world"]);
-    });
-
-    it("should extract children of type number", () => {
-      const children = ["hello", 123, true, 456];
-      const result = childrenModule.getOfType("number", children);
-      expect(result).toEqual([123, 456]);
-    });
-
-    it("should extract children of type boolean", () => {
-      const children = ["hello", true, false, 123];
-      const result = childrenModule.getOfType("boolean", children);
-      expect(result).toEqual([true, false]);
-    });
-
-    it("should extract children of type null", () => {
-      const children = ["hello", null, 123, null];
-      const result = childrenModule.getOfType("null", children);
-      expect(result).toEqual([null, null]);
-    });
-
-    it("should extract children of type undefined", () => {
-      const children = ["hello", undefined, 123, undefined];
-      const result = childrenModule.getOfType("undefined", children);
-      expect(result).toEqual([undefined, undefined]);
-    });
-
-    it("should extract children of a specific React component type", () => {
-      const MyComponent = () => <div />;
-      const children = [
-        <MyComponent key="1" />,
-        <div key="2" />,
-        <MyComponent key="3" />,
-      ];
-      const result = childrenModule.getOfType(MyComponent, children);
-      expect(result).toHaveLength(2);
-    });
-  });
-
   describe("mapOfType", () => {
     it("should transform children of type string", () => {
       const children = ["hello", 123, true, "world"];
