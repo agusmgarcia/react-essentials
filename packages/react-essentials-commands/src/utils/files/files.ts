@@ -2,6 +2,14 @@ import fs from "fs";
 
 import { properties } from "../properties";
 
+export async function isDirectory(path: string): Promise<boolean> {
+  return new Promise<boolean>((resolve, reject) =>
+    fs.stat(path, (error, data) =>
+      !error ? resolve(data.isDirectory()) : reject(error),
+    ),
+  );
+}
+
 export async function readFile(path: string): Promise<string> {
   try {
     return await readRequiredFile(path);
