@@ -3,6 +3,21 @@ import fs from "fs";
 import { properties } from "../properties";
 
 /**
+ * Checks if the given path points to a directory.
+ *
+ * @param path - The file system path to check.
+ * @returns A promise that resolves to `true` if the path is a directory, otherwise `false`.
+ * @throws Will reject the promise if an error occurs while accessing the path.
+ */
+export async function isDirectory(path: string): Promise<boolean> {
+  return new Promise<boolean>((resolve, reject) =>
+    fs.stat(path, (error, data) =>
+      !error ? resolve(data.isDirectory()) : reject(error),
+    ),
+  );
+}
+
+/**
  * Checks if the given path points to a file.
  *
  * @param path - The file system path to check.
