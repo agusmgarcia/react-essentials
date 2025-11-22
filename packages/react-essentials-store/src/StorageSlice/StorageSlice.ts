@@ -1,4 +1,7 @@
-import { equals } from "@agusmgarcia/react-essentials-utils";
+import {
+  equals,
+  isMethodOverridden,
+} from "@agusmgarcia/react-essentials-utils";
 
 import { ServerSlice } from "../ServerSlice";
 import { type BaseData, type BaseSlices } from "./StorageSlice.types";
@@ -31,6 +34,26 @@ export default abstract class StorageSlice<
    */
   protected constructor() {
     super(undefined);
+
+    const prototype1 = isMethodOverridden(
+      this,
+      StorageSlice.prototype,
+      "onRequestBuild",
+    );
+    if (!!prototype1)
+      throw new Error(
+        `'${this.constructor.name}': You cannot override onRequestBuild method. It has been overridden at ${prototype1.constructor.name}`,
+      );
+
+    const prototype2 = isMethodOverridden(
+      this,
+      StorageSlice.prototype,
+      "onFetch",
+    );
+    if (!!prototype2)
+      throw new Error(
+        `'${this.constructor.name}': You cannot override onFetch method. It has been overridden at ${prototype2.constructor.name}`,
+      );
   }
 
   protected override onInit(signal: AbortSignal): void {

@@ -1,6 +1,7 @@
 import {
   emptyFunction,
   type Func,
+  isMethodOverridden,
   isSSR,
 } from "@agusmgarcia/react-essentials-utils";
 
@@ -50,6 +51,26 @@ export default abstract class QueryStringStorageSlice<
     this._interval = configs?.interval || 1000;
 
     this._clearIntervalHandler = emptyFunction;
+
+    const prototype1 = isMethodOverridden(
+      this,
+      QueryStringStorageSlice.prototype,
+      "getDataFromStorage",
+    );
+    if (!!prototype1)
+      throw new Error(
+        `'${this.constructor.name}': You cannot override getDataFromStorage method. It has been overridden at ${prototype1.constructor.name}`,
+      );
+
+    const prototype2 = isMethodOverridden(
+      this,
+      QueryStringStorageSlice.prototype,
+      "setDataIntoStorage",
+    );
+    if (!!prototype2)
+      throw new Error(
+        `'${this.constructor.name}': You cannot override setDataIntoStorage method. It has been overridden at ${prototype2.constructor.name}`,
+      );
   }
 
   protected override onInit(signal: AbortSignal): void {
