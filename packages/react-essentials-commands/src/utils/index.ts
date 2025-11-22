@@ -3,6 +3,7 @@ export * from "./emptyFunction";
 export * from "./errors";
 export * from "./execute";
 export * from "./files";
+export * from "./filters";
 export * from "./folders";
 export * from "./getPackageJSON";
 export * from "./git";
