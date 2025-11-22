@@ -2,6 +2,7 @@ import {
   emptyFunction,
   equals,
   type Func,
+  isMethodOverridden,
 } from "@agusmgarcia/react-essentials-utils";
 
 import {
@@ -58,6 +59,16 @@ export default abstract class GlobalSlice<
     this._initialized = false;
     this._slices = undefined;
     this._state = initialState;
+
+    const prototype = isMethodOverridden(
+      this,
+      GlobalSlice.prototype,
+      "subscribe",
+    );
+    if (!!prototype)
+      throw new Error(
+        `'${this.constructor.name}': You cannot override subscribe method. It has been overridden at ${prototype.constructor.name}`,
+      );
   }
 
   /**

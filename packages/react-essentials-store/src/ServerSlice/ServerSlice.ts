@@ -1,4 +1,7 @@
-import { equals } from "@agusmgarcia/react-essentials-utils";
+import {
+  equals,
+  isMethodOverridden,
+} from "@agusmgarcia/react-essentials-utils";
 
 import { GlobalSlice } from "../GlobalSlice";
 import { type BaseResponse, type BaseSlices } from "./ServerSlice.types";
@@ -261,40 +264,16 @@ export default abstract class ServerSlice<
         `'${this.constructor.name}'.reloadWithRequest: You must pass the signal from the parent method`,
       );
 
-    const prototype = isMethodOverridden(this, "onRequestBuild");
+    const prototype = isMethodOverridden(
+      this,
+      ServerSlice.prototype,
+      "onRequestBuild",
+    );
     if (!!prototype)
       throw new Error(
-        `'${this.constructor.name}'.reloadWithRequest: you cannot override method. It has been overridden at ${prototype.constructor.name}`,
+        `'${this.constructor.name}'.reloadWithRequest: you cannot override onRequestBuild method. It has been overridden at ${prototype.constructor.name}`,
       );
 
     await this._reload(request, signal);
   }
-}
-
-function isMethodOverridden<
-  TResponse extends BaseResponse,
-  TRequest,
-  TSlices extends BaseSlices,
->(
-  instance: ServerSlice<TResponse, TRequest, TSlices>,
-  method: string,
-): object | undefined {
-  let prototype = Object.getPrototypeOf(instance);
-
-  let prototypeOwner: object | undefined = undefined;
-  let prototypeLastImplementation: object | undefined = undefined;
-
-  while (prototype !== null) {
-    if (Object.getOwnPropertyNames(prototype).includes(method)) {
-      prototypeOwner ||= prototype;
-      prototypeLastImplementation = prototype;
-    }
-
-    prototype = Object.getPrototypeOf(prototype);
-  }
-
-  if (!prototypeOwner || prototypeOwner === prototypeLastImplementation)
-    return undefined;
-
-  return prototypeLastImplementation;
 }

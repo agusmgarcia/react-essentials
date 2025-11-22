@@ -1,6 +1,7 @@
 import {
   emptyFunction,
   type Func,
+  isMethodOverridden,
   isSSR,
 } from "@agusmgarcia/react-essentials-utils";
 
@@ -52,6 +53,26 @@ export default abstract class BrowserStorageSlice<
     this._storage = storage;
 
     this._removeStorageEventHandler = emptyFunction;
+
+    const prototype1 = isMethodOverridden(
+      this,
+      BrowserStorageSlice.prototype,
+      "getDataFromStorage",
+    );
+    if (!!prototype1)
+      throw new Error(
+        `'${this.constructor.name}': You cannot override getDataFromStorage method. It has been overridden at ${prototype1.constructor.name}`,
+      );
+
+    const prototype2 = isMethodOverridden(
+      this,
+      BrowserStorageSlice.prototype,
+      "setDataIntoStorage",
+    );
+    if (!!prototype2)
+      throw new Error(
+        `'${this.constructor.name}': You cannot override setDataIntoStorage method. It has been overridden at ${prototype2.constructor.name}`,
+      );
   }
 
   protected override onInit(signal: AbortSignal): void {
