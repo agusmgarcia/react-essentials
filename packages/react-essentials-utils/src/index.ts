@@ -11,6 +11,7 @@ export * from "./files";
 export * from "./filters";
 export * from "./finds";
 export * from "./folders";
+export * from "./isMethodOverridden";
 export * from "./isSSR";
 export * from "./merges";
 export * from "./properties";

@@ -185,6 +185,33 @@ type Func2 = Func<number>; // => () => number
 type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
 ```
 
+## Is method overridden
+
+```typescript
+import { isMethodOverridden } from "@agusmgarcia/react-essentials-utils";
+
+class GrandParent {
+  myMethod() {
+    // ...
+  }
+
+  myOtherMethod() {
+    // ...
+  }
+}
+
+class Parent extends GrandParent {}
+
+class Child extends Parent {
+  override myMethod() {
+    // ...
+  }
+}
+
+isMethodOverridden(new Child(), GrandParent.prototype, "myMethod"); // => Child.prototype
+isMethodOverridden(new Child(), GrandParent.prototype, "myOtherMethod"); // => undefined
+```
+
 ## Is SSR
 
 ```typescript
