@@ -210,19 +210,9 @@ export default abstract class GlobalSlice<
    *
    * @param callback - The function to be executed after the timeout.
    * @param duration - The duration in milliseconds to wait before executing the callback.
-   * @param signal - An AbortSignal to manage cancellation of the timeout.
    * @returns An `Unsubscribe` function that stops the timeout when called.
    */
-  protected setTimeout(
-    callback: TimeoutCallback,
-    duration: number,
-    signal: AbortSignal,
-  ): Func {
-    if (signal !== this._controller.signal)
-      throw new Error(
-        `'${this.constructor.name}'.setTimeout: You must pass the signal from the parent method`,
-      );
-
+  protected setTimeout(callback: TimeoutCallback, duration: number): Func {
     return this._setInterval(callback, true, duration);
   }
 
@@ -231,19 +221,9 @@ export default abstract class GlobalSlice<
    *
    * @param callback - The function to be executed at each interval.
    * @param duration - The duration in milliseconds between each execution of the callback.
-   * @param signal - An AbortSignal to manage cancellation of the interval.
    * @returns An `Unsubscribe` function that stops the interval when called.
    */
-  protected setInterval(
-    callback: IntervalCallback,
-    duration: number,
-    signal: AbortSignal,
-  ): Func {
-    if (signal !== this._controller.signal)
-      throw new Error(
-        `'${this.constructor.name}'.setInterval: You must pass the signal from the parent method`,
-      );
-
+  protected setInterval(callback: IntervalCallback, duration: number): Func {
     return this._setInterval(callback, false, duration);
   }
 
@@ -420,8 +400,8 @@ class SlicesProxyHandler<TState extends BaseState, TSlices extends BaseSlices>
     if (!(maybeSlice instanceof GlobalSlice)) return maybeSlice;
 
     const slice = new Proxy(maybeSlice, new SliceProxyHandler(this.slice));
-
     this.slices[property] = slice;
+
     return slice;
   }
 }
