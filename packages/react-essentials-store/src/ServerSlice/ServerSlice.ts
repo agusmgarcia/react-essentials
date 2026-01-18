@@ -127,24 +127,6 @@ export default abstract class ServerSlice<
     super.state = { error: undefined, loading: false, response };
   }
 
-  /**
-   * Gets the current request used for fetching data.
-   *
-   * @returns The current request of type `TRequest`.
-   *
-   * @throws {Error} If the slice has not been initialized with a request.
-   *
-   * @remarks
-   * - This getter provides access to the latest request used for data fetching.
-   * - If the slice has not been initialized, an error is thrown to indicate that the request is unavailable.
-   */
-  protected get request(): TRequest {
-    if (this._request === ServerSlice.UNINITIALIZED)
-      throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
-
-    return this._request as TRequest;
-  }
-
   protected override onInit(signal: AbortSignal): void {
     super.onInit(signal);
 
