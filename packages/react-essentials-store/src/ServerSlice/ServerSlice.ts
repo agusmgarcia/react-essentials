@@ -57,6 +57,20 @@ export default abstract class ServerSlice<
   }
 
   /**
+   * Gets the current request from the server slice state.
+   *
+   * @returns The current request of type `TRequest`, or `undefined` if the request has not been initialized.
+   *
+   * @remarks
+   * - This getter provides access to the latest request stored in the slice.
+   * - If the request has not been set yet, it returns `undefined`.
+   */
+  get request(): TRequest | undefined {
+    if (this._request === ServerSlice.UNINITIALIZED) return undefined;
+    return this._request as TRequest;
+  }
+
+  /**
    * Gets the current error from the server slice state.
    *
    * @returns The current error, or `undefined` if there is no error.
