@@ -1,6 +1,5 @@
 import {
   equals,
-  type Func,
   isMethodOverridden,
 } from "@agusmgarcia/react-essentials-utils";
 
@@ -222,7 +221,6 @@ export default abstract class ServerSlice<
    * Reloads the server slice with a specific request by fetching data from the server or remote source.
    *
    * @param request - The request object of type `TRequest` to be used for the fetch operation.
-   * @param equality - A function to compare the previous and new request. Defaults is undefined which means always different.
    * @param signal - An `AbortSignal` that can be used to cancel the fetch operation if needed.
    * @returns A promise that resolves when the reload operation is complete.
    *
@@ -236,9 +234,6 @@ export default abstract class ServerSlice<
    */
   protected async reloadWithRequest(
     request: TRequest,
-    equality:
-      | Func<boolean, [newRequest: TRequest, prevRequest: TRequest]>
-      | undefined,
     signal: AbortSignal,
   ): Promise<void> {
     const prototype = isMethodOverridden(
@@ -250,13 +245,6 @@ export default abstract class ServerSlice<
       throw new Error(
         `'${this.constructor.name}'.reloadWithRequest: you cannot override onRequestBuild method. It has been overridden at ${prototype.constructor.name}`,
       );
-
-    if (
-      !!equality &&
-      this._request !== ServerSlice.UNINITIALIZED &&
-      equality(request, this._request as TRequest)
-    )
-      return;
 
     await this._reload(request, signal);
   }
