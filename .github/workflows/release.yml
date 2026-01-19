@@ -15,5 +15,3 @@ jobs:
   release-lib:
     name: Release lib
     uses: ./.github/workflows/release-lib.yml
-    secrets:
-      node-auth-token: ${{ secrets.NODE_AUTH_TOKEN }}

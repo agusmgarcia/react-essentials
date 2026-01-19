@@ -46,7 +46,7 @@ on:
         description: TenantId of the Azure Service principal created
 
       node-auth-token:
-        required: true
+        required: false
         description: The token to authenticate NPM
 
 jobs:

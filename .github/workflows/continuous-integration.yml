@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets:
       node-auth-token:
-        required: true
+        required: false
         description: The token to authenticate NPM
 
     outputs:

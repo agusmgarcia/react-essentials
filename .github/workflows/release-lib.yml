@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets:
       node-auth-token:
-        required: true
+        required: false
         description: The token to authenticate NPM
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          node-version: 22.16
+          node-version: latest
 
       - name: Publish
         run: npm publish

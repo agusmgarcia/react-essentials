@@ -8,7 +8,7 @@ on:
         description: The token to authenticate GitHub
 
       node-auth-token:
-        required: true
+        required: false
         description: The token to authenticate NPM
 
 jobs:

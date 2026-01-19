@@ -13,7 +13,7 @@ export type Response = {
   optionalDependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
   private?: boolean | string;
-  publishConfig?: { access?: "public" | "restricted" };
+  publishConfig?: { access?: "public" | "restricted"; registry?: string };
   repository?: { directory?: string; type?: string; url?: string };
   scripts?: Record<string, string>;
   types?: string;

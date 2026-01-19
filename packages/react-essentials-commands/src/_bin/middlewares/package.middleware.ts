@@ -228,6 +228,9 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
               publishConfig: {
                 ...packageJSON.publishConfig,
                 access: packageJSON.publishConfig?.access || "public",
+                registry:
+                  packageJSON.publishConfig?.registry ||
+                  "https://registry.npmjs.org/",
               },
               repository:
                 packageJSON.repository ||
