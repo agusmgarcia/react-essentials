@@ -123,19 +123,9 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
                     "react-dom": undefined,
                   },
           )
-        : undefined,
-    ),
-    description: packageJSON.description || "",
-    name: context.name,
-    optionalDependencies: packageJSON.optionalDependencies,
-    peerDependencies: toUndefinedIfEmptyDependencies(
-      context.core === "app" ||
-        context.core === "azure-func" ||
-        context.core === "node"
-        ? undefined
         : aggregateDependencies(
-            packageJSON.dependencies,
             packageJSON.peerDependencies,
+            packageJSON.dependencies,
             {
               [context.essentialsCommandsName]: undefined,
               "@azure/functions": undefined,
@@ -148,6 +138,10 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
             },
           ),
     ),
+    description: packageJSON.description || "",
+    name: context.name,
+    optionalDependencies: packageJSON.optionalDependencies,
+    peerDependencies: undefined,
     scripts: context.essentialsCommands
       ? {
           ...packageJSON.scripts,
@@ -277,8 +271,8 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
           },
         )
       : aggregateDependencies(
-          packageJSON.dependencies,
           packageJSON.peerDependencies,
+          packageJSON.dependencies,
           packageJSON.devDependencies,
           { "azure-functions-core-tools": undefined },
         ),
