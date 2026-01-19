@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.14.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.14.0)
+
+> January 19, 2026
+
+### Features ✅
+
+- start using the new NPM publish policy
+- stop using peers dependencies
+- **createWebpackConfig**: improve the way dependencies are detected
+
+### Chores ⚙️
+
+- bump vulnerable dependency
+
 ## [v0.13.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.13.1)
 
 > November 17, 2025
