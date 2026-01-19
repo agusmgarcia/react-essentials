@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.20.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.20.0)
+
+> January 19, 2026
+
+### Features ✅
+
+- start using the new NPM publish policy
+- **ServerSlice**: add reloadWithRequest the ability to pass a custom equality func
+- stop using peers dependencies
+- **ServerSlice**: stop exposing request
+- **GlobalSlice**: stop checking signals
+- start validating overrides
+
 ## [v0.19.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.19.0)
 
 > November 17, 2025
