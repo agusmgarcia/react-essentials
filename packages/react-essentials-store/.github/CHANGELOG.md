@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.21.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.21.0)
+
+> January 20, 2026
+
+### Features ✅
+
+- **ServerSlice**: expose request
+- **ServerSlice**: stop sending equality func to reloadWithRequest method
+
 ## [v0.20.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.20.0)
 
 > January 19, 2026
