@@ -16,6 +16,7 @@ export default function useMediaQuery(
 
   useEffect(() => {
     const list = window.matchMedia(mediaQuery);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMatches(list.matches);
     const handler = (event: MediaQueryListEvent) => setMatches(event.matches);
     list.addEventListener("change", handler);

@@ -11,7 +11,7 @@ export default async function start(): Promise<void> {
 
     if (core === "app")
       await run("start", () =>
-        execute(`next dev${!!port ? ` --port ${port}` : ""}`, true),
+        execute(`next dev${!!port ? ` --port ${port}` : ""} --webpack`, true),
       );
 
     if (core === "azure-func")

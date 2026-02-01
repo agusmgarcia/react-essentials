@@ -21,6 +21,7 @@ export default function createNextConfig(...[_core, configs]: Input): Output {
       {} as Record<string, string | undefined>,
     ),
     output: phase === PHASE_PRODUCTION_BUILD ? "export" : undefined,
+    reactCompiler: true,
     reactStrictMode: true,
     webpack: configs?.webpack,
   });

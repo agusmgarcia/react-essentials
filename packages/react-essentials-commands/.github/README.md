@@ -80,10 +80,10 @@ Here the list of the files:
 - src/index.ts
 - src/functions/httpTrigger1.ts
 - .env.local
-- .eslintrc.js
 - .funcignore
 - .gitignore
 - .nvmrc
+- eslint.config.js
 - host.json
 - jest.config.js
 - local.settings.json

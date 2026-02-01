@@ -1,4 +1,4 @@
-import { type ESLint } from "eslint";
+import { type Config } from "eslint/config";
 
 import { type GetPackageJSONTypes } from "#src/utils";
 
@@ -13,4 +13,4 @@ export type Input = [
   core: NonNullable<GetPackageJSONTypes.Response["core"]>,
 ];
 
-export type Output = ESLint.ConfigData;
+export type Output = Config[];

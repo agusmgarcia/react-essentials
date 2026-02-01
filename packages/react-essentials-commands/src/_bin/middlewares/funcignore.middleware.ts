@@ -9,11 +9,11 @@ export default createFileMiddleware<string[]>({
 function getTemplate(): string[] {
   return [
     "**/.*",
-    ".eslintrc.js",
     ".next",
     "__azurite_db*__.json",
     "__blobstorage__",
     "__queuestorage__",
+    "eslint.config.js",
     "jest.config.js",
     "local.settings.json",
     "package-lock.json",

@@ -22,6 +22,7 @@ function getTemplate(context: Context): Record<string, any> {
     ? {
         compilerOptions: {
           baseUrl: "./",
+          jsx: "react-jsx",
           module: "esnext",
           moduleResolution: "bundler",
           paths: {
@@ -35,7 +36,13 @@ function getTemplate(context: Context): Record<string, any> {
         extends: context.essentialsCommands
           ? "./src/_out/tsconfig.base.json"
           : `${context.essentialsCommandsName}/tsconfig.json`,
-        include: ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+        include: [
+          "next-env.d.ts",
+          "**/*.ts",
+          "**/*.tsx",
+          ".next/types/**/*.ts",
+          ".next/dev/types/**/*.ts",
+        ],
         "ts-node": context.essentialsCommands
           ? {
               compilerOptions: { module: "commonjs" },

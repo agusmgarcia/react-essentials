@@ -82,7 +82,7 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
       packageJSON.devDependencies?.[context.essentialsCommandsName],
     npm.getVersion("azure-functions-core-tools@4").then((v) => `^${v}`),
     npm.getVersion("@azure/functions@4").then((v) => `^${v}`),
-    npm.getVersion("next@15").then((v) => `^${v}`),
+    npm.getVersion("next@16").then((v) => `^${v}`),
     npm.getVersion("react@19").then((v) => `^${v}`),
     npm.getVersion("react-dom@19").then((v) => `^${v}`),
   ]);

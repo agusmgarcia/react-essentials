@@ -4,7 +4,7 @@ import createFileMiddleware from "./createFileMiddleware";
 import { type Context } from "./Middleware.types";
 
 const MIDDLEWARE = createFileMiddleware<string>({
-  path: ".eslintrc.js",
+  path: "eslint.config.js",
   template: getTemplate,
   valid: ["app", "azure-func", "lib", "node"],
 });
@@ -19,9 +19,9 @@ async function deleteEslintConfigFiles(context: Context): Promise<void> {
   if (context.command !== "regenerate") return;
   if (!!context.filesToRegenerate.length) return;
   await Promise.all([
+    files.removeFile(".eslintrc.js"),
     files.removeFile(".eslintrc"),
     files.removeFile(".eslintignore"),
-    files.removeFile("eslint.config.js"),
     files.removeFile("eslint.config.mjs"),
     files.removeFile("eslint.config.ts"),
   ]);

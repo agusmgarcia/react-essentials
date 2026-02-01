@@ -103,10 +103,10 @@ function parse<TElement extends string | string[] | Record<string, any>>(
         {} as Record<string, string>,
       ) as TElement;
 
-    case ".eslintrc.js":
     case ".github/CHANGELOG.md":
     case ".github/README.md":
     case ".nvmrc":
+    case "eslint.config.js":
     case "jest.config.js":
     case "next.config.js":
     case "pages/_app.tsx":
@@ -189,10 +189,10 @@ function stringify<TElement extends string | string[] | Record<string, any>>(
           "",
         );
 
-    case ".eslintrc.js":
     case ".github/CHANGELOG.md":
     case ".github/README.md":
     case ".nvmrc":
+    case "eslint.config.js":
     case "jest.config.js":
     case "next.config.js":
     case "pages/_app.tsx":
