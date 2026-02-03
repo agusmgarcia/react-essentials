@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.15.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.15.1)
+
+> February 3, 2026
+
+### Fixes 🎯
+
+- **build**: remove --no-lint arg
+
 ## [v0.15.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.15.0)
 
 > February 3, 2026
