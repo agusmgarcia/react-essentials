@@ -12,7 +12,7 @@ export default async function build(): Promise<void> {
       await run(
         "build",
         () => execute("del bin dist *.tgz", true),
-        () => execute("next build --no-lint --webpack", true),
+        () => execute("next build --webpack", true),
       );
 
     if (core === "azure-func")
