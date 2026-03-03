@@ -1,8 +1,9 @@
 import process from "process";
 
-import { args, errors, execute, getPackageJSON } from "#src/utils";
+import { execute, getPackageJSON } from "#src/functions";
+import { args, errors } from "#src/modules";
 
-import run from "./_run";
+import { runCommand } from "./runCommand";
 
 export default async function start(): Promise<void> {
   try {
@@ -10,12 +11,12 @@ export default async function start(): Promise<void> {
     const port = args.getString("port");
 
     if (core === "app")
-      await run("start", () =>
+      await runCommand("start", () =>
         execute(`next dev${!!port ? ` --port ${port}` : ""} --webpack`, true),
       );
 
     if (core === "azure-func")
-      await run(
+      await runCommand(
         "start",
         () => execute("del bin dist *.tgz", true),
         () => execute("webpack --mode=development", true),
@@ -27,7 +28,7 @@ export default async function start(): Promise<void> {
       );
 
     if (core === "node") {
-      await run(
+      await runCommand(
         "start",
         () => execute("del bin dist *.tgz", true),
         () => execute("webpack --mode=development", true),

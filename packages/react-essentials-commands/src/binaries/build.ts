@@ -1,36 +1,37 @@
 import process from "process";
 
-import { errors, execute, getPackageJSON } from "#src/utils";
+import { execute, getPackageJSON } from "#src/functions";
+import { errors } from "#src/modules";
 
-import run from "./_run";
+import { runCommand } from "./runCommand";
 
 export default async function build(): Promise<void> {
   try {
     const core = await getPackageJSON().then((json) => json.core);
 
     if (core === "app")
-      await run(
+      await runCommand(
         "build",
         () => execute("del bin dist *.tgz", true),
         () => execute("next build --webpack", true),
       );
 
     if (core === "azure-func")
-      await run(
+      await runCommand(
         "build",
         () => execute("del bin dist *.tgz", true),
         () => execute("webpack --mode=production", true),
       );
 
     if (core === "lib")
-      await run(
+      await runCommand(
         "build",
         () => execute("del bin dist *.tgz", true),
         () => execute("webpack --mode=production", true),
       );
 
     if (core === "node")
-      await run(
+      await runCommand(
         "build",
         () => execute("del bin dist *.tgz", true),
         () => execute("webpack --mode=production", true),

@@ -1,8 +1,9 @@
 import process from "process";
 
-import { args, errors, execute, getPackageJSON } from "#src/utils";
+import { execute, getPackageJSON } from "#src/functions";
+import { args, errors } from "#src/modules";
 
-import run from "./_run";
+import { runCommand } from "./runCommand";
 
 export default async function regenerate(): Promise<void> {
   try {
@@ -12,7 +13,7 @@ export default async function regenerate(): Promise<void> {
 
     const file = args.getStrings("file");
 
-    await run(
+    await runCommand(
       "regenerate",
       () => execute("echo Regenerating files...", true),
       () =>

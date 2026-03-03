@@ -1,12 +1,13 @@
 import process from "process";
 
-import { errors, execute } from "#src/utils";
+import { execute } from "#src/functions";
+import { errors } from "#src/modules";
 
-import run from "./_run";
+import { runCommand } from "./runCommand";
 
 export default async function format(): Promise<void> {
   try {
-    await run("format", () =>
+    await runCommand("format", () =>
       execute(
         "eslint --cache --cache-location ./node_modules/.eslintcache --cache-strategy content --fix .",
         true,

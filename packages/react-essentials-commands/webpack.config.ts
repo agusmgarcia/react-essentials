@@ -1,4 +1,4 @@
-import { createWebpackConfig } from "./src/configs";
+import { createWebpackConfig } from "./src";
 
 export default createWebpackConfig("lib", {
   externals: [
