@@ -1,15 +1,16 @@
 import process from "process";
 
-import { args, errors, execute } from "#src/utils";
+import { execute } from "#src/functions";
+import { args, errors } from "#src/modules";
 
-import run from "./_run";
+import { runCommand } from "./runCommand";
 
 export default async function test(): Promise<void> {
   try {
     const watch = args.getBoolean("watch");
     const pattern = args.getStrings("pattern");
 
-    await run("test", () =>
+    await runCommand("test", () =>
       execute(
         `jest --passWithNoTests${watch ? " --watch" : ""}${pattern.length ? ` ${pattern.join(" ")}` : ""}`,
         true,

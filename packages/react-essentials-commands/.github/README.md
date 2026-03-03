@@ -78,7 +78,8 @@ Here the list of the files:
 - pages/\_app.tsx
 - src/index.css
 - src/index.ts
-- src/functions/httpTrigger1.ts
+- src/functions/index.ts
+- src/functions/httpTrigger1/index.ts
 - .env.local
 - .funcignore
 - .gitignore
