@@ -9,13 +9,13 @@
       "node": "./dist/index.node.js",
       "default": "./dist/index.js"
     },
-    "./tsconfig.json": {
-      "default": "./dist/outputs/tsconfig.base.json"
-    },
     "./*": {
       "types": "./dist/outputs/*.d.ts",
       "node": "./dist/outputs/*.node.js",
       "default": "./dist/outputs/*.js"
+    },
+    "./tsconfig.json": {
+      "default": "./dist/outputs/tsconfig.base.json"
     }
   },
   "author": "Agus Garcia",
@@ -53,6 +53,7 @@
     "eslint-config-next": "^16.0.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-project-structure": "^3.0.0",
     "eslint-plugin-sort": "^4.0.0",
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
