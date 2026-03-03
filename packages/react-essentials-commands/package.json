@@ -51,6 +51,7 @@
     "eslint-config-next": "^16.0.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-project-structure": "^3.0.0",
     "eslint-plugin-sort": "^4.0.0",
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",

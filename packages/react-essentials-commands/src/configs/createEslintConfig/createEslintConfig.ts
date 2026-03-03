@@ -2,8 +2,13 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import eslintConfigNextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import eslintConfigNextTypescript from "eslint-config-next/typescript";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import { projectStructurePlugin } from "eslint-plugin-project-structure";
 import eslintPluginSort from "eslint-plugin-sort";
 
+import APP_FOLDER_STRUCTURE from "./createEslintConfig.app.folderStructure";
+import AZURE_FUNC_FOLDER_STRUCTURE from "./createEslintConfig.azure-func.folderStructure";
+import LIB_FOLDER_STRUCTURE from "./createEslintConfig.lib.folderStructure";
+import NODE_FOLDER_STRUCTURE from "./createEslintConfig.node.folderStructure";
 import { type Input, type Output } from "./createEslintConfig.types";
 
 /**
@@ -16,6 +21,29 @@ import { type Input, type Output } from "./createEslintConfig.types";
  */
 export default function createEslintConfig(...[core]: Input): Output {
   return defineConfig([
+    // project-structure
+    {
+      files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.json"],
+      plugins: {
+        "project-structure": projectStructurePlugin,
+      },
+      rules: {
+        "project-structure/folder-structure": [
+          "error",
+          core === "app"
+            ? APP_FOLDER_STRUCTURE
+            : core === "azure-func"
+              ? AZURE_FUNC_FOLDER_STRUCTURE
+              : core === "lib"
+                ? LIB_FOLDER_STRUCTURE
+                : NODE_FOLDER_STRUCTURE,
+        ],
+      },
+      settings: {
+        "project-structure/cache-location": "./node_modules",
+      },
+    },
+
     // prettier
     eslintPluginPrettierRecommended,
     {
