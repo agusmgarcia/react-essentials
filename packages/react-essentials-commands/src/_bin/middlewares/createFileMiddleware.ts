@@ -116,7 +116,6 @@ function parse<TElement extends string | string[] | Record<string, any>>(
     case "src/functions/httpTrigger1.ts":
     case "src/index.css":
     case "src/index.ts":
-    case "webpack.config.js":
     case "webpack.config.ts":
       return content as TElement;
 
@@ -202,7 +201,6 @@ function stringify<TElement extends string | string[] | Record<string, any>>(
     case "src/functions/httpTrigger1.ts":
     case "src/index.css":
     case "src/index.ts":
-    case "webpack.config.js":
     case "webpack.config.ts":
       return element as string;
 

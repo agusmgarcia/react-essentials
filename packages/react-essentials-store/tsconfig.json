@@ -10,6 +10,6 @@
     },
     "rootDir": "./src"
   },
-  "exclude": [".next", "bin", "dist", "node_modules"],
+  "exclude": ["*.ts", ".next", "bin", "dist", "node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]
 }

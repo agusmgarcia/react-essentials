@@ -4,7 +4,7 @@ import createFileMiddleware from "./createFileMiddleware";
 import { type Context } from "./Middleware.types";
 
 const MIDDLEWARE = createFileMiddleware<string>({
-  path: getPath,
+  path: "webpack.config.ts",
   template: getTemplate,
   valid: ["azure-func", "lib", "node"],
 });
@@ -19,26 +19,14 @@ async function deleteWebpackConfigFiles(context: Context): Promise<void> {
   if (context.command !== "regenerate") return;
   if (!!context.filesToRegenerate.length) return;
   await Promise.all([
-    context.essentialsCommands
-      ? files.removeFile("webpack.config.js")
-      : files.removeFile("webpack.config.ts"),
+    files.removeFile("webpack.config.js"),
     files.removeFile("webpack.config.mjs"),
   ]);
 }
 
-function getPath(context: Context): string {
-  return context.essentialsCommands ? "webpack.config.ts" : "webpack.config.js";
-}
-
 function getTemplate(context: Context): string {
-  if (context.essentialsCommands)
-    return `import { createWebpackConfig } from "./src/configs";
+  return `import { createWebpackConfig } from "${context.essentialsCommands ? "./src/configs" : context.essentialsCommandsName}";
 
 export default createWebpackConfig("${context.core}");
-`;
-
-  return `const { createWebpackConfig } = require("${context.essentialsCommandsName}");
-
-module.exports = createWebpackConfig("${context.core}");
 `;
 }

@@ -92,7 +92,7 @@ Here the list of the files:
 - postcss.config.js
 - prettier.config.js
 - tsconfig.json
-- webpack.config.js
+- webpack.config.ts
 
 #### Specific files
 

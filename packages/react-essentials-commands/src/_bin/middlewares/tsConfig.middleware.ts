@@ -30,9 +30,7 @@ function getTemplate(context: Context): Record<string, any> {
             "#src/*": ["src/*"],
           },
         },
-        exclude: context.essentialsCommands
-          ? [".next", "dist", "node_modules", "webpack.config.ts"]
-          : [".next", "dist", "node_modules"],
+        exclude: ["*.ts", ".next", "dist", "node_modules"],
         extends: context.essentialsCommands
           ? "./src/_out/tsconfig.base.json"
           : `${context.essentialsCommandsName}/tsconfig.json`,
@@ -43,12 +41,6 @@ function getTemplate(context: Context): Record<string, any> {
           ".next/types/**/*.ts",
           ".next/dev/types/**/*.ts",
         ],
-        "ts-node": context.essentialsCommands
-          ? {
-              compilerOptions: { module: "commonjs" },
-              require: ["tsconfig-paths/register"],
-            }
-          : undefined,
       }
     : context.core === "azure-func"
       ? {
@@ -62,19 +54,11 @@ function getTemplate(context: Context): Record<string, any> {
             },
             rootDir: "./src",
           },
-          exclude: context.essentialsCommands
-            ? [".next", "dist", "node_modules", "webpack.config.ts"]
-            : [".next", "dist", "node_modules"],
+          exclude: ["*.ts", ".next", "dist", "node_modules"],
           extends: context.essentialsCommands
             ? "./src/_out/tsconfig.base.json"
             : `${context.essentialsCommandsName}/tsconfig.json`,
           include: ["**/*.ts"],
-          "ts-node": context.essentialsCommands
-            ? {
-                compilerOptions: { module: "commonjs" },
-                require: ["tsconfig-paths/register"],
-              }
-            : undefined,
         }
       : context.core === "lib"
         ? {
@@ -88,19 +72,11 @@ function getTemplate(context: Context): Record<string, any> {
               },
               rootDir: "./src",
             },
-            exclude: context.essentialsCommands
-              ? [".next", "bin", "dist", "node_modules", "webpack.config.ts"]
-              : [".next", "bin", "dist", "node_modules"],
+            exclude: ["*.ts", ".next", "bin", "dist", "node_modules"],
             extends: context.essentialsCommands
               ? "./src/_out/tsconfig.base.json"
               : `${context.essentialsCommandsName}/tsconfig.json`,
             include: ["**/*.ts", "**/*.tsx"],
-            "ts-node": context.essentialsCommands
-              ? {
-                  compilerOptions: { module: "commonjs" },
-                  require: ["tsconfig-paths/register"],
-                }
-              : undefined,
           }
         : {
             compilerOptions: {
@@ -113,18 +89,10 @@ function getTemplate(context: Context): Record<string, any> {
               },
               rootDir: "./src",
             },
-            exclude: context.essentialsCommands
-              ? [".next", "dist", "node_modules", "webpack.config.ts"]
-              : [".next", "dist", "node_modules"],
+            exclude: ["*.ts", ".next", "dist", "node_modules"],
             extends: context.essentialsCommands
               ? "./src/_out/tsconfig.base.json"
               : `${context.essentialsCommandsName}/tsconfig.json`,
             include: ["**/*.ts"],
-            "ts-node": context.essentialsCommands
-              ? {
-                  compilerOptions: { module: "commonjs" },
-                  require: ["tsconfig-paths/register"],
-                }
-              : undefined,
           };
 }
