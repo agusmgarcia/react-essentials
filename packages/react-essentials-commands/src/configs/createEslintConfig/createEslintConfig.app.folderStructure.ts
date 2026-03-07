@@ -1,4 +1,3 @@
-// eslint-disable-next-line project-structure/folder-structure
 import { createFolderStructure } from "eslint-plugin-project-structure";
 import process from "process";
 

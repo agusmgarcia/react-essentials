@@ -63,7 +63,7 @@ const NODE_FOLDER_STRUCTURE = createFolderStructure({
         name: "src",
       },
       { name: "tsconfig.json" },
-      { name: "webpack.config.js" },
+      { name: "webpack.config.ts" },
     ],
     enforceExistence: [
       "eslint.config.js",
@@ -72,7 +72,7 @@ const NODE_FOLDER_STRUCTURE = createFolderStructure({
       "prettier.config.js",
       "src",
       "tsconfig.json",
-      "webpack.config.js",
+      "webpack.config.ts",
     ],
   },
 });
