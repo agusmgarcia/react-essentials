@@ -18,8 +18,6 @@ const NODE_FOLDER_STRUCTURE = createFolderStructure({
     _camel_case_module_folder: {
       children: [
         { name: "index.ts" },
-        { name: "{folderName}.ts" },
-        { name: "{folderName}.*.ts" },
         { name: "{camelCase}", ruleId: "_camel_case_folder" },
         { name: "{PascalCase}", ruleId: "_pascal_case_folder" },
       ],
@@ -39,8 +37,6 @@ const NODE_FOLDER_STRUCTURE = createFolderStructure({
     _pascal_case_module_folder: {
       children: [
         { name: "index.ts" },
-        { name: "{FolderName}.ts" },
-        { name: "{FolderName}.*.ts" },
         { name: "{camelCase}", ruleId: "_camel_case_folder" },
         { name: "{PascalCase}", ruleId: "_pascal_case_folder" },
       ],
