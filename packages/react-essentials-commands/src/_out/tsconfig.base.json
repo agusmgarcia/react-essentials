@@ -17,5 +17,12 @@
     "strict": true,
     "target": "es2017",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "nodenext",
+      "moduleResolution": "nodenext"
+    },
+    "require": ["tsconfig-paths/register"]
   }
 }

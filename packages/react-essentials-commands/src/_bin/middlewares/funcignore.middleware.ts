@@ -20,6 +20,6 @@ function getTemplate(): string[] {
     "prettier.config.js",
     "src",
     "tsconfig.json",
-    "webpack.config.js",
+    "webpack.config.ts",
   ];
 }
