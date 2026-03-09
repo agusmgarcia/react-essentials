@@ -31,7 +31,7 @@ export default async function createWebpackConfigNode(
                   "node_modules",
                   packageJSONEssentialsCommands.name,
                   "dist",
-                  "_out",
+                  "outputs",
                   "LoadEnvConfigLoader.js",
                 ),
               },

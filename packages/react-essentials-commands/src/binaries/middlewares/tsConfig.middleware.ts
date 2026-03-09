@@ -32,7 +32,7 @@ function getTemplate(context: Context): Record<string, any> {
         },
         exclude: ["*.ts", ".next", "dist", "node_modules"],
         extends: context.essentialsCommands
-          ? "./src/_out/tsconfig.base.json"
+          ? "./src/outputs/tsconfig.base.json"
           : `${context.essentialsCommandsName}/tsconfig.json`,
         include: [
           "next-env.d.ts",
@@ -56,7 +56,7 @@ function getTemplate(context: Context): Record<string, any> {
           },
           exclude: ["*.ts", ".next", "dist", "node_modules"],
           extends: context.essentialsCommands
-            ? "./src/_out/tsconfig.base.json"
+            ? "./src/outputs/tsconfig.base.json"
             : `${context.essentialsCommandsName}/tsconfig.json`,
           include: ["**/*.ts"],
         }
@@ -74,7 +74,7 @@ function getTemplate(context: Context): Record<string, any> {
             },
             exclude: ["*.ts", ".next", "bin", "dist", "node_modules"],
             extends: context.essentialsCommands
-              ? "./src/_out/tsconfig.base.json"
+              ? "./src/outputs/tsconfig.base.json"
               : `${context.essentialsCommandsName}/tsconfig.json`,
             include: ["**/*.ts", "**/*.tsx"],
           }
@@ -91,7 +91,7 @@ function getTemplate(context: Context): Record<string, any> {
             },
             exclude: ["*.ts", ".next", "dist", "node_modules"],
             extends: context.essentialsCommands
-              ? "./src/_out/tsconfig.base.json"
+              ? "./src/outputs/tsconfig.base.json"
               : `${context.essentialsCommandsName}/tsconfig.json`,
             include: ["**/*.ts"],
           };
