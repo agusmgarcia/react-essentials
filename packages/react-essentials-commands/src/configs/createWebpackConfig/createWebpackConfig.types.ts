@@ -31,16 +31,9 @@ export type Input =
 
         /**
          * Externals configuration for webpack.
-         * This can be a static array of strings or a function that returns an array based on
-         * the target environment (binaries, node, or web).
-         * - `binaries`: For binary targets, such as CLI tools.
-         * - `node`: For Node.js targets.
-         * - `web`: For web targets.
          * It specifies which modules should not be bundled by webpack.
          */
-        externals:
-          | string[]
-          | Func<string[], [target: "binaries" | "node" | "web"]>;
+        externals: string[];
 
         /**
          * Omit configuration for the webpack setup.

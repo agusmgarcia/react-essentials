@@ -25,9 +25,7 @@ export default async function createWebpackConfigLib(
           path.resolve("src", "binaries"),
         )),
         "react/jsx-runtime",
-        ...(typeof input[1]?.externals === "function"
-          ? input[1].externals("web")
-          : input[1]?.externals || []),
+        ...(input[1]?.externals || []),
       ],
       module: {
         rules: [
@@ -104,9 +102,7 @@ export default async function createWebpackConfigLib(
           path.resolve("src", "binaries"),
         )),
         "react/jsx-runtime",
-        ...(typeof input[1]?.externals === "function"
-          ? input[1].externals("node")
-          : input[1]?.externals || []),
+        ...(input[1]?.externals || []),
       ],
       module: {
         rules: [
@@ -174,9 +170,7 @@ export default async function createWebpackConfigLib(
       externals: [
         ...(await getDependencies(path.resolve("src", "binaries"))),
         "react/jsx-runtime",
-        ...(typeof input[1]?.externals === "function"
-          ? input[1].externals("binaries")
-          : input[1]?.externals || []),
+        ...(input[1]?.externals || []),
       ],
       module: {
         rules: [
