@@ -6,7 +6,7 @@ import { folders, type GetPackageJSONTypes } from "#src/utils";
 
 import { type Input, type Output } from "./createWebpackConfig.types";
 import {
-  getDependencies,
+  buildDependenciesArray,
   NODE_DEPENDENCIES,
 } from "./createWebpackConfig.utils";
 
@@ -20,12 +20,16 @@ export default async function createWebpackConfigLib(
     {
       entry: input[1]?.omit !== "web" ? await getOutEntries(packageJSON) : {},
       externals: [
-        ...(await getDependencies(
+        ...(await buildDependenciesArray(
+          [
+            ...Object.keys(packageJSON.dependencies || {}),
+            ...Object.keys(packageJSON.peerDependencies || {}),
+            ...(input[1]?.externals || []),
+          ],
           path.resolve("src"),
           path.resolve("src", "binaries"),
         )),
         "react/jsx-runtime",
-        ...(input[1]?.externals || []),
       ],
       module: {
         rules: [
@@ -97,12 +101,16 @@ export default async function createWebpackConfigLib(
     {
       entry: input[1]?.omit !== "node" ? await getOutEntries(packageJSON) : {},
       externals: [
-        ...(await getDependencies(
+        ...(await buildDependenciesArray(
+          [
+            ...Object.keys(packageJSON.dependencies || {}),
+            ...Object.keys(packageJSON.peerDependencies || {}),
+            ...(input[1]?.externals || []),
+          ],
           path.resolve("src"),
           path.resolve("src", "binaries"),
         )),
         "react/jsx-runtime",
-        ...(input[1]?.externals || []),
       ],
       module: {
         rules: [
@@ -168,9 +176,15 @@ export default async function createWebpackConfigLib(
     {
       entry: await getBinaryEntries(packageJSON),
       externals: [
-        ...(await getDependencies(path.resolve("src", "binaries"))),
+        ...(await buildDependenciesArray(
+          [
+            ...Object.keys(packageJSON.dependencies || {}),
+            ...Object.keys(packageJSON.peerDependencies || {}),
+            ...(input[1]?.externals || []),
+          ],
+          path.resolve("src", "binaries"),
+        )),
         "react/jsx-runtime",
-        ...(input[1]?.externals || []),
       ],
       module: {
         rules: [

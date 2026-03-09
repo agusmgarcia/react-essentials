@@ -5,7 +5,7 @@ import { type default as webpack } from "webpack";
 import { folders, type GetPackageJSONTypes } from "#src/utils";
 
 import { type Input, type Output } from "./createWebpackConfig.types";
-import { getDependencies } from "./createWebpackConfig.utils";
+import { buildDependenciesArray } from "./createWebpackConfig.utils";
 
 export default async function createWebpackConfigAzureFunc(
   input: Input,
@@ -16,10 +16,13 @@ export default async function createWebpackConfigAzureFunc(
   return [
     {
       entry: await getFunctionEntries(packageJSON),
-      externals: [
-        ...(await getDependencies(path.resolve("src"))),
-        ...(input[1]?.externals || []),
-      ],
+      externals: await buildDependenciesArray(
+        [
+          ...Object.keys(packageJSON.dependencies || {}),
+          ...(input[1]?.externals || []),
+        ],
+        path.resolve("src"),
+      ),
       module: {
         rules: [
           {

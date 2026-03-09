@@ -32,7 +32,22 @@ export const NODE_DEPENDENCIES = [
   "zlib",
 ];
 
-export async function getDependencies(
+export async function buildDependenciesArray(
+  manualDependencies: string[],
+  folderPath: string,
+  ...foldersExcluded: string[]
+): Promise<string[]> {
+  const automaticDependencies = await getDependencies(
+    folderPath,
+    ...foldersExcluded,
+  );
+
+  return manualDependencies.filter((dependency) =>
+    automaticDependencies.includes(dependency),
+  );
+}
+
+async function getDependencies(
   folderPath: string,
   ...foldersExcluded: string[]
 ): Promise<string[]> {

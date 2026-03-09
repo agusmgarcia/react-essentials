@@ -5,7 +5,7 @@ import { type GetPackageJSONTypes } from "#src/utils";
 
 import packageJSONEssentialsCommands from "../../../package.json";
 import { type Input, type Output } from "./createWebpackConfig.types";
-import { getDependencies } from "./createWebpackConfig.utils";
+import { buildDependenciesArray } from "./createWebpackConfig.utils";
 
 export default async function createWebpackConfigNode(
   input: Input,
@@ -16,10 +16,13 @@ export default async function createWebpackConfigNode(
   return [
     {
       entry: path.resolve("src", "index.ts"),
-      externals: [
-        ...(await getDependencies(path.resolve("src"))),
-        ...(input[1]?.externals || []),
-      ],
+      externals: await buildDependenciesArray(
+        [
+          ...Object.keys(packageJSON.dependencies || {}),
+          ...(input[1]?.externals || []),
+        ],
+        path.resolve("src"),
+      ),
       module: {
         rules: [
           {
