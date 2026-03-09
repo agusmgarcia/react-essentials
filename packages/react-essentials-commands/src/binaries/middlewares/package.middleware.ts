@@ -145,15 +145,15 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
     scripts: context.essentialsCommands
       ? {
           ...packageJSON.scripts,
-          build: "tsx src/_bin/build.ts",
-          check: "tsx src/_bin/check.ts",
-          deploy: "tsx src/_bin/deploy.ts",
-          format: "tsx src/_bin/format.ts",
+          build: "tsx src/binaries/build.ts",
+          check: "tsx src/binaries/check.ts",
+          deploy: "tsx src/binaries/deploy.ts",
+          format: "tsx src/binaries/format.ts",
           postpack: undefined,
           prepack: undefined,
-          regenerate: "tsx src/_bin/regenerate.ts",
-          start: "tsx src/_bin/start.ts",
-          test: "tsx src/_bin/test.ts",
+          regenerate: "tsx src/binaries/regenerate.ts",
+          start: "tsx src/binaries/start.ts",
+          test: "tsx src/binaries/test.ts",
         }
       : {
           ...packageJSON.scripts,

@@ -28,15 +28,15 @@
     "react-essentials-commands-test": "bin/test.js"
   },
   "scripts": {
-    "build": "tsx src/_bin/build.ts",
-    "check": "tsx src/_bin/check.ts",
-    "deploy": "tsx src/_bin/deploy.ts --path=../../.github/workflows",
-    "format": "tsx src/_bin/format.ts",
+    "build": "tsx src/binaries/build.ts",
+    "check": "tsx src/binaries/check.ts",
+    "deploy": "tsx src/binaries/deploy.ts --path=../../.github/workflows",
+    "format": "tsx src/binaries/format.ts",
     "postbuild": "chmod +x bin/*.js",
     "prebuild": "npm i --ignore-scripts --no-audit --no-fund",
-    "regenerate": "tsx src/_bin/regenerate.ts --path=../../.github/workflows",
-    "start": "tsx src/_bin/start.ts",
-    "test": "tsx src/_bin/test.ts"
+    "regenerate": "tsx src/binaries/regenerate.ts --path=../../.github/workflows",
+    "start": "tsx src/binaries/start.ts",
+    "test": "tsx src/binaries/test.ts"
   },
   "dependencies": {
     "@next/env": "^16.0.0",
