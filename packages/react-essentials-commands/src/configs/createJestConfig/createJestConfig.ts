@@ -58,7 +58,7 @@ export default async function createJestConfig(
               testMatch: ["<rootDir>/src/**/*.test.ts?(x)"],
               testPathIgnorePatterns: [
                 ...(nextJestConfig.testPathIgnorePatterns || []),
-                "<rootDir>/src/_bin/",
+                "<rootDir>/src/binaries/",
                 "<rootDir>/node_modules/",
               ],
             },
@@ -66,7 +66,7 @@ export default async function createJestConfig(
               ...nextJestConfig,
               displayName: "Binaries",
               testEnvironment: "node",
-              testMatch: ["<rootDir>/src/_bin/**/*.test.ts"],
+              testMatch: ["<rootDir>/src/binaries/**/*.test.ts"],
             },
           ]
         : undefined,

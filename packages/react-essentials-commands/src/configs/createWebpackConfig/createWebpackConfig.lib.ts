@@ -22,7 +22,7 @@ export default async function createWebpackConfigLib(
       externals: [
         ...(await getDependencies(
           path.resolve("src"),
-          path.resolve("src", "_bin"),
+          path.resolve("src", "binaries"),
         )),
         "react/jsx-runtime",
         ...(typeof input[1]?.externals === "function"
@@ -97,7 +97,7 @@ export default async function createWebpackConfigLib(
       externals: [
         ...(await getDependencies(
           path.resolve("src"),
-          path.resolve("src", "_bin"),
+          path.resolve("src", "binaries"),
         )),
         "react/jsx-runtime",
         ...(typeof input[1]?.externals === "function"
@@ -168,7 +168,7 @@ export default async function createWebpackConfigLib(
     {
       entry: await getBinaryEntries(packageJSON),
       externals: [
-        ...(await getDependencies(path.resolve("src", "_bin"))),
+        ...(await getDependencies(path.resolve("src", "binaries"))),
         "react/jsx-runtime",
         ...(typeof input[1]?.externals === "function"
           ? input[1].externals("binaries")
@@ -281,7 +281,7 @@ async function getBinaryEntries(
   packageJSON: GetPackageJSONTypes.Response,
 ): Promise<Record<string, webpack.EntryObject[string]>> {
   return await folders
-    .readFolder(path.resolve("src", "_bin"))
+    .readFolder(path.resolve("src", "binaries"))
     .then((files) =>
       files.filter((file) => !file.startsWith("_") && file.endsWith(".ts")),
     )
@@ -289,9 +289,9 @@ async function getBinaryEntries(
       files.reduce(
         (result, file) => {
           result[file.split(".ts")[0]] = {
-            import: path.resolve("src", "_bin", file),
+            import: path.resolve("src", "binaries", file),
             library: {
-              name: `${packageJSON.name}/_bin/[name]`,
+              name: `${packageJSON.name}/binaries/[name]`,
               type: "umd",
               umdNamedDefine: true,
             },

@@ -18,7 +18,7 @@ import { type Input, type Output } from "./createWebpackConfig.types";
  *
  * @remarks
  * - For "azure-func", it creates entries for each function in `src/functions` and an index entry.
- * - For "lib", it can output both web and node builds, and optionally CLI binaries from `src/_bin`.
+ * - For "lib", it can output both web and node builds, and optionally CLI binaries from `src/binaries`.
  * - Handles TypeScript and CSS processing, and manages externals based on dependencies and peerDependencies.
  * - Applies custom TypeScript path transformers and supports UMD library output.
  */
