@@ -55,9 +55,9 @@ export default async function createWebpackConfigLib(
           {
             exclude: /node_modules/,
             generator: {
-              filename: path.join("dist", "_out", "[name].json"),
+              filename: path.join("dist", "outputs", "[name].json"),
             },
-            test: /src\/_out\/.+?\.json$/,
+            test: /src\/outputs\/.+?\.json$/,
             type: "asset/resource",
           },
         ],
@@ -69,7 +69,11 @@ export default async function createWebpackConfigLib(
         filename: (data) =>
           data.chunk?.name === "index"
             ? path.join("dist", "index.js")
-            : path.join("dist", "_out", `${data.chunk?.name || "[name]"}.js`),
+            : path.join(
+                "dist",
+                "outputs",
+                `${data.chunk?.name || "[name]"}.js`,
+              ),
         globalObject: "this",
         libraryTarget: "umd",
         path: path.resolve("."),
@@ -130,9 +134,9 @@ export default async function createWebpackConfigLib(
           {
             exclude: /node_modules/,
             generator: {
-              filename: path.join("dist", "_out", "[name].json"),
+              filename: path.join("dist", "outputs", "[name].json"),
             },
-            test: /src\/_out\/.+?\.json$/,
+            test: /src\/outputs\/.+?\.json$/,
             type: "asset/resource",
           },
         ],
@@ -146,7 +150,7 @@ export default async function createWebpackConfigLib(
               )
             : path.join(
                 "dist",
-                "_out",
+                "outputs",
                 `${data.chunk?.name || "[name]"}${input[1]?.omit === "web" ? "" : ".node"}.js`,
               ),
         globalObject: "this",
@@ -234,7 +238,7 @@ async function getOutEntries(
   packageJSON: GetPackageJSONTypes.Response,
 ): Promise<Record<string, webpack.EntryObject[string]>> {
   return await folders
-    .readFolder(path.resolve("src", "_out"))
+    .readFolder(path.resolve("src", "outputs"))
     .then((fs) =>
       fs.filter(
         (f) =>
@@ -252,9 +256,9 @@ async function getOutEntries(
               : file.split(".json")[0];
 
           result[fileName] = file.endsWith(".json")
-            ? path.resolve("src", "_out", file)
+            ? path.resolve("src", "outputs", file)
             : {
-                import: path.resolve("src", "_out", file),
+                import: path.resolve("src", "outputs", file),
                 library: {
                   name: `${packageJSON.name}/[name]`,
                   type: "umd",

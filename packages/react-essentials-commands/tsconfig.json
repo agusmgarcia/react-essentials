@@ -1,5 +1,5 @@
 {
-  "extends": "./src/_out/tsconfig.base.json",
+  "extends": "./src/outputs/tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./",
     "module": "esnext",

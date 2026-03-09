@@ -9,11 +9,11 @@
       "default": "./dist/index.js"
     },
     "./*": {
-      "types": "./dist/_out/*.d.ts",
-      "default": "./dist/_out/*.js"
+      "types": "./dist/outputs/*.d.ts",
+      "default": "./dist/outputs/*.js"
     },
     "./tsconfig.json": {
-      "default": "./dist/_out/tsconfig.base.json"
+      "default": "./dist/outputs/tsconfig.base.json"
     }
   },
   "author": "Agus Garcia",

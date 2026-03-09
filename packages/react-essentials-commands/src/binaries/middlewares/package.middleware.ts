@@ -217,9 +217,9 @@ async function getTemplate(context: Context): Promise<Record<string, any>> {
                   types: "./dist/index.d.ts",
                 },
                 "./*": {
-                  default: "./dist/_out/*.js",
-                  node: "./dist/_out/*.node.js",
-                  types: "./dist/_out/*.d.ts",
+                  default: "./dist/outputs/*.js",
+                  node: "./dist/outputs/*.node.js",
+                  types: "./dist/outputs/*.d.ts",
                 },
               },
               files: ["bin", "dist"],
