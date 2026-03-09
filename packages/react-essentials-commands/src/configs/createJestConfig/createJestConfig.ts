@@ -35,15 +35,12 @@ export default async function createJestConfig(
             : "node",
     testMatch:
       core === "app"
-        ? [
-            "<rootDir>/pages/**/*.test.[jt]s?(x)",
-            "<rootDir>/src/**/*.test.[jt]s?(x)",
-          ]
+        ? ["<rootDir>/src/**/*.test.ts?(x)"]
         : core === "azure-func"
-          ? ["<rootDir>/src/**/*.test.[jt]s"]
+          ? ["<rootDir>/src/**/*.test.ts"]
           : core === "lib"
             ? undefined
-            : ["<rootDir>/src/**/*.test.[jt]s"],
+            : ["<rootDir>/src/**/*.test.ts"],
   });
 
   const nextJestConfig = await createNextJestConfig();
@@ -58,7 +55,7 @@ export default async function createJestConfig(
               ...nextJestConfig,
               displayName: "Source",
               testEnvironment: "jsdom",
-              testMatch: ["<rootDir>/src/**/*.test.[jt]s?(x)"],
+              testMatch: ["<rootDir>/src/**/*.test.ts?(x)"],
               testPathIgnorePatterns: [
                 ...(nextJestConfig.testPathIgnorePatterns || []),
                 "<rootDir>/src/_bin/",
@@ -69,7 +66,7 @@ export default async function createJestConfig(
               ...nextJestConfig,
               displayName: "Binaries",
               testEnvironment: "node",
-              testMatch: ["<rootDir>/src/_bin/**/*.test.[jt]s?(x)"],
+              testMatch: ["<rootDir>/src/_bin/**/*.test.ts"],
             },
           ]
         : undefined,
