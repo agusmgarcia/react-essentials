@@ -34,15 +34,6 @@ export type Input =
          * It specifies which modules should not be bundled by webpack.
          */
         externals: string[];
-
-        /**
-         * Omit configuration for the webpack setup.
-         * This specifies which environments to omit from the configuration.
-         * - `node`: Omit Node.js specific configurations.
-         * - `web`: Omit web specific configurations.
-         */
-
-        omit: "node" | "web";
       }>,
     ]
   | [
