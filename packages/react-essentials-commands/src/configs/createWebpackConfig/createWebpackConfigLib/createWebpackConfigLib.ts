@@ -4,11 +4,11 @@ import { default as webpack } from "webpack";
 
 import { folders, type GetPackageJSONTypes } from "#src/utils";
 
-import { type Input, type Output } from "./createWebpackConfig.types";
 import {
   buildDependenciesArray,
   NODE_DEPENDENCIES,
-} from "./createWebpackConfig.utils";
+} from "../createWebpackConfig.utils";
+import { type Input, type Output } from "./createWebpackConfigLib.types";
 
 export default async function createWebpackConfigLib(
   input: Input,

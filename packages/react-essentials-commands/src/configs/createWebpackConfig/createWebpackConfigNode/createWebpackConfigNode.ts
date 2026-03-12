@@ -3,9 +3,9 @@ import getCustomTransformers from "ts-transform-paths";
 
 import { type GetPackageJSONTypes } from "#src/utils";
 
-import packageJSONEssentialsCommands from "../../../package.json";
-import { type Input, type Output } from "./createWebpackConfig.types";
-import { buildDependenciesArray } from "./createWebpackConfig.utils";
+import packageJSONEssentialsCommands from "../../../../package.json";
+import { buildDependenciesArray } from "../createWebpackConfig.utils";
+import { type Input, type Output } from "./createWebpackConfigNode.types";
 
 export default async function createWebpackConfigNode(
   input: Input,
