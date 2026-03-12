@@ -4,8 +4,8 @@ import { type default as webpack } from "webpack";
 
 import { folders, type GetPackageJSONTypes } from "#src/utils";
 
-import { type Input, type Output } from "./createWebpackConfig.types";
-import { buildDependenciesArray } from "./createWebpackConfig.utils";
+import { buildDependenciesArray } from "../createWebpackConfig.utils";
+import { type Input, type Output } from "./createWebpackConfigAzureFunc.types";
 
 export default async function createWebpackConfigAzureFunc(
   input: Input,

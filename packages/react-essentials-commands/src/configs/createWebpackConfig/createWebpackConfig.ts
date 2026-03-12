@@ -1,9 +1,9 @@
 import { getPackageJSON } from "#src/utils";
 
-import createWebpackConfigAzureFunc from "./createWebpackConfig.azure-func";
-import createWebpackConfigLib from "./createWebpackConfig.lib";
-import createWebpackConfigNode from "./createWebpackConfig.node";
 import { type Input, type Output } from "./createWebpackConfig.types";
+import { createWebpackConfigAzureFunc } from "./createWebpackConfigAzureFunc";
+import { createWebpackConfigLib } from "./createWebpackConfigLib";
+import { createWebpackConfigNode } from "./createWebpackConfigNode";
 
 /**
  * Asynchronously generates a Webpack configuration array based on the provided core type and configuration options.

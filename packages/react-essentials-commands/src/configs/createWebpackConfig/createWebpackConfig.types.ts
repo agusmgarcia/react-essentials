@@ -1,69 +1,13 @@
-import { type Configuration } from "webpack";
-
-import { type Func, type GetPackageJSONTypes } from "#src/utils";
+import { type CreateWebpackConfigAzureFunc } from "./createWebpackConfigAzureFunc";
+import { type CreateWebpackConfigLib } from "./createWebpackConfigLib";
+import { type CreateWebpackConfigNode } from "./createWebpackConfigNode";
 
 export type Input =
-  | [
-      /**
-       * The core type of the package, which can be one of:
-       * - "lib": for libraries that can be used in both Node.js and browser environments
-       */
-      core: Extract<NonNullable<GetPackageJSONTypes.Response["core"]>, "lib">,
+  | CreateWebpackConfigAzureFunc.Input
+  | CreateWebpackConfigLib.Input
+  | CreateWebpackConfigNode.Input;
 
-      /**
-       * Optional configurations for the webpack setup.
-       */
-      configs?: Partial<{
-        /**
-         * Alias configuration for module resolution.
-         * This can be a static object or a function that returns an object based on the target
-         * environment (binaries, node, or web).
-         * - `binaries`: For binary targets, such as CLI tools.
-         * - `node`: For Node.js targets.
-         * - `web`: For web targets.
-         */
-        alias:
-          | Record<string, string | false | string[]>
-          | Func<
-              Record<string, string | false | string[]>,
-              [target: "node" | "web"]
-            >;
-
-        /**
-         * Externals configuration for webpack.
-         * It specifies which modules should not be bundled by webpack.
-         */
-        externals: string[];
-      }>,
-    ]
-  | [
-      /**
-       * The core type of the package, which can be one of:
-       * - "azure-func": for Azure Functions
-       * - "node": for Node.js applications
-       */
-      core: Extract<
-        NonNullable<GetPackageJSONTypes.Response["core"]>,
-        "azure-func" | "node"
-      >,
-
-      /**
-       * Optional configurations for the webpack setup.
-       */
-      configs?: Partial<{
-        /**
-         * Alias configuration for module resolution.
-         * This is a static object that returns an object.
-         */
-        alias: Record<string, string | false | string[]>;
-
-        /**
-         * Externals configuration for webpack.
-         * This is a static array of strings.
-         * It specifies which modules should not be bundled by webpack.
-         */
-        externals: string[];
-      }>,
-    ];
-
-export type Output = Configuration[];
+export type Output =
+  | CreateWebpackConfigAzureFunc.Output
+  | CreateWebpackConfigLib.Output
+  | CreateWebpackConfigNode.Output;
