@@ -18,7 +18,7 @@ export default async function createWebpackConfigLib(
 
   return [
     {
-      entry: input[1]?.omit !== "web" ? await getOutEntries(packageJSON) : {},
+      entry: await getOutEntries(packageJSON),
       externals: [
         ...(await buildDependenciesArray(
           [
@@ -99,7 +99,7 @@ export default async function createWebpackConfigLib(
       },
     },
     {
-      entry: input[1]?.omit !== "node" ? await getOutEntries(packageJSON) : {},
+      entry: await getOutEntries(packageJSON),
       externals: [
         ...(await buildDependenciesArray(
           [
@@ -126,7 +126,7 @@ export default async function createWebpackConfigLib(
                 loader: "ts-loader",
                 options: {
                   compilerOptions: {
-                    declaration: input[1]?.omit === "web" ? true : false,
+                    declaration: false,
                     jsx: "react-jsx",
                     noEmit: false,
                   },
@@ -148,14 +148,11 @@ export default async function createWebpackConfigLib(
       output: {
         filename: (data) =>
           data.chunk?.name === "index"
-            ? path.join(
-                "dist",
-                `index${input[1]?.omit === "web" ? "" : ".node"}.js`,
-              )
+            ? path.join("dist", "index.node.js")
             : path.join(
                 "dist",
                 "outputs",
-                `${data.chunk?.name || "[name]"}${input[1]?.omit === "web" ? "" : ".node"}.js`,
+                `${data.chunk?.name || "[name]"}.node.js`,
               ),
         globalObject: "this",
         libraryTarget: "umd",

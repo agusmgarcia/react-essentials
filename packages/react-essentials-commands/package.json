@@ -6,14 +6,16 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "node": "./dist/index.node.js",
       "default": "./dist/index.js"
-    },
-    "./*": {
-      "types": "./dist/outputs/*.d.ts",
-      "default": "./dist/outputs/*.js"
     },
     "./tsconfig.json": {
       "default": "./dist/outputs/tsconfig.base.json"
+    },
+    "./*": {
+      "types": "./dist/outputs/*.d.ts",
+      "node": "./dist/outputs/*.node.js",
+      "default": "./dist/outputs/*.js"
     }
   },
   "author": "Agus Garcia",

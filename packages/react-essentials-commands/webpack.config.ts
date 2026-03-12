@@ -9,5 +9,4 @@ export default createWebpackConfig("lib", {
     "next/constants",
     "next/jest",
   ],
-  omit: "web",
 });
