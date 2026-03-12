@@ -26,7 +26,7 @@ export type Input =
           | Record<string, string | false | string[]>
           | Func<
               Record<string, string | false | string[]>,
-              [target: "binaries" | "node" | "web"]
+              [target: "node" | "web"]
             >;
 
         /**

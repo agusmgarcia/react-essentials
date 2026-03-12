@@ -229,7 +229,7 @@ export default async function createWebpackConfigLib(
         alias: {
           "#src": path.resolve("src"),
           ...(typeof input[1]?.alias === "function"
-            ? input[1].alias("binaries")
+            ? input[1].alias("node")
             : input[1]?.alias),
         },
         extensions: [".js", ".jsx", ".ts", ".tsx"],
