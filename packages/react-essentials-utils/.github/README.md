@@ -169,6 +169,7 @@ array.find(finds.singleOrDefault); // => undefined
 ```typescript
 import { folders } from "@agusmgarcia/react-essentials-utils";
 
+folders.isFolder("src"); // => true if the path belongs to a folder or throw error if it doesn't exist
 folders.readFolder("src"); // => a list of files
 folders.removeFolder("src"); // => delete a folder
 folders.removeFolderIfEmpty("src"); // => delete a folder if empty
