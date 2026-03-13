@@ -1,5 +1,6 @@
 import { equals } from "#src/modules";
-import { filters } from ".";
+
+import * as filters from "./filters";
 
 describe("filters", () => {
   describe("distinct", () => {

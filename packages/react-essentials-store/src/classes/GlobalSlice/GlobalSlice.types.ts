@@ -1,5 +1,6 @@
 import { type AsyncFunc, type Func } from "@agusmgarcia/react-essentials-utils";
 
+// eslint-disable-next-line project-structure/independent-modules
 import type GlobalSlice from "./GlobalSlice";
 
 /**

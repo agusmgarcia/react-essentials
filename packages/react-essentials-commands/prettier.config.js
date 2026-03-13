@@ -1,3 +1,3 @@
-const { createPrettierConfig } = require("./dist");
+const { createPrettierConfig } = require("./dist/index.node");
 
 module.exports = createPrettierConfig("lib", { disableTailwind: true });
