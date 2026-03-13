@@ -1,5 +1,13 @@
 import fs from "fs";
 
+export async function isFolder(path: string): Promise<boolean> {
+  return new Promise<boolean>((resolve, reject) =>
+    fs.stat(path, (error, data) =>
+      !error ? resolve(data.isDirectory()) : reject(error),
+    ),
+  );
+}
+
 export async function readFolder(path: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) =>
     fs.readdir(path, { encoding: "utf-8" }, (error, files) =>

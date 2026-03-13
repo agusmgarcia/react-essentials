@@ -1,6 +1,21 @@
 import fs from "fs";
 
 /**
+ * Checks if the given path points to a directory.
+ *
+ * @param path - The file system path to check.
+ * @returns A promise that resolves to `true` if the path is a directory, otherwise `false`.
+ * @throws Will reject the promise if an error occurs while accessing the path.
+ */
+export async function isFolder(path: string): Promise<boolean> {
+  return new Promise<boolean>((resolve, reject) =>
+    fs.stat(path, (error, data) =>
+      !error ? resolve(data.isDirectory()) : reject(error),
+    ),
+  );
+}
+
+/**
  * Reads the contents of a folder asynchronously.
  *
  * @param path - The path to the folder to read.
