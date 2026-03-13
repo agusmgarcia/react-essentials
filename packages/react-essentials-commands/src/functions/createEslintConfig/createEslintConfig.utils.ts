@@ -1,4 +1,7 @@
-import { createFolderStructure } from "eslint-plugin-project-structure";
+import {
+  createFolderStructure,
+  createIndependentModules,
+} from "eslint-plugin-project-structure";
 
 export const APP_FOLDER_STRUCTURE = createFolderStructure({
   projectRoot: process.cwd(),
@@ -161,6 +164,273 @@ export const APP_FOLDER_STRUCTURE = createFolderStructure({
   },
 });
 
+export const APP_INDEPENDENT_MODULES = createIndependentModules({
+  modules: [
+    {
+      allowImportsFrom: [],
+      name: "Pages_Document",
+      pattern: "pages/_document.tsx",
+    },
+    {
+      allowImportsFrom: [
+        "pages/_app.css",
+        "src/clients/index.ts",
+        "src/pages/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+      ],
+      name: "Pages_App",
+      pattern: "pages/_app.tsx",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/pages/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+      ],
+      name: "Page_Element",
+      pattern: "pages/**/*.tsx",
+    },
+    {
+      allowImportsFrom: ["{dirname}/*/index.ts"],
+      name: "Module_Index",
+      pattern: "src/*/index.ts",
+    },
+    {
+      allowImportsFrom: ["{dirname}/*.ts", "{dirname}/*.types.ts"],
+      name: "Internal_Index",
+      pattern: "src/*/*/**/index.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/utils/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Client",
+      pattern: "src/clients/*/**/*.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/utils/index.ts",
+        "{typesPattern}",
+      ],
+      name: "Client_Types",
+      pattern: "src/clients/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/utils/index.ts",
+        "{utilsPattern}",
+      ],
+      name: "Client_Utils",
+      pattern: "src/clients/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/utils/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Component",
+      pattern: "src/components/*/**/*.tsx",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/utils/index.ts",
+        "{hooksPattern}",
+      ],
+      name: "Component_Hooks",
+      pattern: "src/components/*/**/*.hooks.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/utils/index.ts",
+        "{typesPattern}",
+      ],
+      name: "Component_Types",
+      pattern: "src/components/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/utils/index.ts",
+        "{utilsPattern}",
+      ],
+      name: "Component_Utils",
+      pattern: "src/components/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/fragments/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Fragment",
+      pattern: "src/fragments/*/**/*.tsx",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/fragments/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{hooksPattern}",
+      ],
+      name: "Fragment_Hooks",
+      pattern: "src/fragments/*/**/*.hooks.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/fragments/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{typesPattern}",
+      ],
+      name: "Fragment_Types",
+      pattern: "src/fragments/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/fragments/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{utilsPattern}",
+      ],
+      name: "Fragment_Utils",
+      pattern: "src/fragments/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/fragments/index.ts",
+        "src/pages/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Page",
+      pattern: "src/pages/*/**/*.tsx",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/fragments/index.ts",
+        "src/pages/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{hooksPattern}",
+      ],
+      name: "Page_Hooks",
+      pattern: "src/pages/*/**/*.hooks.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/fragments/index.ts",
+        "src/pages/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{typesPattern}",
+      ],
+      name: "Page_Types",
+      pattern: "src/pages/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/components/index.ts",
+        "src/fragments/index.ts",
+        "src/pages/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{utilsPattern}",
+      ],
+      name: "Page_Utils",
+      pattern: "src/pages/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Slice",
+      pattern: "src/store/*/**/*.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{typesPattern}",
+      ],
+      name: "Slice_Types",
+      pattern: "src/store/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{utilsPattern}",
+      ],
+      name: "Slice_Utils",
+      pattern: "src/store/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: ["src/utils/index.ts", "{elementPattern}"],
+      name: "Util",
+      pattern: "src/utils/*/**/*.ts",
+    },
+    {
+      allowImportsFrom: ["src/utils/index.ts", "{typesPattern}"],
+      name: "Util_Types",
+      pattern: "src/utils/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: ["src/utils/index.ts", "{utilsPattern}"],
+      name: "Util_Utils",
+      pattern: "src/utils/*/**/*.utils.ts",
+    },
+  ],
+  packageRoot: process.cwd(),
+  reusableImportPatterns: {
+    elementPattern: [
+      "./package.json",
+      "{dirname}/*.hooks.ts",
+      "{dirname}/*.json",
+      "{dirname}/*.types.ts",
+      "{dirname}/*.utils.ts",
+      "{dirname}/*(.module)?.(sass|css|scss)",
+      "{dirname}/*/index.ts",
+    ],
+    hooksPattern: [
+      "./package.json",
+      "{dirname}/*.json",
+      "{dirname}/*.types.ts",
+      "{dirname}/*.utils.ts",
+      "{dirname}/*/index.ts",
+    ],
+    typesPattern: ["./package.json", "{dirname}/*/index.ts"],
+    utilsPattern: [
+      "./package.json",
+      "{dirname}/*.json",
+      "{dirname}/*.types.ts",
+      "{dirname}/*/index.ts",
+    ],
+  },
+});
+
 export const AZURE_FUNC_FOLDER_STRUCTURE = createFolderStructure({
   projectRoot: process.cwd(),
   rules: {
@@ -251,6 +521,148 @@ export const AZURE_FUNC_FOLDER_STRUCTURE = createFolderStructure({
       "src",
       "tsconfig.json",
       "webpack.config.ts",
+    ],
+  },
+});
+
+export const AZURE_FUNC_INDEPENDENT_MODULES = createIndependentModules({
+  modules: [
+    {
+      allowImportsFrom: [],
+      name: "Function_Index",
+      pattern: "src/functions/index.ts",
+    },
+    {
+      allowImportsFrom: ["{dirname}/*/index.ts"],
+      name: "Module_Index",
+      pattern: "src/*/index.ts",
+    },
+    {
+      allowImportsFrom: ["{dirname}/*.ts", "{dirname}/*.types.ts"],
+      name: "Internal_Index",
+      pattern: "src/*/*/**/index.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/utils/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Client",
+      pattern: "src/clients/*/**/*.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/utils/index.ts",
+        "{typesPattern}",
+      ],
+      name: "Client_Types",
+      pattern: "src/clients/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/utils/index.ts",
+        "{utilsPattern}",
+      ],
+      name: "Client_Utils",
+      pattern: "src/clients/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/fragments/index.ts",
+        "src/utils/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Fragment",
+      pattern: "src/fragments/*/**/*.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/fragments/index.ts",
+        "src/utils/index.ts",
+        "{typesPattern}",
+      ],
+      name: "Fragment_Types",
+      pattern: "src/fragments/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/fragments/index.ts",
+        "src/utils/index.ts",
+        "{utilsPattern}",
+      ],
+      name: "Fragment_Utils",
+      pattern: "src/fragments/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/fragments/index.ts",
+        "src/functions/index.ts",
+        "src/utils/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Function",
+      pattern: "src/functions/*/**/*.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/fragments/index.ts",
+        "src/functions/index.ts",
+        "src/utils/index.ts",
+        "{typesPattern}",
+      ],
+      name: "Function_Types",
+      pattern: "src/functions/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/fragments/index.ts",
+        "src/functions/index.ts",
+        "src/utils/index.ts",
+        "{utilsPattern}",
+      ],
+      name: "Function_Utils",
+      pattern: "src/functions/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: ["src/utils/index.ts", "{elementPattern}"],
+      name: "Util",
+      pattern: "src/utils/*/**/*.ts",
+    },
+    {
+      allowImportsFrom: ["src/utils/index.ts", "{typesPattern}"],
+      name: "Util_Types",
+      pattern: "src/utils/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: ["src/utils/index.ts", "{utilsPattern}"],
+      name: "Util_Utils",
+      pattern: "src/utils/*/**/*.utils.ts",
+    },
+  ],
+  packageRoot: process.cwd(),
+  reusableImportPatterns: {
+    elementPattern: [
+      "./package.json",
+      "{dirname}/*.json",
+      "{dirname}/*.types.ts",
+      "{dirname}/*.utils.ts",
+      "{dirname}/*/index.ts",
+    ],
+    typesPattern: ["./package.json", "{dirname}/*/index.ts"],
+    utilsPattern: [
+      "./package.json",
+      "{dirname}/*.json",
+      "{dirname}/*.types.ts",
+      "{dirname}/*/index.ts",
     ],
   },
 });
@@ -365,6 +777,7 @@ export const LIB_FOLDER_STRUCTURE = createFolderStructure({
       {
         children: [
           { name: "index.ts" },
+          { name: "index(.module)?.(sass|css|scss)" },
           { name: "binaries", ruleId: "binaries_folder" },
           { name: "classes", ruleId: "classes_folder" },
           { name: "components", ruleId: "components_folder" },
@@ -387,6 +800,71 @@ export const LIB_FOLDER_STRUCTURE = createFolderStructure({
       "src",
       "tsconfig.json",
       "webpack.config.ts",
+    ],
+  },
+});
+
+export const LIB_INDEPENDENT_MODULES = createIndependentModules({
+  modules: [
+    {
+      allowImportsFrom: [
+        "{dirname}/index(.module)?.(sass|css|scss)",
+        "{dirname}/(classes|components|functions|modules|outputs|types)/index.ts",
+      ],
+      name: "Main_Index",
+      pattern: "src/index.ts",
+    },
+    {
+      allowImportsFrom: ["{dirname}/*/index.ts"],
+      name: "Module_Index",
+      pattern: "src/*/index.ts",
+    },
+    {
+      allowImportsFrom: ["{dirname}/*.ts", "{dirname}/*.types.ts"],
+      name: "Internal_Index",
+      pattern: "src/*/*/**/index.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/(classes|components|functions|modules|outputs|types)/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Element",
+      pattern: "src/*/*/**/*.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/(classes|components|functions|modules|outputs|types)/index.ts",
+        "{typesPattern}",
+      ],
+      name: "Element_Types",
+      pattern: "src/*/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/(classes|components|functions|modules|outputs|types)/index.ts",
+        "{utilsPattern}",
+      ],
+      name: "Element_Utils",
+      pattern: "src/*/*/**/*.utils.ts",
+    },
+  ],
+  packageRoot: process.cwd(),
+  reusableImportPatterns: {
+    elementPattern: [
+      "./package.json",
+      "{dirname}/*.json",
+      "{dirname}/*.types.ts",
+      "{dirname}/*.utils.ts",
+      "{dirname}/*(.module)?.(sass|css|scss)",
+      "{dirname}/*/index.ts",
+    ],
+    typesPattern: ["./package.json", "{dirname}/*/index.ts"],
+    utilsPattern: [
+      "./package.json",
+      "{dirname}/*.json",
+      "{dirname}/*.types.ts",
+      "{dirname}/*/index.ts",
     ],
   },
 });
@@ -456,6 +934,58 @@ export const NODE_FOLDER_STRUCTURE = createFolderStructure({
       "src",
       "tsconfig.json",
       "webpack.config.ts",
+    ],
+  },
+});
+
+export const NODE_INDEPENDENT_MODULES = createIndependentModules({
+  modules: [
+    {
+      allowImportsFrom: ["{dirname}/*/index.ts"],
+      name: "Main_Index",
+      pattern: "src/index.ts",
+    },
+    {
+      allowImportsFrom: ["{dirname}/*/index.ts"],
+      name: "Module_Index",
+      pattern: "src/*/index.ts",
+    },
+    {
+      allowImportsFrom: ["{dirname}/*.ts", "{dirname}/*.types.ts"],
+      name: "Internal_Index",
+      pattern: "src/*/*/**/index.ts",
+    },
+    {
+      allowImportsFrom: ["src/*/index.ts", "{elementPattern}"],
+      name: "Element",
+      pattern: "src/*/*/**/*.ts",
+    },
+    {
+      allowImportsFrom: ["src/*/index.ts", "{typesPattern}"],
+      name: "Element_Types",
+      pattern: "src/*/*/**/*.types.ts",
+    },
+    {
+      allowImportsFrom: ["src/*/index.ts", "{utilsPattern}"],
+      name: "Element_Utils",
+      pattern: "src/*/*/**/*.utils.ts",
+    },
+  ],
+  packageRoot: process.cwd(),
+  reusableImportPatterns: {
+    elementPattern: [
+      "./package.json",
+      "{dirname}/*.json",
+      "{dirname}/*.types.ts",
+      "{dirname}/*.utils.ts",
+      "{dirname}/*/index.ts",
+    ],
+    typesPattern: ["./package.json", "{dirname}/*/index.ts"],
+    utilsPattern: [
+      "./package.json",
+      "{dirname}/*.json",
+      "{dirname}/*.types.ts",
+      "{dirname}/*/index.ts",
     ],
   },
 });

@@ -8,9 +8,13 @@ import eslintPluginSort from "eslint-plugin-sort";
 import { type Input, type Output } from "./createEslintConfig.types";
 import {
   APP_FOLDER_STRUCTURE,
+  APP_INDEPENDENT_MODULES,
   AZURE_FUNC_FOLDER_STRUCTURE,
+  AZURE_FUNC_INDEPENDENT_MODULES,
   LIB_FOLDER_STRUCTURE,
+  LIB_INDEPENDENT_MODULES,
   NODE_FOLDER_STRUCTURE,
+  NODE_INDEPENDENT_MODULES,
 } from "./createEslintConfig.utils";
 
 /**
@@ -46,6 +50,17 @@ export default function createEslintConfig(...[core]: Input): Output {
               : core === "lib"
                 ? LIB_FOLDER_STRUCTURE
                 : NODE_FOLDER_STRUCTURE,
+        ],
+
+        "project-structure/independent-modules": [
+          "error",
+          core === "app"
+            ? APP_INDEPENDENT_MODULES
+            : core === "azure-func"
+              ? AZURE_FUNC_INDEPENDENT_MODULES
+              : core === "lib"
+                ? LIB_INDEPENDENT_MODULES
+                : NODE_INDEPENDENT_MODULES,
         ],
       },
       settings: {
