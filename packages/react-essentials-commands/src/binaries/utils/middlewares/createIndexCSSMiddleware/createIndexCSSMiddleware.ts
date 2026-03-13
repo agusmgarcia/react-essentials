@@ -1,0 +1,12 @@
+import { createFileMiddleware } from "#src/binaries/utils";
+
+export default createFileMiddleware<string>({
+  path: "src/index.css",
+  template: getTemplate,
+  valid: ["lib"],
+});
+
+function getTemplate(): string {
+  return `@import "tailwindcss";
+`;
+}

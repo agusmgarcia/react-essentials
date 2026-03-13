@@ -1,9 +1,8 @@
 import process from "process";
 
+import { runCommand } from "#src/binaries/utils";
 import { execute, getPackageJSON } from "#src/functions";
 import { args, errors } from "#src/modules";
-
-import { runCommand } from "./runCommand";
 
 export default async function regenerate(): Promise<void> {
   try {

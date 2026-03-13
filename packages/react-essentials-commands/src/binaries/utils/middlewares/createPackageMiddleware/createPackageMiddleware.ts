@@ -1,0 +1,316 @@
+import semver from "semver";
+
+import {
+  createFileMiddleware,
+  type CreateFileMiddlewareTypes,
+} from "#src/binaries/utils";
+import { execute, getPackageJSON } from "#src/functions";
+import { files, git, npm, properties } from "#src/modules";
+
+const MIDDLEWARE = createFileMiddleware<Record<string, any>>({
+  mapOutput: (output) =>
+    properties.sort(output, [
+      "name",
+      "core",
+      "version",
+      "private",
+      "main",
+      "types",
+      "exports",
+      "exports.*.types",
+      "exports.*.node",
+      "exports.*.default",
+      "author",
+      "description",
+      "bin",
+      "scripts",
+      "dependencies",
+      "peerDependencies",
+      "devDependencies",
+      "optionalDependencies",
+      "files",
+      "engines",
+      "publishConfig",
+      "repository",
+    ]),
+  path: "package.json",
+  template: getTemplate,
+  valid: ["app", "azure-func", "lib", "node"],
+});
+
+export default async function packageMiddleware(
+  context: CreateFileMiddlewareTypes.Context,
+): Promise<void> {
+  await MIDDLEWARE(context);
+  await installDependencies(context);
+}
+
+async function installDependencies(
+  context: CreateFileMiddlewareTypes.Context,
+): Promise<void> {
+  if (context.command !== "regenerate") return;
+
+  if (
+    !context.filesToRegenerate.length ||
+    context.filesToRegenerate.includes("package.json")
+  )
+    await execute("npm i --ignore-scripts --no-audit --no-fund", false);
+
+  if (!context.filesToRegenerate.length) await files.removeFile(".npmignore");
+}
+
+async function getTemplate(
+  context: CreateFileMiddlewareTypes.Context,
+): Promise<Record<string, any>> {
+  const packageJSON = await getPackageJSON();
+
+  const [repositoryDetails, remoteURL] = (await git.isInsideRepository())
+    ? await Promise.all([git.getRepositoryDetails(), git.getRemoteURL()])
+    : [undefined, undefined];
+
+  const [
+    essentialsCommandsVersion,
+    azureFunctionsCoreToolsVersion,
+    functionsVersion,
+    nextVersion,
+    reactVersion,
+    reactDomVersion,
+  ] = await Promise.all([
+    packageJSON.dependencies?.[context.essentialsCommandsName] ||
+      packageJSON.peerDependencies?.[context.essentialsCommandsName] ||
+      packageJSON.devDependencies?.[context.essentialsCommandsName],
+    npm.getVersion("azure-functions-core-tools@4").then((v) => `^${v}`),
+    npm.getVersion("@azure/functions@4").then((v) => `^${v}`),
+    npm.getVersion("next@16").then((v) => `^${v}`),
+    npm.getVersion("react@19").then((v) => `^${v}`),
+    npm.getVersion("react-dom@19").then((v) => `^${v}`),
+  ]);
+
+  const newPackageJSON = {
+    ...packageJSON,
+    author: packageJSON.author || repositoryDetails?.owner || "",
+    core: context.core,
+    dependencies: toUndefinedIfEmptyDependencies(
+      context.core === "app" ||
+        context.core === "azure-func" ||
+        context.core === "node"
+        ? aggregateDependencies(
+            packageJSON.peerDependencies,
+            packageJSON.dependencies,
+            {
+              [context.essentialsCommandsName]: undefined,
+              "azure-functions-core-tools": undefined,
+            },
+            context.core === "app"
+              ? {
+                  "@azure/functions": undefined,
+                  next: nextVersion,
+                  react: reactVersion,
+                  "react-dom": reactDomVersion,
+                }
+              : context.core === "azure-func"
+                ? {
+                    "@azure/functions": functionsVersion,
+                    next: undefined,
+                    react: undefined,
+                    "react-dom": undefined,
+                  }
+                : {
+                    "@azure/functions": undefined,
+                    next: undefined,
+                    react: undefined,
+                    "react-dom": undefined,
+                  },
+          )
+        : aggregateDependencies(
+            packageJSON.peerDependencies,
+            packageJSON.dependencies,
+            {
+              [context.essentialsCommandsName]: undefined,
+              "@azure/functions": undefined,
+              "azure-functions-core-tools": undefined,
+              next: context.essentialsCommands ? nextVersion : undefined,
+              react: context.essentialsCommands ? undefined : reactVersion,
+              "react-dom": context.essentialsCommands
+                ? undefined
+                : reactDomVersion,
+            },
+          ),
+    ),
+    description: packageJSON.description || "",
+    name: context.name,
+    optionalDependencies: packageJSON.optionalDependencies,
+    peerDependencies: undefined,
+    scripts: context.essentialsCommands
+      ? {
+          ...packageJSON.scripts,
+          build: "tsx src/binaries/build.ts",
+          check: "tsx src/binaries/check.ts",
+          deploy: "tsx src/binaries/deploy.ts",
+          format: "tsx src/binaries/format.ts",
+          postpack: undefined,
+          prepack: undefined,
+          regenerate: "tsx src/binaries/regenerate.ts",
+          start: "tsx src/binaries/start.ts",
+          test: "tsx src/binaries/test.ts",
+        }
+      : {
+          ...packageJSON.scripts,
+          build: "react-essentials-commands-build",
+          check: "react-essentials-commands-check",
+          deploy: "react-essentials-commands-deploy",
+          format: "react-essentials-commands-format",
+          postpack: undefined,
+          prepack: undefined,
+          regenerate: "react-essentials-commands-regenerate",
+          start: "react-essentials-commands-start",
+          test: "react-essentials-commands-test",
+        },
+    version: context.version,
+
+    ...(context.core === "app"
+      ? {
+          bin: undefined,
+          engines: {
+            ...packageJSON.engines,
+            node: "22.16.0",
+          },
+          exports: undefined,
+          files: undefined,
+          main: undefined,
+          private: true,
+          publishConfig: undefined,
+          repository: undefined,
+          types: undefined,
+        }
+      : context.core === "azure-func"
+        ? {
+            bin: undefined,
+            engines: {
+              ...packageJSON.engines,
+              node: "22.16.0",
+            },
+            exports: undefined,
+            files: undefined,
+            main: "dist/{index.js,functions/*.js}",
+            private: true,
+            publishConfig: undefined,
+            repository: undefined,
+            types: undefined,
+          }
+        : context.core === "lib"
+          ? {
+              bin: packageJSON.bin,
+              engines: {
+                ...packageJSON.engines,
+                node:
+                  !!packageJSON.engines?.node &&
+                  semver.satisfies("22.16.0", packageJSON.engines.node)
+                    ? packageJSON.engines.node
+                    : "22.16.0",
+              },
+              exports: {
+                ".": {
+                  default: "./dist/index.js",
+                  node: "./dist/index.node.js",
+                  types: "./dist/index.d.ts",
+                },
+                "./*": {
+                  default: "./dist/outputs/*.js",
+                  node: "./dist/outputs/*.node.js",
+                  types: "./dist/outputs/*.d.ts",
+                },
+              },
+              files: ["bin", "dist"],
+              main: undefined,
+              private: false,
+              publishConfig: {
+                ...packageJSON.publishConfig,
+                access: packageJSON.publishConfig?.access || "public",
+                registry:
+                  packageJSON.publishConfig?.registry ||
+                  "https://registry.npmjs.org/",
+              },
+              repository:
+                packageJSON.repository ||
+                (!!remoteURL
+                  ? { type: "git", url: `git+${remoteURL}.git` }
+                  : undefined),
+              types: undefined,
+            }
+          : {
+              bin: undefined,
+              engines: {
+                ...packageJSON.engines,
+                node: "22.16.0",
+              },
+              exports: undefined,
+              files: undefined,
+              main: undefined,
+              private: true,
+              publishConfig: undefined,
+              repository: undefined,
+              types: undefined,
+            }),
+  };
+
+  newPackageJSON.devDependencies = toUndefinedIfEmptyDependencies(
+    context.core === "app" ||
+      context.core === "azure-func" ||
+      context.core === "node"
+      ? aggregateDependencies(
+          substractDependencies(
+            packageJSON.devDependencies,
+            packageJSON.peerDependencies,
+            packageJSON.dependencies,
+          ),
+          {
+            [context.essentialsCommandsName]: essentialsCommandsVersion,
+            "azure-functions-core-tools":
+              context.core === "azure-func"
+                ? azureFunctionsCoreToolsVersion
+                : undefined,
+          },
+        )
+      : aggregateDependencies(
+          packageJSON.peerDependencies,
+          packageJSON.dependencies,
+          packageJSON.devDependencies,
+          { "azure-functions-core-tools": undefined },
+        ),
+  );
+
+  return newPackageJSON;
+}
+
+function toUndefinedIfEmptyDependencies(
+  dependencies: Record<string, string | undefined> | undefined,
+): Record<string, string> | undefined {
+  if (!dependencies) return undefined;
+
+  const keys = Object.keys(dependencies).filter(
+    (k) => typeof dependencies[k] !== "undefined",
+  );
+
+  if (!keys.length) return undefined;
+  return dependencies as Record<string, string>;
+}
+
+function aggregateDependencies(
+  ...dependenciesList: (Record<string, string | undefined> | undefined)[]
+): Record<string, string | undefined> {
+  let result = {};
+  for (const dependencies of dependenciesList)
+    result = { ...result, ...dependencies };
+  return result;
+}
+
+function substractDependencies(
+  dependencies: Record<string, string | undefined> | undefined,
+  ...dependenciesList: (Record<string, string | undefined> | undefined)[]
+) {
+  const result = { ...dependencies };
+  for (const dependencies of dependenciesList)
+    Object.keys(dependencies || {}).forEach((key) => delete result[key]);
+  return result;
+}

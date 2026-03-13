@@ -4,13 +4,21 @@ import eslintConfigNextTypescript from "eslint-config-next/typescript";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import { projectStructurePlugin } from "eslint-plugin-project-structure";
 import eslintPluginSort from "eslint-plugin-sort";
+import path from "path";
+import process from "process";
+
+import { files, npm } from "#src/modules";
 
 import { type Input, type Output } from "./createEslintConfig.types";
 import {
   APP_FOLDER_STRUCTURE,
+  APP_INDEPENDENT_MODULES,
   AZURE_FUNC_FOLDER_STRUCTURE,
+  AZURE_FUNC_INDEPENDENT_MODULES,
   LIB_FOLDER_STRUCTURE,
+  LIB_INDEPENDENT_MODULES,
   NODE_FOLDER_STRUCTURE,
+  NODE_INDEPENDENT_MODULES,
 } from "./createEslintConfig.utils";
 
 /**
@@ -21,18 +29,20 @@ import {
  *               Determines whether certain Next.js rules are enabled.
  * @returns An ESLint configuration object compatible with the flat config API.
  */
-export default function createEslintConfig(...[core]: Input): Output {
+export default async function createEslintConfig(
+  ...[core]: Input
+): Promise<Output> {
+  const [monorepoDetails, tsconfig] = await Promise.all([
+    npm.getMonorepoDetails(),
+    files
+      .readFile(path.resolve(process.cwd(), "tsconfig.json"))
+      .then((tsconfig) => (tsconfig ? JSON.parse(tsconfig) : undefined)),
+  ]);
+
   return defineConfig([
     // project-structure
     {
-      files: [
-        "**/*.css",
-        "**/*.js",
-        "**/*.sass",
-        "**/*.scss",
-        "**/*.ts",
-        "**/*.tsx",
-      ],
+      files: ["**/*.js", "**/*.ts", "**/*.tsx"],
       plugins: {
         "project-structure": projectStructurePlugin,
       },
@@ -46,6 +56,29 @@ export default function createEslintConfig(...[core]: Input): Output {
               : core === "lib"
                 ? LIB_FOLDER_STRUCTURE
                 : NODE_FOLDER_STRUCTURE,
+        ],
+
+        "project-structure/independent-modules": [
+          "error",
+          core === "app"
+            ? APP_INDEPENDENT_MODULES(
+                monorepoDetails?.location,
+                tsconfig?.compilerOptions?.paths,
+              )
+            : core === "azure-func"
+              ? AZURE_FUNC_INDEPENDENT_MODULES(
+                  monorepoDetails?.location,
+                  tsconfig?.compilerOptions?.paths,
+                )
+              : core === "lib"
+                ? LIB_INDEPENDENT_MODULES(
+                    monorepoDetails?.location,
+                    tsconfig?.compilerOptions?.paths,
+                  )
+                : NODE_INDEPENDENT_MODULES(
+                    monorepoDetails?.location,
+                    tsconfig?.compilerOptions?.paths,
+                  ),
         ],
       },
       settings: {

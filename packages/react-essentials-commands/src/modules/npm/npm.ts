@@ -6,7 +6,7 @@ import { execute } from "#src/functions";
 import { git } from "#src/modules";
 
 export async function getMonorepoDetails(): Promise<
-  { name: string } | undefined
+  { location: string; name: string } | undefined
 > {
   return await execute("npm query .workspace", false)
     .then((result) => result.replace(EOL, ""))
