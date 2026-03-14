@@ -206,15 +206,6 @@ export const APP_INDEPENDENT_MODULES = createIndependentModules({
       allowImportsFrom: [
         "src/clients/index.ts",
         "src/utils/index.ts",
-        "{elementPattern}",
-      ],
-      name: "Client",
-      pattern: "src/clients/*/**/*.ts",
-    },
-    {
-      allowImportsFrom: [
-        "src/clients/index.ts",
-        "src/utils/index.ts",
         "{typesPattern}",
       ],
       name: "Client_Types",
@@ -231,12 +222,12 @@ export const APP_INDEPENDENT_MODULES = createIndependentModules({
     },
     {
       allowImportsFrom: [
-        "src/components/index.ts",
+        "src/clients/index.ts",
         "src/utils/index.ts",
         "{elementPattern}",
       ],
-      name: "Component",
-      pattern: "src/components/*/**/*.tsx",
+      name: "Client",
+      pattern: "src/clients/*/**/*.ts",
     },
     {
       allowImportsFrom: [
@@ -268,13 +259,11 @@ export const APP_INDEPENDENT_MODULES = createIndependentModules({
     {
       allowImportsFrom: [
         "src/components/index.ts",
-        "src/fragments/index.ts",
-        "src/store/index.ts",
         "src/utils/index.ts",
         "{elementPattern}",
       ],
-      name: "Fragment",
-      pattern: "src/fragments/*/**/*.tsx",
+      name: "Component",
+      pattern: "src/components/*/**/*.tsx",
     },
     {
       allowImportsFrom: [
@@ -313,13 +302,12 @@ export const APP_INDEPENDENT_MODULES = createIndependentModules({
       allowImportsFrom: [
         "src/components/index.ts",
         "src/fragments/index.ts",
-        "src/pages/index.ts",
         "src/store/index.ts",
         "src/utils/index.ts",
         "{elementPattern}",
       ],
-      name: "Page",
-      pattern: "src/pages/*/**/*.tsx",
+      name: "Fragment",
+      pattern: "src/fragments/*/**/*.tsx",
     },
     {
       allowImportsFrom: [
@@ -359,13 +347,15 @@ export const APP_INDEPENDENT_MODULES = createIndependentModules({
     },
     {
       allowImportsFrom: [
-        "src/clients/index.ts",
+        "src/components/index.ts",
+        "src/fragments/index.ts",
+        "src/pages/index.ts",
         "src/store/index.ts",
         "src/utils/index.ts",
         "{elementPattern}",
       ],
-      name: "Slice",
-      pattern: "src/store/*/**/*.ts",
+      name: "Page",
+      pattern: "src/pages/*/**/*.tsx",
     },
     {
       allowImportsFrom: [
@@ -388,9 +378,14 @@ export const APP_INDEPENDENT_MODULES = createIndependentModules({
       pattern: "src/store/*/**/*.utils.ts",
     },
     {
-      allowImportsFrom: ["src/utils/index.ts", "{elementPattern}"],
-      name: "Util",
-      pattern: "src/utils/*/**/*.ts",
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/store/index.ts",
+        "src/utils/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Slice",
+      pattern: "src/store/*/**/*.ts",
     },
     {
       allowImportsFrom: ["src/utils/index.ts", "{typesPattern}"],
@@ -402,6 +397,11 @@ export const APP_INDEPENDENT_MODULES = createIndependentModules({
       name: "Util_Utils",
       pattern: "src/utils/*/**/*.utils.ts",
     },
+    {
+      allowImportsFrom: ["src/utils/index.ts", "{elementPattern}"],
+      name: "Util",
+      pattern: "src/utils/*/**/*.ts",
+    },
   ],
   packageRoot: process.cwd(),
   reusableImportPatterns: {
@@ -411,7 +411,7 @@ export const APP_INDEPENDENT_MODULES = createIndependentModules({
       "{dirname}/*.json",
       "{dirname}/*.types.ts",
       "{dirname}/*.utils.ts",
-      "{dirname}/*(.module)?.(sass|css|scss)",
+      "{dirname}/*{,.module}.{sass,css,scss}",
       "{dirname}/*/index.ts",
     ],
     hooksPattern: [
@@ -546,15 +546,6 @@ export const AZURE_FUNC_INDEPENDENT_MODULES = createIndependentModules({
       allowImportsFrom: [
         "src/clients/index.ts",
         "src/utils/index.ts",
-        "{elementPattern}",
-      ],
-      name: "Client",
-      pattern: "src/clients/*/**/*.ts",
-    },
-    {
-      allowImportsFrom: [
-        "src/clients/index.ts",
-        "src/utils/index.ts",
         "{typesPattern}",
       ],
       name: "Client_Types",
@@ -572,12 +563,11 @@ export const AZURE_FUNC_INDEPENDENT_MODULES = createIndependentModules({
     {
       allowImportsFrom: [
         "src/clients/index.ts",
-        "src/fragments/index.ts",
         "src/utils/index.ts",
         "{elementPattern}",
       ],
-      name: "Fragment",
-      pattern: "src/fragments/*/**/*.ts",
+      name: "Client",
+      pattern: "src/clients/*/**/*.ts",
     },
     {
       allowImportsFrom: [
@@ -603,12 +593,11 @@ export const AZURE_FUNC_INDEPENDENT_MODULES = createIndependentModules({
       allowImportsFrom: [
         "src/clients/index.ts",
         "src/fragments/index.ts",
-        "src/functions/index.ts",
         "src/utils/index.ts",
         "{elementPattern}",
       ],
-      name: "Function",
-      pattern: "src/functions/*/**/*.ts",
+      name: "Fragment",
+      pattern: "src/fragments/*/**/*.ts",
     },
     {
       allowImportsFrom: [
@@ -633,9 +622,15 @@ export const AZURE_FUNC_INDEPENDENT_MODULES = createIndependentModules({
       pattern: "src/functions/*/**/*.utils.ts",
     },
     {
-      allowImportsFrom: ["src/utils/index.ts", "{elementPattern}"],
-      name: "Util",
-      pattern: "src/utils/*/**/*.ts",
+      allowImportsFrom: [
+        "src/clients/index.ts",
+        "src/fragments/index.ts",
+        "src/functions/index.ts",
+        "src/utils/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Function",
+      pattern: "src/functions/*/**/*.ts",
     },
     {
       allowImportsFrom: ["src/utils/index.ts", "{typesPattern}"],
@@ -646,6 +641,11 @@ export const AZURE_FUNC_INDEPENDENT_MODULES = createIndependentModules({
       allowImportsFrom: ["src/utils/index.ts", "{utilsPattern}"],
       name: "Util_Utils",
       pattern: "src/utils/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: ["src/utils/index.ts", "{elementPattern}"],
+      name: "Util",
+      pattern: "src/utils/*/**/*.ts",
     },
   ],
   packageRoot: process.cwd(),
@@ -808,8 +808,8 @@ export const LIB_INDEPENDENT_MODULES = createIndependentModules({
   modules: [
     {
       allowImportsFrom: [
-        "{dirname}/index(.module)?.(sass|css|scss)",
-        "{dirname}/(classes|components|functions|modules|outputs|types)/index.ts",
+        "src/index{,.module}.{sass,css,scss}",
+        "src/{classes,components,functions,modules,outputs,types}/index.ts",
       ],
       name: "Main_Index",
       pattern: "src/index.ts",
@@ -826,15 +826,7 @@ export const LIB_INDEPENDENT_MODULES = createIndependentModules({
     },
     {
       allowImportsFrom: [
-        "src/(classes|components|functions|modules|outputs|types)/index.ts",
-        "{elementPattern}",
-      ],
-      name: "Element",
-      pattern: "src/*/*/**/*.ts",
-    },
-    {
-      allowImportsFrom: [
-        "src/(classes|components|functions|modules|outputs|types)/index.ts",
+        "src/{classes,components,functions,modules,outputs,types}/index.ts",
         "{typesPattern}",
       ],
       name: "Element_Types",
@@ -842,11 +834,19 @@ export const LIB_INDEPENDENT_MODULES = createIndependentModules({
     },
     {
       allowImportsFrom: [
-        "src/(classes|components|functions|modules|outputs|types)/index.ts",
+        "src/{classes,components,functions,modules,outputs,types}/index.ts",
         "{utilsPattern}",
       ],
       name: "Element_Utils",
       pattern: "src/*/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: [
+        "src/{classes,components,functions,modules,outputs,types}/index.ts",
+        "{elementPattern}",
+      ],
+      name: "Element",
+      pattern: "src/*/*/**/*.ts",
     },
   ],
   packageRoot: process.cwd(),
@@ -856,7 +856,7 @@ export const LIB_INDEPENDENT_MODULES = createIndependentModules({
       "{dirname}/*.json",
       "{dirname}/*.types.ts",
       "{dirname}/*.utils.ts",
-      "{dirname}/*(.module)?.(sass|css|scss)",
+      "{dirname}/*{,.module}.{sass,css,scss}",
       "{dirname}/*/index.ts",
     ],
     typesPattern: ["./package.json", "{dirname}/*/index.ts"],
@@ -956,11 +956,6 @@ export const NODE_INDEPENDENT_MODULES = createIndependentModules({
       pattern: "src/*/*/**/index.ts",
     },
     {
-      allowImportsFrom: ["src/*/index.ts", "{elementPattern}"],
-      name: "Element",
-      pattern: "src/*/*/**/*.ts",
-    },
-    {
       allowImportsFrom: ["src/*/index.ts", "{typesPattern}"],
       name: "Element_Types",
       pattern: "src/*/*/**/*.types.ts",
@@ -969,6 +964,11 @@ export const NODE_INDEPENDENT_MODULES = createIndependentModules({
       allowImportsFrom: ["src/*/index.ts", "{utilsPattern}"],
       name: "Element_Utils",
       pattern: "src/*/*/**/*.utils.ts",
+    },
+    {
+      allowImportsFrom: ["src/*/index.ts", "{elementPattern}"],
+      name: "Element",
+      pattern: "src/*/*/**/*.ts",
     },
   ],
   packageRoot: process.cwd(),
