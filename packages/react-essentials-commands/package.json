@@ -14,9 +14,7 @@
       "node": "./dist/outputs/*.node.js",
       "default": "./dist/outputs/*.js"
     },
-    "./tsconfig.json": {
-      "default": "./dist/outputs/tsconfig.base.json"
-    }
+    "./tsconfig.json": "./tsconfig.json"
   },
   "author": "Agus Garcia",
   "description": "Set of opinionated commands for NextJS applications, libraries and Azure functions",
@@ -36,6 +34,8 @@
     "format": "tsx src/binaries/format.ts",
     "postbuild": "chmod +x bin/*.js",
     "prebuild": "npm i --ignore-scripts --no-audit --no-fund",
+    "prepack": "move-cli tsconfig.json tsconfig.json2 && move-cli src/outputs/tsconfig.base.json tsconfig.json",
+    "postpack": "move-cli tsconfig.json src/outputs/tsconfig.base.json && move-cli tsconfig.json2 tsconfig.json",
     "regenerate": "tsx src/binaries/regenerate.ts --path=../../.github/workflows",
     "start": "tsx src/binaries/start.ts",
     "test": "tsx src/binaries/test.ts"
@@ -65,7 +65,6 @@
     "style-loader": "^4.0.0",
     "tailwindcss": "^4.0.0",
     "ts-loader": "^9.0.0",
-    "ts-node": "^10.0.0",
     "ts-transform-paths": "^3.0.0",
     "tsconfig-paths": "^4.0.0",
     "typescript": "^5.0.0",
@@ -73,14 +72,19 @@
     "webpack-cli": "^6.0.0",
     "yaml": "^2.0.0"
   },
+  "peerDependencies": {
+    "ts-node": "^10.0.0"
+  },
   "devDependencies": {
     "@types/node": "~18.18.0",
     "@types/semver": "^7.7.1",
+    "move-cli": "^2.0.0",
     "tsx": "^4.21.0"
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "tsconfig.json"
   ],
   "engines": {
     "node": ">=18.18.0"

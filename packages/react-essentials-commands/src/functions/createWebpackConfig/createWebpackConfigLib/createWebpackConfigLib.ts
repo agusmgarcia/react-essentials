@@ -225,30 +225,22 @@ async function getOutEntries(
 ): Promise<Record<string, webpack.EntryObject[string]>> {
   return await folders
     .readFolder(path.resolve("src", "outputs"))
-    .then((fs) =>
-      fs.filter(
-        (f) => f.endsWith(".ts") || f.endsWith(".tsx") || f.endsWith(".json"),
-      ),
-    )
+    .then((fs) => fs.filter((f) => f.endsWith(".ts") || f.endsWith(".tsx")))
     .then((files) =>
       files.reduce(
         (result, file) => {
           const fileName = file.endsWith(".ts")
             ? file.split(".ts")[0]
-            : file.endsWith(".tsx")
-              ? file.split(".tsx")[0]
-              : file.split(".json")[0];
+            : file.split(".tsx")[0];
 
-          result[fileName] = file.endsWith(".json")
-            ? path.resolve("src", "outputs", file)
-            : {
-                import: path.resolve("src", "outputs", file),
-                library: {
-                  name: `${packageJSON.name}/[name]`,
-                  type: "umd",
-                  umdNamedDefine: true,
-                },
-              };
+          result[fileName] = {
+            import: path.resolve("src", "outputs", file),
+            library: {
+              name: `${packageJSON.name}/[name]`,
+              type: "umd",
+              umdNamedDefine: true,
+            },
+          };
           return result;
         },
         {
