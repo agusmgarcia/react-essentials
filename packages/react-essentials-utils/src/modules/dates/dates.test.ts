@@ -1,4 +1,4 @@
-import * as dates from "./dates";
+import { default as dates } from "./dates";
 
 describe("dates", () => {
   test("addDays", () => {

@@ -5,7 +5,7 @@ import { type Func } from "#src/types";
 
 // <=============================== BRANCHES ===============================> //
 
-export async function deleteBranch(branch: string): Promise<void> {
+async function deleteBranch(branch: string): Promise<void> {
   await execute(`git branch -D ${branch}`, true);
 
   const remote = await getRemoteName();
@@ -14,13 +14,13 @@ export async function deleteBranch(branch: string): Promise<void> {
   await execute(`git push --delete ${remote} ${branch} --no-verify`, true);
 }
 
-export async function getCurrentBranch(): Promise<string | undefined> {
+async function getCurrentBranch(): Promise<string | undefined> {
   return await execute("git branch --show-current", false).then((branch) =>
     branch?.replace(EOL, ""),
   );
 }
 
-export async function getDefaultBranch(): Promise<string | undefined> {
+async function getDefaultBranch(): Promise<string | undefined> {
   return await getRemoteName().then((remote) =>
     !!remote
       ? execute(`git remote show ${remote}`, false).then((branch) =>
@@ -33,7 +33,7 @@ export async function getDefaultBranch(): Promise<string | undefined> {
   );
 }
 
-export async function isCurrentBranchSynced(): Promise<boolean> {
+async function isCurrentBranchSynced(): Promise<boolean> {
   return await execute("git fetch -p -P -f", true)
     .then(() => execute("git diff @{upstream}", false))
     .then((diffs) => !diffs)
@@ -42,7 +42,7 @@ export async function isCurrentBranchSynced(): Promise<boolean> {
 
 // <=============================== COMMITS ===============================> //
 
-export async function cherryPick(
+async function cherryPick(
   initialCommit: string,
   lastCommit: string,
 ): Promise<void> {
@@ -51,7 +51,7 @@ export async function cherryPick(
 
 const COMMIT_REGEXP = /^(chore|feat|fix|refactor)(?:\((.*)\))?(!)?:\s(.*)$/;
 
-export async function getCommits(
+async function getCommits(
   options?: Partial<{
     initial: string;
     last: string;
@@ -63,7 +63,7 @@ export async function getCommits(
   );
 }
 
-export async function getDetailedCommits(
+async function getDetailedCommits(
   options?: Partial<{
     initial: string;
     last: string;
@@ -99,7 +99,7 @@ export async function getDetailedCommits(
     .then((commits) => commits.reverse());
 }
 
-export function getCommitInfo(commit: string): {
+function getCommitInfo(commit: string): {
   isBreakingChange: boolean;
   message: string;
   scope: string | undefined;
@@ -122,7 +122,7 @@ export function getCommitInfo(commit: string): {
   };
 }
 
-export async function createCommit(
+async function createCommit(
   message: string,
   options?: Partial<{ amend: boolean }>,
 ): Promise<void> {
@@ -145,7 +145,7 @@ export async function createCommit(
   await execute(`git push -u ${remote} ${branch} --no-verify -f`, true);
 }
 
-export async function getInitialCommit(): Promise<string | undefined> {
+async function getInitialCommit(): Promise<string | undefined> {
   return await execute("git rev-list --max-parents=0 HEAD", false).then(
     (commit) => commit?.replace(EOL, "") || undefined,
   );
@@ -156,13 +156,13 @@ export async function getInitialCommit(): Promise<string | undefined> {
 const REMOTE_URL_REGEXP =
   /^(.+?):\/\/(?:.+?:)?(?:.+?@)?(.+?)\/(.+?)\/(.+?).git$/;
 
-export async function getRemoteName(): Promise<string | undefined> {
+async function getRemoteName(): Promise<string | undefined> {
   return await execute("git remote", false).then(
     (remote) => remote?.replace(EOL, "") || undefined,
   );
 }
 
-export async function getRemoteURL(): Promise<string | undefined> {
+async function getRemoteURL(): Promise<string | undefined> {
   return await getRemoteName()
     .then((remote) =>
       !!remote ? execute(`git remote get-url ${remote}`, false) : undefined,
@@ -182,13 +182,13 @@ export async function getRemoteURL(): Promise<string | undefined> {
 
 const TAG_REGEXP = /^(?:(.+?)@)?v(\d+)\.(\d+)\.(\d+)(?:-temp)?$/;
 
-export async function getTags(
+async function getTags(
   options?: Partial<{ merged: boolean; scope: string }>,
 ): Promise<string[]> {
   return await getDetailedTags(options).then((dts) => dts.map((dt) => dt.tag));
 }
 
-export async function getDetailedTags(
+async function getDetailedTags(
   options?: Partial<{ merged: boolean; scope: string }>,
 ): Promise<{ sha: string; tag: string }[]> {
   const tags = await execute("git fetch -p -P -f", true)
@@ -232,7 +232,7 @@ function sortTags(tag1: string, tag2: string): number {
   return 0;
 }
 
-export function getTagInfo(tag: string): {
+function getTagInfo(tag: string): {
   major: number;
   minor: number;
   patch: number;
@@ -248,7 +248,7 @@ export function getTagInfo(tag: string): {
   };
 }
 
-export async function createTag(tag: string): Promise<void> {
+async function createTag(tag: string): Promise<void> {
   if (!TAG_REGEXP.test(tag)) throw `Tag ${tag} doesn't match the pattern`;
   await execute(`git tag ${tag}`, true);
 
@@ -258,7 +258,7 @@ export async function createTag(tag: string): Promise<void> {
   await execute(`git push ${remote} ${tag} --no-verify`, true);
 }
 
-export async function deleteTag(tag: string): Promise<void> {
+async function deleteTag(tag: string): Promise<void> {
   await execute(`git tag --delete ${tag}`, true);
 
   const remote = await getRemoteName();
@@ -269,13 +269,13 @@ export async function deleteTag(tag: string): Promise<void> {
 
 // <================================ UTILS ================================> //
 
-export async function checkout(sha: string): Promise<void> {
+async function checkout(sha: string): Promise<void> {
   await execute(`git checkout ${sha}`, true);
 }
 
 const REPOSITORY_DETAILS_REGEXP = /^(?:.+?):\/\/(?:.+?)\/(.+?)\/(.+?)$/;
 
-export async function getRepositoryDetails(): Promise<
+async function getRepositoryDetails(): Promise<
   { name: string; owner: string } | undefined
 > {
   return await getRemoteURL().then((remoteURL) => {
@@ -290,8 +290,31 @@ export async function getRepositoryDetails(): Promise<
   });
 }
 
-export async function isInsideRepository(): Promise<boolean> {
+async function isInsideRepository(): Promise<boolean> {
   return await execute("git rev-parse --is-inside-work-tree", false)
     .then((result) => result === `true${EOL}`)
     .catch(() => false);
 }
+
+const git = {
+  checkout,
+  cherryPick,
+  createCommit,
+  createTag,
+  deleteBranch,
+  deleteTag,
+  getCommitInfo,
+  getCommits,
+  getCurrentBranch,
+  getDefaultBranch,
+  getDetailedCommits,
+  getDetailedTags,
+  getInitialCommit,
+  getRemoteURL,
+  getRepositoryDetails,
+  getTagInfo,
+  getTags,
+  isCurrentBranchSynced,
+  isInsideRepository,
+};
+export default git;

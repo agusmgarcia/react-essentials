@@ -10,7 +10,7 @@ const MIDDLEWARE = createFileMiddleware<string>({
   valid: ["azure-func", "lib", "node"],
 });
 
-export default async function webpackConfigMiddleware(
+export default async function createWebpackConfigMiddleware(
   context: CreateFileMiddlewareTypes.Context,
 ): Promise<void> {
   await Promise.all([MIDDLEWARE(context), deleteWebpackConfigFiles(context)]);

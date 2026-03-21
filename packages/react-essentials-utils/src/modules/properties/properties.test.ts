@@ -1,4 +1,4 @@
-import * as properties from "./properties";
+import { default as properties } from "./properties";
 
 describe("properties", () => {
   describe("has", () => {

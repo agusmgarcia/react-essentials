@@ -8,7 +8,7 @@
  * @returns `true` if the current element is the first element in the array; otherwise, `false`.
  */
 
-export function first<TElement>(
+function first<TElement>(
   _element: TElement,
   index: number,
   _array: ReadonlyArray<TElement>,
@@ -27,7 +27,7 @@ export function first<TElement>(
  * @throws {Error} If the array contains more than one element.
  * @returns `true` if the current element is the single element in the array; otherwise, `false`.
  */
-export function single<TElement>(
+function single<TElement>(
   _element: TElement,
   index: number,
   array: ReadonlyArray<TElement>,
@@ -48,7 +48,7 @@ export function single<TElement>(
  * @param array - The array being processed.
  * @returns `true` if the current element is the single element or the default element in the array; otherwise, `false`.
  */
-export function singleOrDefault<TElement>(
+function singleOrDefault<TElement>(
   _element: TElement,
   index: number,
   array: ReadonlyArray<TElement>,
@@ -56,3 +56,6 @@ export function singleOrDefault<TElement>(
   if (array.length > 1) return false;
   return !index;
 }
+
+const finds = { first, single, singleOrDefault };
+export default finds;

@@ -1,12 +1,12 @@
-export function getBoolean(name: string): boolean {
+function getBoolean(name: string): boolean {
   return getString(name) === "true";
 }
 
-export function getString(name: string): string | undefined {
+function getString(name: string): string | undefined {
   return getStrings(name).at(-1);
 }
 
-export function getStrings(name: string): string[] {
+function getStrings(name: string): string[] {
   const result = new Array<string>();
   const input = `--${name}`;
 
@@ -27,3 +27,6 @@ export function getStrings(name: string): string[] {
 
   return result;
 }
+
+const args = { getBoolean, getString, getStrings };
+export default args;

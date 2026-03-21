@@ -14,7 +14,7 @@ function getTemplate(): string {
   type InvocationContext,
 } from "@azure/functions";
 
-async function httpTrigger1(
+async function handler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
@@ -27,7 +27,7 @@ async function httpTrigger1(
 
 app.http("httpTrigger1", {
   authLevel: "anonymous",
-  handler: httpTrigger1,
+  handler,
   methods: ["GET", "POST"],
 });
 `;

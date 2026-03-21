@@ -5,7 +5,7 @@
  * @param string - The input string to be capitalized.
  * @returns The input string with its first letter converted to uppercase.
  */
-export function capitalize<TString extends string>(
+function capitalize<TString extends string>(
   string: TString,
 ): Capitalize<TString> {
   return (string.charAt(0).toUpperCase() +
@@ -19,7 +19,7 @@ export function capitalize<TString extends string>(
  * @param string - The input string to be uncapitalized.
  * @returns The input string with its first letter converted to lowercase.
  */
-export function uncapitalize<TString extends string>(
+function uncapitalize<TString extends string>(
   string: TString,
 ): Uncapitalize<TString> {
   return (string.charAt(0).toLowerCase() +
@@ -45,7 +45,7 @@ type Replacements = Record<string, string | number | boolean | undefined>;
  * @returns The string with placeholders replaced by their corresponding values from the
  *          replacements object. If the input message is undefined, the function returns undefined.
  */
-export function replace(message: string, replacements?: Replacements): string;
+function replace(message: string, replacements?: Replacements): string;
 
 /**
  * Replaces placeholders in a string with corresponding values from a replacements object.
@@ -62,12 +62,12 @@ export function replace(message: string, replacements?: Replacements): string;
  * @returns The string with placeholders replaced by their corresponding values from the
  *          replacements object. If the input message is undefined, the function returns undefined.
  */
-export function replace(
+function replace(
   message: string | undefined,
   replacements?: Replacements,
 ): string | undefined;
 
-export function replace(
+function replace(
   message: string | undefined,
   replacements?: Replacements,
 ): string | undefined {
@@ -93,3 +93,6 @@ export function replace(
     return original;
   });
 }
+
+const strings = { capitalize, replace, uncapitalize };
+export default strings;

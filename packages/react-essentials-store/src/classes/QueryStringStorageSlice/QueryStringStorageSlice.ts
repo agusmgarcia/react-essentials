@@ -32,11 +32,11 @@ export default abstract class QueryStringStorageSlice<
   TData extends BaseData,
   TSlices extends BaseSlices = {},
 > extends StorageSlice<TData, TSlices> {
-  private readonly _name: string;
-  private readonly _mode: Configs["mode"];
-  private readonly _interval: Configs["interval"];
+  private readonly name: string;
+  private readonly mode: Configs["mode"];
+  private readonly interval: Configs["interval"];
 
-  private _clearIntervalHandler: Func;
+  private clearIntervalHandler: Func;
 
   /**
    * Creates a new instance of the QueryStringStorageSlice.
@@ -47,11 +47,11 @@ export default abstract class QueryStringStorageSlice<
   protected constructor(name: string, configs?: Partial<Configs>) {
     super();
 
-    this._name = name;
-    this._mode = configs?.mode || "replace";
-    this._interval = configs?.interval || 1000;
+    this.name = name;
+    this.mode = configs?.mode || "replace";
+    this.interval = configs?.interval || 1000;
 
-    this._clearIntervalHandler = emptyFunction;
+    this.clearIntervalHandler = emptyFunction;
 
     const prototype1 = isMethodOverridden(
       this,
@@ -86,33 +86,33 @@ export default abstract class QueryStringStorageSlice<
       if (prevSearch === search) return;
       prevSearch = search;
 
-      this["_regenerateSignal"]();
+      this["regenerateSignal"]();
       try {
-        this.response = deserialize(this._name, new URLSearchParams(search));
+        this.response = deserialize(this.name, new URLSearchParams(search));
       } catch (error) {
         this.error = error;
       }
-    }, this._interval);
+    }, this.interval);
 
-    this._clearIntervalHandler = () => clearInterval(handler);
+    this.clearIntervalHandler = () => clearInterval(handler);
   }
 
   protected override onDestroy(signal: AbortSignal): void {
-    this._clearIntervalHandler();
+    this.clearIntervalHandler();
     super.onDestroy(signal);
   }
 
   protected override getDataFromStorage(): TData | undefined {
     if (isSSR()) return undefined;
     const params = new URLSearchParams(location.search);
-    return deserialize(this._name, params);
+    return deserialize(this.name, params);
   }
 
   protected override setDataIntoStorage(data: TData | undefined): void {
     if (isSSR()) return;
     const url = new URL(location.href);
-    serialize(this.constructor.name, data, this._name, url.searchParams);
-    history[`${this._mode}State`](null, "", url.toString());
+    serialize(this.constructor.name, data, this.name, url.searchParams);
+    history[`${this.mode}State`](null, "", url.toString());
   }
 }
 

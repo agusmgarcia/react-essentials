@@ -1,4 +1,4 @@
-import * as strings from "./strings";
+import { default as strings } from "./strings";
 
 describe("strings", () => {
   describe("capitalize", () => {

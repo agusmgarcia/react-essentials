@@ -10,7 +10,7 @@ const MIDDLEWARE = createFileMiddleware<string>({
   valid: ["app", "azure-func", "lib", "node"],
 });
 
-export default async function prettierConfigMiddleware(
+export default async function createPrettierConfigMiddleware(
   context: CreateFileMiddlewareTypes.Context,
 ): Promise<void> {
   await Promise.all([MIDDLEWARE(context), deletePrettierConfigFiles(context)]);

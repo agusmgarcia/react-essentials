@@ -10,7 +10,7 @@ const MIDDLEWARE = createFileMiddleware<string>({
   valid: ["app", "azure-func", "lib", "node"],
 });
 
-export default async function jestConfigMiddleware(
+export default async function createJestConfigMiddleware(
   context: CreateFileMiddlewareTypes.Context,
 ): Promise<void> {
   await Promise.all([MIDDLEWARE(context), deleteJestConfigFiles(context)]);

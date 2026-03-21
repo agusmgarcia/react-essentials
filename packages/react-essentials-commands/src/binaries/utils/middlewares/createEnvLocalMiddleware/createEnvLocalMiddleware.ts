@@ -13,7 +13,7 @@ const MIDDLEWARE = createFileMiddleware<Record<string, any>>({
   valid: ["app", "node"],
 });
 
-export default async function envLocalMiddleware(
+export default async function createEnvLocalMiddleware(
   context: CreateFileMiddlewareTypes.Context,
 ): Promise<void> {
   await Promise.all([MIDDLEWARE(context), deleteEnvFiles(context)]);

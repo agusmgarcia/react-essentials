@@ -7,7 +7,7 @@
  * @returns A negative number if `value1` is less than `value2`,
  *          zero if they are equal, or a positive number if `value1` is greater than `value2`.
  */
-export function byNumberAsc(value1: number, value2: number): number {
+function byNumberAsc(value1: number, value2: number): number {
   return value1 - value2;
 }
 
@@ -20,7 +20,7 @@ export function byNumberAsc(value1: number, value2: number): number {
  * @returns A negative number if `value1` is greater than `value2`,
  *          zero if they are equal, or a positive number if `value1` is less than `value2`.
  */
-export function byNumberDesc(value1: number, value2: number): number {
+function byNumberDesc(value1: number, value2: number): number {
   return byNumberAsc(value2, value1);
 }
 
@@ -33,7 +33,7 @@ export function byNumberDesc(value1: number, value2: number): number {
  * @returns A negative number if `value1` is less than `value2`,
  *          zero if they are equal, or a positive number if `value1` is greater than `value2`.
  */
-export function byStringAsc(value1: string, value2: string): number {
+function byStringAsc(value1: string, value2: string): number {
   return +(value1 > value2) || -(value2 > value1);
 }
 
@@ -46,7 +46,7 @@ export function byStringAsc(value1: string, value2: string): number {
  * @returns A negative number if `value1` is greater than `value2`,
  *          zero if they are equal, or a positive number if `value1` is less than `value2`.
  */
-export function byStringDesc(value1: string, value2: string): number {
+function byStringDesc(value1: string, value2: string): number {
   return byStringAsc(value2, value1);
 }
 
@@ -59,7 +59,7 @@ export function byStringDesc(value1: string, value2: string): number {
  * @returns A negative number if `value1` is `false` and `value2` is `true`,
  *          zero if they are equal, or a positive number if `value1` is `true` and `value2` is `false`.
  */
-export function byBooleanAsc(value1: boolean, value2: boolean): number {
+function byBooleanAsc(value1: boolean, value2: boolean): number {
   if (value1 && !value2) return -1;
   if (!value1 && value2) return 1;
   return 0;
@@ -74,6 +74,16 @@ export function byBooleanAsc(value1: boolean, value2: boolean): number {
  * @returns A negative number if `value1` is `true` and `value2` is `false`,
  *          zero if they are equal, or a positive number if `value1` is `false` and `value2` is `true`.
  */
-export function byBooleanDesc(value1: boolean, value2: boolean): number {
+function byBooleanDesc(value1: boolean, value2: boolean): number {
   return byBooleanAsc(value2, value1);
 }
+
+const sorts = {
+  byBooleanAsc,
+  byBooleanDesc,
+  byNumberAsc,
+  byNumberDesc,
+  byStringAsc,
+  byStringDesc,
+};
+export default sorts;

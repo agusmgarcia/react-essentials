@@ -1,7 +1,6 @@
 export * from "./args";
 export * from "./errors";
 export * from "./files";
-export * from "./filters";
 export * from "./folders";
 export * from "./git";
 export * from "./npm";

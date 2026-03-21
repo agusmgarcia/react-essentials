@@ -10,7 +10,7 @@ const MIDDLEWARE = createFileMiddleware<string>({
   valid: ["app", "azure-func", "lib", "node"],
 });
 
-export default async function eslintConfigMiddleware(
+export default async function createEslintConfigMiddleware(
   context: CreateFileMiddlewareTypes.Context,
 ): Promise<void> {
   await Promise.all([MIDDLEWARE(context), deleteEslintConfigFiles(context)]);

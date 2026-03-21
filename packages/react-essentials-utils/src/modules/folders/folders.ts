@@ -7,7 +7,7 @@ import fs from "fs";
  * @returns A promise that resolves to `true` if the path is a directory, otherwise `false`.
  * @throws Will reject the promise if an error occurs while accessing the path.
  */
-export async function isFolder(path: string): Promise<boolean> {
+async function isFolder(path: string): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) =>
     fs.stat(path, (error, data) =>
       !error ? resolve(data.isDirectory()) : reject(error),
@@ -22,7 +22,7 @@ export async function isFolder(path: string): Promise<boolean> {
  * @returns A promise that resolves to an array of file and folder names in the specified directory.
  *          If the folder does not exist, resolves with an empty array.
  */
-export async function readFolder(path: string): Promise<string[]> {
+async function readFolder(path: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) =>
     fs.readdir(path, { encoding: "utf-8" }, (error, files) =>
       !error || error.code === "ENOENT" ? resolve(files || []) : reject(error),
@@ -36,7 +36,7 @@ export async function readFolder(path: string): Promise<string[]> {
  * @param path - The path to the folder to remove.
  * @returns A promise that resolves when the folder has been removed.
  */
-export function removeFolder(path: string): Promise<void> {
+function removeFolder(path: string): Promise<void> {
   return new Promise<void>((resolve, reject) =>
     fs.rm(path, { force: true, recursive: true }, (error) =>
       !error ? resolve() : reject(error),
@@ -50,7 +50,7 @@ export function removeFolder(path: string): Promise<void> {
  * @param path - The path to the folder to check and remove if empty.
  * @returns A promise that resolves when the folder has been removed or if it was not empty.
  */
-export function removeFolderIfEmpty(path: string): Promise<void> {
+function removeFolderIfEmpty(path: string): Promise<void> {
   return readFolder(path)
     .then((files) => !files.length)
     .then((empty) => (empty ? removeFolder(path) : Promise.resolve()));
@@ -62,10 +62,19 @@ export function removeFolderIfEmpty(path: string): Promise<void> {
  * @param path - The path to the folder to create or ensure exists.
  * @returns A promise that resolves when the folder exists.
  */
-export async function upsertFolder(path: string): Promise<void> {
+async function upsertFolder(path: string): Promise<void> {
   await new Promise<void>((resolve, reject) =>
     fs.mkdir(path, { recursive: true }, (error) =>
       !error || error.code === "EEXIST" ? resolve() : reject(error),
     ),
   );
 }
+
+const folders = {
+  isFolder,
+  readFolder,
+  removeFolder,
+  removeFolderIfEmpty,
+  upsertFolder,
+};
+export default folders;

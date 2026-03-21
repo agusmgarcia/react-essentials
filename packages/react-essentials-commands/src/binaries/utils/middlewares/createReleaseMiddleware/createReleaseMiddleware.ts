@@ -42,7 +42,7 @@ const MIDDLEWARE = createFileMiddleware<Record<string, any>>({
   valid: ["app", "azure-func", "lib", "node"],
 });
 
-export default async function releaseMiddleware(
+export default async function createReleaseMiddleware(
   context: CreateFileMiddlewareTypes.Context,
 ): Promise<void> {
   await Promise.all([MIDDLEWARE(context), deleteWorkflowFiles(context)]);

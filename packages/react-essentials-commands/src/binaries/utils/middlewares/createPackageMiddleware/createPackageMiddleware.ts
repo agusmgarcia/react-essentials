@@ -38,7 +38,7 @@ const MIDDLEWARE = createFileMiddleware<Record<string, any>>({
   valid: ["app", "azure-func", "lib", "node"],
 });
 
-export default async function packageMiddleware(
+export default async function createPackageMiddleware(
   context: CreateFileMiddlewareTypes.Context,
 ): Promise<void> {
   await MIDDLEWARE(context);

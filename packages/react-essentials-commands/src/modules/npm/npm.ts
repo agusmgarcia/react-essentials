@@ -5,7 +5,7 @@ import { compare } from "semver";
 import { execute } from "#src/functions";
 import { git } from "#src/modules";
 
-export async function getMonorepoDetails(): Promise<
+async function getMonorepoDetails(): Promise<
   { location: string; name: string } | undefined
 > {
   return await execute("npm query .workspace", false)
@@ -14,7 +14,7 @@ export async function getMonorepoDetails(): Promise<
     .then((ws) => ws.find((w: any) => w.realpath === process.cwd()));
 }
 
-export async function getNewTag(
+async function getNewTag(
   typeOfNewVersionOrTag: "major" | "minor" | "patch" | (string & {}),
 ): Promise<string | undefined> {
   let tag = await execute(
@@ -35,9 +35,7 @@ export async function getNewTag(
   }
 }
 
-export async function getVersion(
-  dependency: string,
-): Promise<string | undefined> {
+async function getVersion(dependency: string): Promise<string | undefined> {
   return await execute(`npm view ${dependency} version`, false)
     .then((result) => result.split(EOL))
     .then((result) => result.filter((r) => !!r))
@@ -46,3 +44,6 @@ export async function getVersion(
     .then((result) => result.at(-1))
     .catch(() => undefined);
 }
+
+const npm = { getMonorepoDetails, getNewTag, getVersion };
+export default npm;

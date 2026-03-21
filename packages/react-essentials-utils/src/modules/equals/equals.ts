@@ -6,7 +6,7 @@
  * @param b - The second value to compare.
  * @returns `true` if the values are strictly equal, otherwise `false`.
  */
-export function strict(a: unknown, b: unknown): boolean {
+function strict(a: unknown, b: unknown): boolean {
   return equal(a, b, 0);
 }
 
@@ -19,7 +19,7 @@ export function strict(a: unknown, b: unknown): boolean {
  * @param level - The recursion depth for comparison. Defaults to 1.
  * @returns `true` if the values are shallowly equal, otherwise `false`.
  */
-export function shallow(a: unknown, b: unknown, level = 1): boolean {
+function shallow(a: unknown, b: unknown, level = 1): boolean {
   return equal(a, b, level);
 }
 
@@ -31,7 +31,7 @@ export function shallow(a: unknown, b: unknown, level = 1): boolean {
  * @param b - The second value to compare.
  * @returns `true` if the values are deeply equal, otherwise `false`.
  */
-export function deep(a: unknown, b: unknown): boolean {
+function deep(a: unknown, b: unknown): boolean {
   return equal(a, b, undefined);
 }
 
@@ -77,3 +77,6 @@ function equal(a: unknown, b: unknown, level: number | undefined): boolean {
 
   return false;
 }
+
+const equals = { deep, shallow, strict };
+export default equals;

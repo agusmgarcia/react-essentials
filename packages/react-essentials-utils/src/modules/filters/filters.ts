@@ -10,7 +10,7 @@ import { type Func } from "#src/types";
  * @param array - The array being filtered.
  * @returns `true` if the element is distinct, otherwise `false`.
  */
-export function distinct<TElement>(
+function distinct<TElement>(
   element: TElement,
   index: number,
   array: ReadonlyArray<TElement>,
@@ -24,14 +24,14 @@ export function distinct<TElement>(
  * @param compare - A comparison function.
  * @returns A function that determines if an element is distinct based on the specified comparison method.
  */
-export function distinct<TElement>(
+function distinct<TElement>(
   compare: Func<boolean, [element1: TElement, element2: TElement]>,
 ): Func<
   boolean,
   [element: TElement, index: number, array: ReadonlyArray<TElement>]
 >;
 
-export function distinct<TElement>(
+function distinct<TElement>(
   elementOrCompare:
     | TElement
     | Func<boolean, [element1: TElement, element2: TElement]>,
@@ -70,7 +70,7 @@ export function distinct<TElement>(
  * @param pageSize - The number of elements per page.
  * @returns A function that determines if an element belongs to the specified page.
  */
-export function paginate<TElement>(
+function paginate<TElement>(
   pageIndex: number,
   pageSize: number,
 ): Func<
@@ -80,3 +80,6 @@ export function paginate<TElement>(
   return (_element, index, _array) =>
     index >= pageSize * (pageIndex - 1) && index < pageSize * pageIndex;
 }
+
+const filters = { distinct, paginate };
+export default filters;

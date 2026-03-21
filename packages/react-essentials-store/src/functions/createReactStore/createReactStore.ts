@@ -18,11 +18,11 @@ import {
   type Output,
 } from "./createReactStore.types";
 
-const StoreContext = createContext<Store<any> | null>(null);
-StoreContext.displayName = "StoreContext";
+const STORE_CONTEXT = createContext<Store<any> | null>(null);
+STORE_CONTEXT.displayName = "StoreContext";
 
-const StateContext = createContextSelector(Number.MIN_SAFE_INTEGER);
-StateContext.displayName = "StateContext";
+const STATE_CONTEXT = createContextSelector(Number.MIN_SAFE_INTEGER);
+STATE_CONTEXT.displayName = "StateContext";
 
 /**
  * Creates a React store provider and a selector hook for state management using context.
@@ -67,24 +67,24 @@ export default function createReactStore<
       }, []);
 
       return React.createElement(
-        StoreContext.Provider,
+        STORE_CONTEXT.Provider,
         { value: storeRef.current },
         // eslint-disable-next-line react/no-children-prop
         React.createElement(
-          StateContext.Provider,
+          STATE_CONTEXT.Provider,
           { children: undefined, value: state },
           props.children,
         ),
       );
     },
     useSelector: (selector) => {
-      const store = useContext(StoreContext);
+      const store = useContext(STORE_CONTEXT);
       if (!store)
         throw new Error(
           "You should wrap your component within <StoreProvider>",
         );
 
-      return useContextSelector(StateContext, () =>
+      return useContextSelector(STATE_CONTEXT, () =>
         selector(store.state as any),
       );
     },

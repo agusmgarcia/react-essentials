@@ -1,2 +1,2 @@
-export * as equals from "./equals";
+export { default as equals } from "./equals";
 export type * as EqualsTypes from "./equals.types";

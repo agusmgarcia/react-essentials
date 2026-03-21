@@ -10,7 +10,7 @@ import { type NestedPaths } from "./properties.types";
  * @param property - The property name to look for on the object.
  * @returns `true` if the property exists on the object otherwise `false`.
  */
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
 ): element is Record<TProperty, unknown>;
@@ -24,7 +24,7 @@ export function has<TProperty extends string>(
  * @param type - The expected JavaScript type of the property value.
  * @returns `true` if the property exists on the object and matches the type if specified, otherwise `false`.
  */
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "boolean",
@@ -39,7 +39,7 @@ export function has<TProperty extends string>(
  * @param type - The expected JavaScript type of the property value.
  * @returns `true` if the property exists on the object and matches the type if specified, otherwise `false`.
  */
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "function",
@@ -54,7 +54,7 @@ export function has<TProperty extends string>(
  * @param type - The expected JavaScript type of the property value.
  * @returns `true` if the property exists on the object and matches the type if specified, otherwise `false`.
  */
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "null",
@@ -69,7 +69,7 @@ export function has<TProperty extends string>(
  * @param type - The expected JavaScript type of the property value.
  * @returns `true` if the property exists on the object and matches the type if specified, otherwise `false`.
  */
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "number",
@@ -84,7 +84,7 @@ export function has<TProperty extends string>(
  * @param type - The expected JavaScript type of the property value.
  * @returns `true` if the property exists on the object and matches the type if specified, otherwise `false`.
  */
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "object",
@@ -99,7 +99,7 @@ export function has<TProperty extends string>(
  * @param type - The expected JavaScript type of the property value.
  * @returns `true` if the property exists on the object and matches the type if specified, otherwise `false`.
  */
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "string",
@@ -114,13 +114,13 @@ export function has<TProperty extends string>(
  * @param type - The expected JavaScript type of the property value.
  * @returns `true` if the property exists on the object and matches the type if specified, otherwise `false`.
  */
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "undefined",
 ): element is Record<TProperty, undefined>;
 
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type?:
@@ -160,7 +160,7 @@ export function has<TProperty extends string>(
  * - The function is recursive and will sort nested objects and arrays according to the relevant subset of `preferred` paths.
  * - The `NestedPaths<TElement>` type is used to infer all possible nested property paths for the given input type.
  */
-export function sort<TElement>(
+function sort<TElement>(
   input: TElement,
   preferred: NestedPaths<TElement>[] = [],
 ): TElement {
@@ -224,3 +224,6 @@ function recursiveSort<TElement>(
       return result;
     }, {} as TElement);
 }
+
+const properties = { has, sort };
+export default properties;

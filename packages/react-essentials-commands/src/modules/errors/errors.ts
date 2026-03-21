@@ -1,9 +1,6 @@
 import { properties } from "#src/modules";
 
-export function getMessage(
-  error: unknown,
-  notFound?: string,
-): string | undefined {
+function getMessage(error: unknown, notFound?: string): string | undefined {
   if (typeof error === "undefined") return undefined;
   if (typeof error === "string") return error;
   if (properties.has(error, "message", "string")) return error.message;
@@ -13,3 +10,6 @@ export function getMessage(
     return error.message.toString();
   return notFound || "An unexpected error occurred";
 }
+
+const errors = { getMessage };
+export default errors;

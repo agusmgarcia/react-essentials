@@ -1,4 +1,4 @@
-import * as errors from "./errors";
+import { default as errors } from "./errors";
 
 describe("errors", () => {
   describe("emit", () => {

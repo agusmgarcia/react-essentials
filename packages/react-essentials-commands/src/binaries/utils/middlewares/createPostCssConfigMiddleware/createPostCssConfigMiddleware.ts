@@ -10,7 +10,7 @@ const MIDDLEWARE = createFileMiddleware<string>({
   valid: ["app", "lib"],
 });
 
-export default async function postCssConfigMiddleware(
+export default async function createPostCssConfigMiddleware(
   context: CreateFileMiddlewareTypes.Context,
 ): Promise<void> {
   await Promise.all([MIDDLEWARE(context), deletePostCSSConfigFiles(context)]);

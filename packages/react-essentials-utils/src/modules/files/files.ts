@@ -9,7 +9,7 @@ import { properties } from "#src/modules";
  * @returns A promise that resolves to `true` if the path is a file, otherwise `false`.
  * @throws Will reject the promise if an error occurs while accessing the path.
  */
-export function isFile(path: string): Promise<boolean> {
+function isFile(path: string): Promise<boolean> {
   return new Promise((resolve, reject) =>
     fs.stat(path, (error, stats) =>
       !error ? resolve(stats.isFile()) : reject(error),
@@ -24,7 +24,7 @@ export function isFile(path: string): Promise<boolean> {
  * @returns A promise that resolves to the file contents as a string, or empty `string` if the file does not exist.
  * @throws Will throw if an error occurs other than the file not existing.
  */
-export async function readFile(path: string): Promise<string> {
+async function readFile(path: string): Promise<string> {
   try {
     return await readRequiredFile(path);
   } catch (error) {
@@ -40,7 +40,7 @@ export async function readFile(path: string): Promise<string> {
  * @returns A promise that resolves to the file contents as a string.
  * @throws Will reject the promise if the file does not exist or another error occurs.
  */
-export function readRequiredFile(path: string): Promise<string> {
+function readRequiredFile(path: string): Promise<string> {
   return new Promise<string>((resolve, reject) =>
     fs.readFile(path, { encoding: "utf-8" }, (error, data) =>
       !error ? resolve(data) : reject(error),
@@ -55,7 +55,7 @@ export function readRequiredFile(path: string): Promise<string> {
  * @returns A promise that resolves when the file or directory has been removed.
  * @throws Will reject the promise if an error occurs during removal.
  */
-export function removeFile(path: string): Promise<void> {
+function removeFile(path: string): Promise<void> {
   return new Promise<void>((resolve, reject) =>
     fs.rm(path, { force: true, recursive: true }, (error) =>
       !error ? resolve() : reject(error),
@@ -71,10 +71,13 @@ export function removeFile(path: string): Promise<void> {
  * @returns A promise that resolves when the file has been written.
  * @throws Will reject the promise if an error occurs during writing.
  */
-export async function upsertFile(path: string, data: string): Promise<void> {
+async function upsertFile(path: string, data: string): Promise<void> {
   return new Promise<void>((resolve, reject) =>
     fs.writeFile(path, data, { encoding: "utf-8", flag: "w+" }, (error) =>
       !error ? resolve() : reject(error),
     ),
   );
 }
+
+const files = { isFile, readFile, readRequiredFile, removeFile, upsertFile };
+export default files;

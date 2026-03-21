@@ -40,7 +40,7 @@ export type Options = {
  * Provides methods to get and set cache entries, supporting both synchronous and asynchronous
  * implementations. The methods may optionally accept an AbortSignal for cancellation support.
  */
-export interface Storage {
+export type Storage = {
   /**
    * Deletes a cache entry.
    *
@@ -72,13 +72,13 @@ export interface Storage {
    * @param signal - An AbortSignal to support cancellation of the operation.
    */
   setEntry(key: string, entry: Entry, signal: AbortSignal): Promise<void>;
-}
+};
 
 /**
  * Represents a mutual exclusion lock interface for running asynchronous functions exclusively.
  * @template TResult The result type returned by the callback function.
  */
-export interface Mutex {
+export type Mutex = {
   /**
    * Runs the provided callback function exclusively, ensuring no other operations
    * are running concurrently within the mutex.
@@ -95,7 +95,7 @@ export interface Mutex {
    * @returns A promise that resolves with the result of the callback.
    */
   runShared<TResult>(callback: AsyncFunc<TResult>): Promise<TResult>;
-}
+};
 
 /**
  * Represents a cache entry, which can either store a successful result or an error,

@@ -9,7 +9,7 @@ const maxDaysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * @param days - The number of days to add to the input date. Can be positive or negative.
  * @returns The resulting date as a string after adding the specified number of days.
  */
-export function addDays(date: string, days: number): string {
+function addDays(date: string, days: number): string {
   const tmp = new Date(date);
   tmp.setUTCDate(tmp.getUTCDate() + days);
   return toString(tmp);
@@ -22,7 +22,7 @@ export function addDays(date: string, days: number): string {
  * @param months - The number of months to add to the input date. Can be positive or negative.
  * @returns The resulting date as a string after adding the specified number of months.
  */
-export function addMonths(date: string, months: number): string {
+function addMonths(date: string, months: number): string {
   const tmp = new Date(date);
   tmp.setUTCMonth(tmp.getUTCMonth() + months);
   return toString(tmp);
@@ -35,7 +35,7 @@ export function addMonths(date: string, months: number): string {
  * @param years - The number of years to add to the input date. Can be positive or negative.
  * @returns The resulting date as a string after adding the specified number of years.
  */
-export function addYears(date: string, years: number): string {
+function addYears(date: string, years: number): string {
   const tmp = new Date(date);
   tmp.setUTCFullYear(tmp.getUTCFullYear() + years);
   return toString(tmp);
@@ -50,7 +50,7 @@ export function addYears(date: string, years: number): string {
  * @returns The clamped date as a string. If the input date is less than `minDate`, it returns `minDate`.
  * If the input date is greater than `maxDate`, it returns `maxDate`. Otherwise, it returns the input date.
  */
-export function clamp(date: string, minDate: string, maxDate: string): string {
+function clamp(date: string, minDate: string, maxDate: string): string {
   return min(max(date, minDate), maxDate);
 }
 
@@ -66,7 +66,7 @@ export function clamp(date: string, minDate: string, maxDate: string): string {
  * It calculates the difference in milliseconds between the two dates and converts it to days.
  * The result is rounded up using `Math.ceil` to ensure partial days are counted as full days.
  */
-export function differenceInDays(endDate: string, startDate: string): number {
+function differenceInDays(endDate: string, startDate: string): number {
   const upper = new Date(endDate).getTime();
   const lower = new Date(startDate).getTime();
   const diffTime = upper - lower;
@@ -80,7 +80,7 @@ export function differenceInDays(endDate: string, startDate: string): number {
  * @param timeZoneName - Optional time zone name to include in the formatted date.
  * @returns The current date as a string in the format YYYY-MM-DD.
  */
-export function getCurrentDate(
+function getCurrentDate(
   timeZone?: Intl.DateTimeFormatOptions["timeZone"],
   timeZoneName?: Intl.DateTimeFormatOptions["timeZoneName"],
 ): string {
@@ -103,7 +103,7 @@ export function getCurrentDate(
  * @param date - The input date as a string in the format YYYY-MM-DD.
  * @returns The date part as a number.
  */
-export function getDate(date: string): number {
+function getDate(date: string): number {
   return +date.replace(
     dateRegexp,
     (_: string, _year: string, _month: string, date: string) => date,
@@ -116,7 +116,7 @@ export function getDate(date: string): number {
  * @param date - The input date as a string in the format YYYY-MM-DD.
  * @returns The day of the week as a number (0-6), where 0 represents Sunday and 6 represents Saturday.
  */
-export function getDayOfTheWeek(date: string): number {
+function getDayOfTheWeek(date: string): number {
   return new Date(date).getUTCDay();
 }
 
@@ -126,7 +126,7 @@ export function getDayOfTheWeek(date: string): number {
  * @param date - The input date as a string in the format YYYY-MM-DD.
  * @returns The first date of the month as a string in the format YYYY-MM-DD.
  */
-export function getFirstDateOfMonth(date: string): string {
+function getFirstDateOfMonth(date: string): string {
   return date.replace(
     dateRegexp,
     (_: string, year: string, month: string) => `${year}-${month}-01`,
@@ -139,7 +139,7 @@ export function getFirstDateOfMonth(date: string): string {
  * @param date - The input date as a string in the format YYYY-MM-DD.
  * @returns The last date of the month as a string in the format YYYY-MM-DD.
  */
-export function getLastDateOfMonth(date: string): string {
+function getLastDateOfMonth(date: string): string {
   return addDays(addMonths(getFirstDateOfMonth(date), 1), -1);
 }
 
@@ -149,7 +149,7 @@ export function getLastDateOfMonth(date: string): string {
  * @param date - The input date as a string in the format YYYY-MM-DD.
  * @returns The month as a number (1-12).
  */
-export function getMonth(date: string): number {
+function getMonth(date: string): number {
   return +date.replace(
     dateRegexp,
     (_: string, _year: string, month: string, _date: string) => month,
@@ -162,7 +162,7 @@ export function getMonth(date: string): number {
  * @param date - The input date as a string in the format YYYY-MM-DD.
  * @returns The year as a number.
  */
-export function getYear(date: string): number {
+function getYear(date: string): number {
   return +date.replace(
     dateRegexp,
     (_: string, year: string, _month: string, _date: string) => year,
@@ -180,7 +180,7 @@ function isLeap(year: number): boolean {
  * @param dates - Additional dates as strings in the format YYYY-MM-DD.
  * @returns The maximum date as a string in the format YYYY-MM-DD.
  */
-export function max(date: string, ...dates: string[]): string {
+function max(date: string, ...dates: string[]): string {
   let result = date;
   for (const aux of dates) if (aux > result) result = aux;
   return result;
@@ -193,7 +193,7 @@ export function max(date: string, ...dates: string[]): string {
  * @param dates - Additional dates as strings in the format YYYY-MM-DD.
  * @returns The minimum date as a string in the format YYYY-MM-DD.
  */
-export function min(date: string, ...dates: string[]): string {
+function min(date: string, ...dates: string[]): string {
   let result = date;
   for (const aux of dates) if (aux < result) result = aux;
   return result;
@@ -207,7 +207,7 @@ export function min(date: string, ...dates: string[]): string {
  * @param options - Optional formatting options for the date.
  * @returns The formatted date string.
  */
-export function toDateString(
+function toDateString(
   date: string,
   locale?: string,
   options?: Omit<
@@ -233,7 +233,7 @@ export function toDateString(
  * @param date - The input date as a number (timestamp).
  * @returns The formatted date string in the format YYYY-MM-DD.
  */
-export function toString(date: number): string;
+function toString(date: number): string;
 
 /**
  * Converts a date to a string in the format YYYY-MM-DD.
@@ -241,9 +241,9 @@ export function toString(date: number): string;
  * @param date - The input date as a Date object.
  * @returns The formatted date string in the format YYYY-MM-DD.
  */
-export function toString(date: Date): string;
+function toString(date: Date): string;
 
-export function toString(date: Date | number): string {
+function toString(date: Date | number): string {
   date = typeof date === "number" ? new Date(date) : date;
   return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, "0")}-${date.getUTCDate().toString().padStart(2, "0")}`;
 }
@@ -254,7 +254,7 @@ export function toString(date: Date | number): string {
  * @param date - The input date as a string in the format YYYY-MM-DD.
  * @returns `true` if the date is valid, `false` otherwise.
  */
-export function validate(date: string): boolean {
+function validate(date: string): boolean {
   const matches = dateRegexp.exec(date);
   if (!matches) return false;
 
@@ -267,3 +267,24 @@ export function validate(date: string): boolean {
   if (month === 2 && isLeap(year)) return day <= 29;
   return day <= maxDaysPerMonth[month - 1];
 }
+
+const dates = {
+  addDays,
+  addMonths,
+  addYears,
+  clamp,
+  differenceInDays,
+  getCurrentDate,
+  getDate,
+  getDayOfTheWeek,
+  getFirstDateOfMonth,
+  getLastDateOfMonth,
+  getMonth,
+  getYear,
+  max,
+  min,
+  toDateString,
+  toString,
+  validate,
+};
+export default dates;

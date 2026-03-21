@@ -1,4 +1,4 @@
-import * as equals from "./equals";
+import { default as equals } from "./equals";
 
 describe("equals", () => {
   describe("strict", () => {

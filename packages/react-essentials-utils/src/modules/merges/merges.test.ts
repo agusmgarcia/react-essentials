@@ -1,4 +1,4 @@
-import * as merges from "./merges";
+import { default as merges } from "./merges";
 
 describe("merges", () => {
   describe("strict", () => {

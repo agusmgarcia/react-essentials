@@ -1,4 +1,4 @@
-import * as sorts from "./sorts";
+import { default as sorts } from "./sorts";
 
 describe("sorts", () => {
   describe("byNumberAsc", () => {

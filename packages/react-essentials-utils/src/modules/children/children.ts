@@ -16,7 +16,7 @@ import { type Func } from "#src/types";
  *                 the current child if it returns true.
  * @returns A new React node tree with the transformation applied to the matching children.
  */
-export function mapOfType<TType extends Func<React.ReactElement, [props: any]>>(
+function mapOfType<TType extends Func<React.ReactElement, [props: any]>>(
   type: TType,
   children: React.ReactNode,
   transform: Func<
@@ -38,7 +38,7 @@ export function mapOfType<TType extends Func<React.ReactElement, [props: any]>>(
  *                 the current child if it returns true.
  * @returns A new React node tree with the transformation applied to the matching children.
  */
-export function mapOfType<TType extends "boolean">(
+function mapOfType<TType extends "boolean">(
   type: TType,
   children: React.ReactNode,
   transform: Func<React.ReactNode, [child: boolean]>,
@@ -57,7 +57,7 @@ export function mapOfType<TType extends "boolean">(
  *                 the current child if it returns true.
  * @returns A new React node tree with the transformation applied to the matching children.
  */
-export function mapOfType<TType extends "null">(
+function mapOfType<TType extends "null">(
   type: TType,
   children: React.ReactNode,
   transform: Func<React.ReactNode, [child: null]>,
@@ -76,7 +76,7 @@ export function mapOfType<TType extends "null">(
  *                 the current child if it returns true.
  * @returns A new React node tree with the transformation applied to the matching children.
  */
-export function mapOfType<TType extends "number">(
+function mapOfType<TType extends "number">(
   type: TType,
   children: React.ReactNode,
   transform: Func<React.ReactNode, [child: number]>,
@@ -95,7 +95,7 @@ export function mapOfType<TType extends "number">(
  *                 the current child if it returns true.
  * @returns A new React node tree with the transformation applied to the matching children.
  */
-export function mapOfType<TType extends "string">(
+function mapOfType<TType extends "string">(
   type: TType,
   children: React.ReactNode,
   transform: Func<React.ReactNode, [child: string]>,
@@ -114,14 +114,14 @@ export function mapOfType<TType extends "string">(
  *                 the current child if it returns true.
  * @returns A new React node tree with the transformation applied to the matching children.
  */
-export function mapOfType<TType extends "undefined">(
+function mapOfType<TType extends "undefined">(
   type: TType,
   children: React.ReactNode,
   transform: Func<React.ReactNode, [child: undefined]>,
   stopIf?: Func<boolean, [child: React.ReactNode]>,
 ): React.ReactNode;
 
-export function mapOfType(
+function mapOfType(
   type: any,
   children: React.ReactNode,
   transform: Func<React.ReactNode, [child: any]>,
@@ -200,7 +200,7 @@ function assignKeyIfNeeded(
  *                   an array of nodes, or any other valid ReactNode.
  * @returns A boolean indicating whether the given React node is of the specified type.
  */
-export function isOfType<TType extends Func<React.ReactElement, [props: any]>>(
+function isOfType<TType extends Func<React.ReactElement, [props: any]>>(
   type: TType,
   children: React.ReactNode,
 ): children is React.ReactElement<Parameters<TType>[0], TType>;
@@ -214,7 +214,7 @@ export function isOfType<TType extends Func<React.ReactElement, [props: any]>>(
  *                   an array of nodes, or any other valid ReactNode.
  * @returns A boolean indicating whether the given React node is of type "boolean".
  */
-export function isOfType<TType extends "boolean">(
+function isOfType<TType extends "boolean">(
   type: TType,
   children: React.ReactNode,
 ): children is boolean;
@@ -228,7 +228,7 @@ export function isOfType<TType extends "boolean">(
  *                   an array of nodes, or any other valid ReactNode.
  * @returns A boolean indicating whether the given React node is of type "null".
  */
-export function isOfType<TType extends "null">(
+function isOfType<TType extends "null">(
   type: TType,
   children: React.ReactNode,
 ): children is null;
@@ -242,7 +242,7 @@ export function isOfType<TType extends "null">(
  *                   an array of nodes, or any other valid ReactNode.
  * @returns A boolean indicating whether the given React node is of type "number".
  */
-export function isOfType<TType extends "number">(
+function isOfType<TType extends "number">(
   type: TType,
   children: React.ReactNode,
 ): children is number;
@@ -256,7 +256,7 @@ export function isOfType<TType extends "number">(
  *                   an array of nodes, or any other valid ReactNode.
  * @returns A boolean indicating whether the given React node is of type "string".
  */
-export function isOfType<TType extends "string">(
+function isOfType<TType extends "string">(
   type: TType,
   children: React.ReactNode,
 ): children is string;
@@ -270,12 +270,12 @@ export function isOfType<TType extends "string">(
  *                   an array of nodes, or any other valid ReactNode.
  * @returns A boolean indicating whether the given React node is of type "undefined".
  */
-export function isOfType<TType extends "undefined">(
+function isOfType<TType extends "undefined">(
   type: TType,
   children: React.ReactNode,
 ): children is undefined;
 
-export function isOfType(type: any, children: React.ReactNode): boolean {
+function isOfType(type: any, children: React.ReactNode): boolean {
   if (typeof children !== "object") return typeof children === type;
   if (!children) return type === "null";
   if (Array.isArray(children)) return false;
@@ -283,3 +283,6 @@ export function isOfType(type: any, children: React.ReactNode): boolean {
   if (children.type !== type) return false;
   return true;
 }
+
+const children = { isOfType, mapOfType };
+export default children;

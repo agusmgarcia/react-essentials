@@ -8,7 +8,7 @@ import { type AsyncFunc, type Func } from "#src/types";
  * @throws The provided error object.
  * @returns This function never returns as it always throws an error.
  */
-export function emit(error: Error): never;
+function emit(error: Error): never;
 
 /**
  * Throws an error with the provided message and options.
@@ -18,12 +18,9 @@ export function emit(error: Error): never;
  * @throws An Error object with the provided message and options.
  * @returns This function never returns as it always throws an error.
  */
-export function emit(message: string, options?: ErrorOptions): never;
+function emit(message: string, options?: ErrorOptions): never;
 
-export function emit(
-  errorOrMessage: Error | string,
-  options?: ErrorOptions,
-): never {
+function emit(errorOrMessage: Error | string, options?: ErrorOptions): never {
   if (typeof errorOrMessage === "string")
     throw new Error(errorOrMessage, options);
 
@@ -38,10 +35,7 @@ export function emit(
  *
  *  @returns The message from the error object, or the `notFound` string if provided, or a default message if no message is found.
  */
-export function getMessage(
-  error: unknown,
-  notFound?: string,
-): string | undefined {
+function getMessage(error: unknown, notFound?: string): string | undefined {
   if (typeof error === "undefined") return undefined;
   if (typeof error === "string") return error;
   if (properties.has(error, "message", "string")) return error.message;
@@ -65,7 +59,7 @@ export function getMessage(
  *
  * @returns The result of `callback`, or the result of `catchCallback` if an error occurs.
  */
-export function handle<TResult, TResultCatch>(
+function handle<TResult, TResultCatch>(
   callback: Func<TResult>,
   catchCallback: Func<TResultCatch, [error: unknown]>,
 ): TResult | TResultCatch;
@@ -83,12 +77,12 @@ export function handle<TResult, TResultCatch>(
  *
  * @returns The result of `callback`, or the result of `catchCallback` if an error occurs.
  */
-export function handle<TResult, TResultCatch>(
+function handle<TResult, TResultCatch>(
   callback: AsyncFunc<TResult>,
   catchCallback: Func<TResultCatch, [error: unknown]>,
 ): Promise<TResult | TResultCatch>;
 
-export function handle<TResult, TResultCatch>(
+function handle<TResult, TResultCatch>(
   callback: Func<TResult> | AsyncFunc<TResult>,
   catchCallback: Func<TResultCatch, [error: unknown]>,
 ): TResult | TResultCatch | Promise<TResult | TResultCatch> {
@@ -100,3 +94,6 @@ export function handle<TResult, TResultCatch>(
     return catchCallback(error);
   }
 }
+
+const errors = { emit, getMessage, handle };
+export default errors;

@@ -1,4 +1,4 @@
-import * as finds from "./finds";
+import { default as finds } from "./finds";
 
 describe("finds utility functions", () => {
   describe("first", () => {

@@ -8,7 +8,7 @@ import { type Func } from "#src/types";
  * @param next - The next object or array to merge from.
  * @returns The merged result.
  */
-export function strict(base: unknown, next: unknown): any {
+function strict(base: unknown, next: unknown): any {
   return merge(base, next, 0, equals.deep);
 }
 
@@ -24,7 +24,7 @@ export function strict(base: unknown, next: unknown): any {
  *     - `level`: The depth level for merging.
  * @returns The merged result.
  */
-export function shallow(
+function shallow(
   base: unknown,
   next: unknown,
   options:
@@ -57,7 +57,7 @@ export function shallow(
  *   - `array.comparator`: A custom comparator function for arrays.
  * @returns The merged result.
  */
-export function deep(
+function deep(
   base: unknown,
   next: unknown,
   options?: {
@@ -122,3 +122,6 @@ function merge(
 }
 
 type ArrayComparatorFn = Func<boolean, [element1: any, element2: any]>;
+
+const merges = { deep, shallow, strict };
+export default merges;

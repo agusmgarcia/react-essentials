@@ -1,6 +1,6 @@
 import fs from "fs";
 
-export async function isFolder(path: string): Promise<boolean> {
+async function isFolder(path: string): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) =>
     fs.stat(path, (error, data) =>
       !error ? resolve(data.isDirectory()) : reject(error),
@@ -8,7 +8,7 @@ export async function isFolder(path: string): Promise<boolean> {
   );
 }
 
-export async function readFolder(path: string): Promise<string[]> {
+async function readFolder(path: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) =>
     fs.readdir(path, { encoding: "utf-8" }, (error, files) =>
       !error || error.code === "ENOENT" ? resolve(files || []) : reject(error),
@@ -16,7 +16,7 @@ export async function readFolder(path: string): Promise<string[]> {
   );
 }
 
-export function removeFolder(path: string): Promise<void> {
+function removeFolder(path: string): Promise<void> {
   return new Promise<void>((resolve, reject) =>
     fs.rm(path, { force: true, recursive: true }, (error) =>
       !error ? resolve() : reject(error),
@@ -24,16 +24,25 @@ export function removeFolder(path: string): Promise<void> {
   );
 }
 
-export function removeFolderIfEmpty(path: string): Promise<void> {
+function removeFolderIfEmpty(path: string): Promise<void> {
   return readFolder(path)
     .then((files) => !files.length)
     .then((empty) => (empty ? removeFolder(path) : Promise.resolve()));
 }
 
-export async function upsertFolder(path: string): Promise<void> {
+async function upsertFolder(path: string): Promise<void> {
   await new Promise<void>((resolve, reject) =>
     fs.mkdir(path, { recursive: true }, (error) =>
       !error || error.code === "EEXIST" ? resolve() : reject(error),
     ),
   );
 }
+
+const folders = {
+  isFolder,
+  readFolder,
+  removeFolder,
+  removeFolderIfEmpty,
+  upsertFolder,
+};
+export default folders;

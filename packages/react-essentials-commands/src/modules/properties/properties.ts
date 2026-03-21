@@ -2,54 +2,54 @@ import { type Func } from "#src/types";
 
 import { type NestedPaths } from "./properties.types";
 
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
 ): element is Record<TProperty, unknown>;
 
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "boolean",
 ): element is Record<TProperty, boolean>;
 
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "function",
 ): element is Record<TProperty, Func<any, [...any[]]>>;
 
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "null",
 ): element is Record<TProperty, null>;
 
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "number",
 ): element is Record<TProperty, number>;
 
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "object",
 ): element is Record<TProperty, Record<string, unknown>>;
 
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "string",
 ): element is Record<TProperty, string>;
 
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type: "undefined",
 ): element is Record<TProperty, undefined>;
 
-export function has<TProperty extends string>(
+function has<TProperty extends string>(
   element: unknown,
   property: TProperty,
   type?:
@@ -74,7 +74,7 @@ export function has<TProperty extends string>(
   return true;
 }
 
-export function sort<TElement>(
+function sort<TElement>(
   input: TElement,
   preferred: NestedPaths<TElement>[] = [],
 ): TElement {
@@ -138,3 +138,6 @@ function recursiveSort<TElement>(
       return result;
     }, {} as TElement);
 }
+
+const properties = { has, sort };
+export default properties;

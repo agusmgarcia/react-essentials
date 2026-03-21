@@ -11,14 +11,18 @@ import { files, npm } from "#src/modules";
 
 import { type Input, type Output } from "./createEslintConfig.types";
 import {
+  APP_FILE_COMPOSITION,
   APP_FOLDER_STRUCTURE,
-  APP_INDEPENDENT_MODULES,
+  AZURE_FUNC_FILE_COMPOSITION,
   AZURE_FUNC_FOLDER_STRUCTURE,
-  AZURE_FUNC_INDEPENDENT_MODULES,
+  createAppIndependentModules,
+  createAzureFuncIndependentModules,
+  createLibIndependentModules,
+  createNodeIndependentModules,
+  LIB_FILE_COMPOSITION,
   LIB_FOLDER_STRUCTURE,
-  LIB_INDEPENDENT_MODULES,
+  NODE_FILE_COMPOSITION,
   NODE_FOLDER_STRUCTURE,
-  NODE_INDEPENDENT_MODULES,
 } from "./createEslintConfig.utils";
 
 /**
@@ -47,6 +51,17 @@ export default async function createEslintConfig(
         "project-structure": projectStructurePlugin,
       },
       rules: {
+        "project-structure/file-composition": [
+          "error",
+          core === "app"
+            ? APP_FILE_COMPOSITION
+            : core === "azure-func"
+              ? AZURE_FUNC_FILE_COMPOSITION
+              : core === "lib"
+                ? LIB_FILE_COMPOSITION
+                : NODE_FILE_COMPOSITION,
+        ],
+
         "project-structure/folder-structure": [
           "error",
           core === "app"
@@ -61,21 +76,21 @@ export default async function createEslintConfig(
         "project-structure/independent-modules": [
           "error",
           core === "app"
-            ? APP_INDEPENDENT_MODULES(
+            ? createAppIndependentModules(
                 monorepoDetails?.location,
                 tsconfig?.compilerOptions?.paths,
               )
             : core === "azure-func"
-              ? AZURE_FUNC_INDEPENDENT_MODULES(
+              ? createAzureFuncIndependentModules(
                   monorepoDetails?.location,
                   tsconfig?.compilerOptions?.paths,
                 )
               : core === "lib"
-                ? LIB_INDEPENDENT_MODULES(
+                ? createLibIndependentModules(
                     monorepoDetails?.location,
                     tsconfig?.compilerOptions?.paths,
                   )
-                : NODE_INDEPENDENT_MODULES(
+                : createNodeIndependentModules(
                     monorepoDetails?.location,
                     tsconfig?.compilerOptions?.paths,
                   ),
