@@ -11,6 +11,7 @@ import { files, npm } from "#src/modules";
 
 import { type Input, type Output } from "./createEslintConfig.types";
 import {
+  APP_FILE_COMPOSITION,
   APP_FOLDER_STRUCTURE,
   APP_INDEPENDENT_MODULES,
   AZURE_FUNC_FOLDER_STRUCTURE,
@@ -47,6 +48,17 @@ export default async function createEslintConfig(
         "project-structure": projectStructurePlugin,
       },
       rules: {
+        "project-structure/file-composition": [
+          "error",
+          core === "app"
+            ? APP_FILE_COMPOSITION
+            : core === "azure-func"
+              ? AZURE_FUNC_FILE_COMPOSITION
+              : core === "lib"
+                ? LIB_FILE_COMPOSITION
+                : NODE_FILE_COMPOSITION,
+        ],
+
         "project-structure/folder-structure": [
           "error",
           core === "app"

@@ -1,7 +1,39 @@
 import {
+  createFileComposition,
   createFolderStructure,
   createIndependentModules,
 } from "eslint-plugin-project-structure";
+import process from "process";
+
+const PRIVATE_FILE_ROOTS_COMPOSITION: Parameters<
+  typeof createFileComposition
+>[0]["filesRules"][number]["rules"] = [
+  {
+    format: "{camelCase}",
+    scope: "nestedSelectors",
+    selector: "arrowFunction",
+  },
+  {
+    format: "{PascalCase}",
+    scope: "fileRoot",
+    selector: "class",
+  },
+  {
+    format: "{camelCase}",
+    scope: ["fileRoot", "nestedSelectors"],
+    selector: "function",
+  },
+  {
+    format: "{PascalCase}",
+    scope: ["fileRoot", "nestedSelectors"],
+    selector: "type",
+  },
+  {
+    format: ["{camelCase}", "{SNAKE_CASE}"],
+    scope: ["fileRoot", "nestedSelectors"],
+    selector: "variable",
+  },
+];
 
 export const APP_FOLDER_STRUCTURE = createFolderStructure({
   projectRoot: process.cwd(),
@@ -687,6 +719,332 @@ export const APP_INDEPENDENT_MODULES = (
     },
     tsconfigPath: location ? `${location}/tsconfig.json` : undefined,
   });
+
+export const APP_FILE_COMPOSITION = createFileComposition({
+  filesRules: [
+    // <============================= CLIENTS =============================> //
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: "src/clients/*/index.ts",
+      rootSelectorsLimits: [
+        { limit: 1, selector: "class" },
+        { limit: 1, selector: "type" },
+      ],
+      rules: [
+        {
+          format: "{PascalCase}Client",
+          scope: "fileExport",
+          selector: "class",
+        },
+        {
+          format: "{PascalCase}ClientTypes",
+          scope: "fileExport",
+          selector: "type",
+        },
+      ],
+    },
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: "src/clients/*/*.types.ts",
+      rootSelectorsLimits: [{ limit: { min: 2 }, selector: "type" }],
+      rules: [
+        {
+          format: ["{PascalCase}Request", "{PascalCase}Response"],
+          scope: "fileExport",
+          selector: "type",
+        },
+        {
+          format: "{PascalCase}",
+          scope: "fileRoot",
+          selector: "type",
+        },
+      ],
+    },
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: ["src/clients/*/*.ts", "!src/clients/*/*.utils.ts"],
+      rootSelectorsLimits: [{ limit: { min: 1 }, selector: "class" }],
+      rules: [
+        {
+          format: "{FileName}",
+          scope: "fileExport",
+          selector: "class",
+        },
+        ...PRIVATE_FILE_ROOTS_COMPOSITION,
+      ],
+    },
+
+    // <============================ COMPONENTS ===========================> //
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: [
+        "src/components/*/**/index.ts",
+        "src/fragments/*/**/index.ts",
+        "src/pages/*/**/index.ts",
+      ],
+      rootSelectorsLimits: [
+        { limit: 1, selector: "function" },
+        { limit: 1, selector: "type" },
+      ],
+      rules: [
+        {
+          format: "{PascalCase}",
+          scope: "fileExport",
+          selector: "function",
+        },
+        {
+          format: "{PascalCase}Props",
+          scope: "fileExport",
+          selector: "type",
+        },
+      ],
+    },
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: [
+        "src/components/*/**/*.hooks.ts",
+        "src/fragments/*/**/*.hooks.ts",
+        "src/pages/*/**/*.hooks.ts",
+      ],
+      rootSelectorsLimits: [{ limit: { min: 1 }, selector: "function" }],
+      rules: [
+        {
+          filenamePartsToRemove: "hooks",
+          format: "use{FileName}",
+          scope: "fileExport",
+          selector: "function",
+        },
+        ...PRIVATE_FILE_ROOTS_COMPOSITION,
+      ],
+    },
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: [
+        "src/components/*/**/*.types.ts",
+        "src/fragments/*/**/*.types.ts",
+        "src/pages/*/**/*.types.ts",
+      ],
+      rootSelectorsLimits: [{ limit: { min: 1 }, selector: "type" }],
+      rules: [
+        {
+          filenamePartsToRemove: "types",
+          format: "{FileName}Props",
+          scope: "fileExport",
+          selector: "type",
+        },
+        {
+          format: "{PascalCase}",
+          scope: "fileRoot",
+          selector: "type",
+        },
+      ],
+    },
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: [
+        "src/components/*/**/*.tsx",
+        "src/fragments/*/**/*.tsx",
+        "src/pages/*/**/*.tsx",
+      ],
+      rootSelectorsLimits: [{ limit: { min: 1 }, selector: "function" }],
+      rules: [
+        {
+          format: "{FileName}",
+          scope: "fileExport",
+          selector: "function",
+        },
+        ...PRIVATE_FILE_ROOTS_COMPOSITION,
+      ],
+    },
+
+    // <============================== STORE ==============================> //
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: "src/store/index.ts",
+      rootSelectorsLimits: [
+        { limit: { min: 1 }, selector: "type" },
+        { limit: { min: 1 }, selector: "function" },
+        { limit: 1, selector: "variable" },
+      ],
+      rules: [
+        {
+          format: "{PascalCase}",
+          scope: "fileExport",
+          selector: "type",
+        },
+        {
+          format: "use{PascalCase}",
+          scope: "fileExport",
+          selector: "function",
+        },
+        {
+          format: "StoreProvider",
+          scope: "fileExport",
+          selector: "variable",
+        },
+      ],
+    },
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: "src/store/*/index.ts",
+      rootSelectorsLimits: [
+        { limit: 1, selector: "class" },
+        { limit: 1, selector: "type" },
+      ],
+      rules: [
+        {
+          format: "{PascalCase}Slice",
+          scope: "fileExport",
+          selector: "class",
+        },
+        {
+          format: "{PascalCase}SliceTypes",
+          scope: "fileExport",
+          selector: "type",
+        },
+      ],
+    },
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: [
+        "src/store/*/*.ts",
+        "!src/store/*/*.types.ts",
+        "!src/store/*/*.utils.ts",
+      ],
+      rootSelectorsLimits: [{ limit: { min: 1 }, selector: "class" }],
+      rules: [
+        {
+          format: "{FileName}",
+          scope: "fileExport",
+          selector: "class",
+        },
+        ...PRIVATE_FILE_ROOTS_COMPOSITION,
+      ],
+    },
+
+    // <============================= GENERAL =============================> //
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: "src/*/*/**/index.ts",
+      rootSelectorsLimits: [
+        { limit: 1, selector: ["class", "function"] },
+        { limit: 1, selector: "type" },
+      ],
+      rules: [
+        {
+          format: "{PascalCase}",
+          scope: "fileExport",
+          selector: "class",
+        },
+        {
+          format: "{camelCase}",
+          scope: "fileExport",
+          selector: "function",
+        },
+        {
+          format: "{PascalCase}",
+          scope: "fileExport",
+          selector: "type",
+        },
+      ],
+    },
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: "src/*/*/**/*.types.ts",
+      rootSelectorsLimits: [{ limit: { min: 1 }, selector: "type" }],
+      rules: [
+        {
+          format: "{PascalCase}",
+          scope: "fileExport",
+          selector: "type",
+        },
+        {
+          format: "{PascalCase}",
+          scope: "fileRoot",
+          selector: "type",
+        },
+      ],
+    },
+    {
+      allowOnlySpecifiedSelectors: {
+        fileExport: true,
+        fileRoot: true,
+        nestedSelectors: true,
+      },
+      filePattern: "src/*/*/**/*.utils.ts",
+      rootSelectorsLimits: [
+        { limit: { min: 1 }, selector: ["class", "function", "variable"] },
+      ],
+      rules: [
+        {
+          format: "{PascalCase}",
+          scope: "fileExport",
+          selector: "class",
+        },
+        {
+          format: "{camelCase}",
+          scope: "fileExport",
+          selector: "function",
+        },
+        {
+          format: "{SNAKE_CASE}",
+          scope: "fileExport",
+          selector: "variable",
+        },
+        ...PRIVATE_FILE_ROOTS_COMPOSITION,
+      ],
+    },
+  ],
+  projectRoot: process.cwd(),
+});
 
 export const AZURE_FUNC_FOLDER_STRUCTURE = createFolderStructure({
   projectRoot: process.cwd(),
