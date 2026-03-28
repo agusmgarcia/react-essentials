@@ -1196,7 +1196,7 @@ export function createAzureFuncIndependentModules(
       {
         allowImportsFrom: ["{dirname}/*/index.ts"],
         name: "src/*/index.ts",
-        pattern: ["src/*/index.ts", "!src/functions/index.ts"],
+        pattern: [["src/*/index.ts", "!src/functions/index.ts"]],
       },
       {
         allowImportsFrom: ["{element}", "{dirname}/*.types.ts"],
@@ -1516,8 +1516,7 @@ export const AZURE_FUNC_FILE_COMPOSITION = createFileComposition({
       rootSelectorsLimits: [{ limit: { min: 2 }, selector: "type" }],
       rules: [
         {
-          filenamePartsToRemove: ".types",
-          format: ["{FileName}Request", "{FileName}Response"],
+          format: ["Input", "Output"],
           scope: "fileExport",
           selector: "type",
         },

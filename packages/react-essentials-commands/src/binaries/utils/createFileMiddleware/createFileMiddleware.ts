@@ -106,6 +106,8 @@ function parse<TElement extends string | string[] | Record<string, any>>(
     case "postcss.config.js":
     case "prettier.config.js":
     case "src/functions/httpTrigger1/index.ts":
+    case "src/functions/httpTrigger1/httpTrigger1.ts":
+    case "src/functions/httpTrigger1/httpTrigger1.types.ts":
     case "src/functions/index.ts":
     case "src/index.css":
     case "src/index.ts":
@@ -192,6 +194,8 @@ function stringify<TElement extends string | string[] | Record<string, any>>(
     case "postcss.config.js":
     case "prettier.config.js":
     case "src/functions/httpTrigger1/index.ts":
+    case "src/functions/httpTrigger1/httpTrigger1.ts":
+    case "src/functions/httpTrigger1/httpTrigger1.types.ts":
     case "src/functions/index.ts":
     case "src/index.css":
     case "src/index.ts":
