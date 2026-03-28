@@ -14,7 +14,7 @@ export default function setupDevTools<
   if (!window.__REDUX_DEVTOOLS_EXTENSION__) return;
   if (
     typeof devTools === "undefined"
-      ? process.env.NODE_ENV !== "development"
+      ? process.env["NODE_ENV"] !== "development"
       : !devTools
   )
     return;

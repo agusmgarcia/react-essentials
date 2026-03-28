@@ -5,7 +5,7 @@ export type Response = {
   dependencies?: Record<string, string>;
   description?: string;
   devDependencies?: Record<string, string>;
-  engines?: Record<string, string>;
+  engines?: { node?: string; [other: string]: string | undefined };
   exports?: Record<string, { default?: string; node?: string; types?: string }>;
   files?: string[];
   main?: string;
