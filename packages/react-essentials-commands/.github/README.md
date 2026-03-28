@@ -80,6 +80,8 @@ Here the list of the files:
 - src/index.ts
 - src/functions/index.ts
 - src/functions/httpTrigger1/index.ts
+- src/functions/httpTrigger1/httpTrigger1.ts
+- src/functions/httpTrigger1/httpTrigger1.types.ts
 - .env.local
 - .funcignore
 - .gitignore
