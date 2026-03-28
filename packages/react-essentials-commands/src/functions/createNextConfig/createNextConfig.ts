@@ -10,7 +10,7 @@ import { type Input, type Output } from "./createNextConfig.types";
  */
 export default function createNextConfig(...[_core, configs]: Input): Output {
   return (phase) => ({
-    basePath: process.env.APP_BASE_PATH,
+    basePath: process.env["APP_BASE_PATH"],
     devIndicators: false,
     distDir: "dist",
     env: Object.keys(process.env).reduce(
