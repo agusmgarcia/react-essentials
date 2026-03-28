@@ -130,17 +130,23 @@ async function getTemplate(
               "@azure/functions": undefined,
               "azure-functions-core-tools": undefined,
               next: context.essentialsCommands ? nextVersion : undefined,
-              react: context.essentialsCommands ? undefined : reactVersion,
-              "react-dom": context.essentialsCommands
-                ? undefined
-                : reactDomVersion,
+              react: undefined,
+              "react-dom": undefined,
             },
           ),
     ),
     description: packageJSON.description || "",
     name: context.name,
     optionalDependencies: packageJSON.optionalDependencies,
-    peerDependencies: undefined,
+    peerDependencies:
+      context.core === "lib"
+        ? toUndefinedIfEmptyDependencies({
+            react: context.essentialsCommands ? undefined : reactVersion,
+            "react-dom": context.essentialsCommands
+              ? undefined
+              : reactDomVersion,
+          })
+        : undefined,
     scripts: context.essentialsCommands
       ? {
           ...packageJSON.scripts,
