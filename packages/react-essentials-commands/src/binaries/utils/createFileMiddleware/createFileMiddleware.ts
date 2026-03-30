@@ -105,10 +105,19 @@ function parse<TElement extends string | string[] | Record<string, any>>(
     case "pages/_app.css":
     case "postcss.config.js":
     case "prettier.config.js":
+    case "src/binaries/utils/index.ts":
+    case "src/clients/index.ts":
+    case "src/classes/index.ts":
+    case "src/components/index.ts":
+    case "src/fragments/index.ts":
     case "src/functions/httpTrigger1/index.ts":
     case "src/functions/httpTrigger1/httpTrigger1.ts":
     case "src/functions/httpTrigger1/httpTrigger1.types.ts":
     case "src/functions/index.ts":
+    case "src/modules/index.ts":
+    case "src/outputs/myExportedFunction.ts":
+    case "src/store/index.ts":
+    case "src/utils/index.ts":
     case "src/index.css":
     case "src/index.ts":
     case "webpack.config.ts":
@@ -193,10 +202,19 @@ function stringify<TElement extends string | string[] | Record<string, any>>(
     case "pages/_app.css":
     case "postcss.config.js":
     case "prettier.config.js":
+    case "src/binaries/utils/index.ts":
+    case "src/clients/index.ts":
+    case "src/classes/index.ts":
+    case "src/components/index.ts":
+    case "src/fragments/index.ts":
     case "src/functions/httpTrigger1/index.ts":
     case "src/functions/httpTrigger1/httpTrigger1.ts":
     case "src/functions/httpTrigger1/httpTrigger1.types.ts":
     case "src/functions/index.ts":
+    case "src/modules/index.ts":
+    case "src/outputs/myExportedFunction.ts":
+    case "src/store/index.ts":
+    case "src/utils/index.ts":
     case "src/index.css":
     case "src/index.ts":
     case "webpack.config.ts":
