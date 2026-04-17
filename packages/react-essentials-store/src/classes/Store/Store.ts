@@ -25,12 +25,12 @@ import {
  * - Integrating with development tools.
  */
 export default class Store<TSliceFactories extends BaseSliceFactories> {
-  private readonly configs: Configs<TSliceFactories>;
-  private readonly listeners: Listener<TSliceFactories>[];
-  private readonly slices: SlicesOf<TSliceFactories>;
-  private readonly innerState: StateOf<TSliceFactories>;
+  private readonly _configs: Configs<TSliceFactories>;
+  private readonly _listeners: Listener<TSliceFactories>[];
+  private readonly _slices: SlicesOf<TSliceFactories>;
+  private readonly _state: StateOf<TSliceFactories>;
 
-  private subscriptionIndex: number;
+  private _subscriptionIndex: number;
 
   /**
    * Creates a new instance of the `Store` class, initializing slices, middleware, and internal state.
@@ -47,10 +47,10 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
    * - Prepares internal listeners and subscription index for state change notifications.
    */
   constructor(...[sliceFactories, configs]: Input<TSliceFactories>) {
-    this.configs = configs || ({} as Configs<TSliceFactories>);
-    this.listeners = [];
+    this._configs = configs || ({} as Configs<TSliceFactories>);
+    this._listeners = [];
 
-    this.slices = Object.keys(sliceFactories).reduce((result, key) => {
+    this._slices = Object.keys(sliceFactories).reduce((result, key) => {
       const sliceFactory = sliceFactories[key];
       const params = (configs?.params as any)?.[key] || [];
 
@@ -64,22 +64,22 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
     }, {} as SlicesOf<TSliceFactories>);
 
     const middleware = createMiddleware<TSliceFactories>(
-      Array.isArray(this.configs.middlewares)
-        ? this.configs.middlewares
-        : typeof this.configs.middlewares !== "undefined"
-          ? [this.configs.middlewares]
+      Array.isArray(this._configs.middlewares)
+        ? this._configs.middlewares
+        : typeof this._configs.middlewares !== "undefined"
+          ? [this._configs.middlewares]
           : [],
     );
 
-    this.innerState = Object.keys(this.slices).reduce((result, key) => {
+    this._state = Object.keys(this._slices).reduce((result, key) => {
       result[key as keyof typeof result] = new Proxy(
-        this.slices[key],
-        new SliceProxyHandler(this.slices, middleware),
+        this._slices[key],
+        new SliceProxyHandler(this._slices, middleware),
       );
       return result;
     }, {} as StateOf<TSliceFactories>);
 
-    this.subscriptionIndex = Number.MIN_SAFE_INTEGER;
+    this._subscriptionIndex = Number.MIN_SAFE_INTEGER;
   }
 
   /**
@@ -97,17 +97,17 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
   init(): void {
     setupDevTools(
       this,
-      this.configs.devTools as Configs<TSliceFactories>["devTools"],
+      this._configs.devTools as Configs<TSliceFactories>["devTools"],
     );
 
-    Object.keys(this.slices).forEach((key) => {
-      const slice = this.slices[key];
+    Object.keys(this._slices).forEach((key) => {
+      const slice = this._slices[key];
 
       const handleSubscribe = () => {
-        const subscriptionIndex = ++this.subscriptionIndex;
+        const subscriptionIndex = ++this._subscriptionIndex;
 
-        this.listeners.forEach((listener) => {
-          if (subscriptionIndex !== this.subscriptionIndex) return;
+        this._listeners.forEach((listener) => {
+          if (subscriptionIndex !== this._subscriptionIndex) return;
           listener(this.state);
         });
       };
@@ -115,12 +115,12 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
       slice.subscribe(handleSubscribe);
     });
 
-    Object.keys(this.slices).forEach((key) => {
-      const slice = this.slices[key];
+    Object.keys(this._slices).forEach((key) => {
+      const slice = this._slices[key];
 
       slice["onInit"](slice["regenerateSignal"]());
 
-      if (!slice["initialized"])
+      if (!slice["_initialized"])
         throw new Error(`'${slice.constructor.name}' must call super.onInit()`);
     });
   }
@@ -136,18 +136,18 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
    * @throws {Error} If a slice does not call `super.onDestroy()` during its destruction.
    */
   destroy(): void {
-    Object.keys(this.slices).forEach((key) => {
-      const slice = this.slices[key];
+    Object.keys(this._slices).forEach((key) => {
+      const slice = this._slices[key];
 
       slice["onDestroy"](slice["regenerateSignal"]());
 
-      if (slice["initialized"])
+      if (slice["_initialized"])
         throw new Error(
           `'${slice.constructor.name}' must call super.onDestroy()`,
         );
     });
 
-    this.listeners.splice(0, this.listeners.length);
+    this._listeners.splice(0, this._listeners.length);
   }
 
   /**
@@ -159,7 +159,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
    * - Accessing this property does not trigger any side effects.
    */
   get state(): StateOf<TSliceFactories> {
-    return this.innerState;
+    return this._state;
   }
 
   /**
@@ -174,8 +174,8 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
    * - To stop receiving updates, call the returned unsubscribe function.
    */
   subscribe(listener: Listener<TSliceFactories>): Unsubscribe {
-    this.listeners.push(listener);
-    return () => this.listeners.splice(this.listeners.indexOf(listener), 1);
+    this._listeners.push(listener);
+    return () => this._listeners.splice(this._listeners.indexOf(listener), 1);
   }
 }
 

@@ -1,15 +1,1 @@
-import { properties } from "#src/modules";
-
-function getMessage(error: unknown, notFound?: string): string | undefined {
-  if (typeof error === "undefined") return undefined;
-  if (typeof error === "string") return error;
-  if (properties.has(error, "message", "string")) return error.message;
-  if (properties.has(error, "message", "number"))
-    return error.message.toString();
-  if (properties.has(error, "message", "boolean"))
-    return error.message.toString();
-  return notFound || "An unexpected error occurred";
-}
-
-const errors = { getMessage };
-export default errors;
+export * as default from "./errors.utils";

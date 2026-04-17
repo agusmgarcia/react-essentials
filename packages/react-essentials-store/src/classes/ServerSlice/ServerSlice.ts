@@ -32,7 +32,7 @@ export default abstract class ServerSlice<
 > {
   private static readonly UNINITIALIZED = Symbol("UNINITIALIZED");
 
-  private innerRequest: TRequest | symbol;
+  private _request: TRequest | symbol;
 
   /**
    * Creates a new instance of the ServerSlice.
@@ -46,7 +46,7 @@ export default abstract class ServerSlice<
   protected constructor(initialResponse: TResponse) {
     super({ error: undefined, loading: true, response: initialResponse });
 
-    this.innerRequest = ServerSlice.UNINITIALIZED;
+    this._request = ServerSlice.UNINITIALIZED;
   }
 
   override get state(): {
@@ -67,8 +67,8 @@ export default abstract class ServerSlice<
    * - If the request has not been set yet, it returns `undefined`.
    */
   get request(): TRequest | undefined {
-    if (this.innerRequest === ServerSlice.UNINITIALIZED) return undefined;
-    return this.innerRequest as TRequest;
+    if (this._request === ServerSlice.UNINITIALIZED) return undefined;
+    return this._request as TRequest;
   }
 
   /**
@@ -148,14 +148,14 @@ export default abstract class ServerSlice<
     Object.values(this.slices).forEach((slice) =>
       slice.subscribe(
         () => this.onRequestBuild(),
-        (request, signal) => this.innerReload(request, signal),
-        (request) => equals.deep(this.innerRequest, request),
+        (request, signal) => this.internalReload(request, signal),
+        (request) => equals.deep(this._request, request),
       ),
     );
 
     const request = this.onRequestBuild();
     if (request === ServerSlice.UNINITIALIZED) this.loading = false;
-    else this.innerReload(request, signal);
+    else this.internalReload(request, signal);
   }
 
   /**
@@ -169,7 +169,7 @@ export default abstract class ServerSlice<
    * - Useful for cases where the request depends on the state of the slice or its dependencies.
    */
   protected onRequestBuild(): TRequest {
-    return this.innerRequest as TRequest;
+    return this._request as TRequest;
   }
 
   /**
@@ -190,23 +190,23 @@ export default abstract class ServerSlice<
     signal: AbortSignal,
   ): TResponse | Promise<TResponse>;
 
-  private async innerReload(
+  private async internalReload(
     request: TRequest | symbol,
     signal: AbortSignal,
   ): Promise<void> {
-    this.innerRequest = request;
+    this._request = request;
     this.loading = true;
 
     try {
       const response = await this.onFetch(request as TRequest, signal);
       signal.throwIfAborted();
 
-      this.innerRequest = request;
+      this._request = request;
       this.response = response;
     } catch (error) {
       if (signal.aborted) return;
 
-      this.innerRequest = request;
+      this._request = request;
       this.error = error;
     }
   }
@@ -226,10 +226,10 @@ export default abstract class ServerSlice<
    * - Intended to be called by consumers or subclasses to manually trigger a data refresh.
    */
   protected async reload(signal: AbortSignal): Promise<void> {
-    if (this.innerRequest === ServerSlice.UNINITIALIZED)
+    if (this._request === ServerSlice.UNINITIALIZED)
       throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
 
-    return this.innerReload(this.innerRequest, signal);
+    return this.internalReload(this._request, signal);
   }
 
   /**
@@ -261,6 +261,6 @@ export default abstract class ServerSlice<
         `'${this.constructor.name}'.reloadWithRequest: you cannot override onRequestBuild method. It has been overridden at ${prototype.constructor.name}`,
       );
 
-    await this.innerReload(request, signal);
+    await this.internalReload(request, signal);
   }
 }

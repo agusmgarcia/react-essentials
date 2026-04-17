@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { type Output } from "./useDimensions.types";
+
 /**
  * A custom React hook that observes and retrieves the dimensions (height and width)
  * of a referenced DOM element using the ResizeObserver API.
@@ -16,15 +18,13 @@ import { useEffect, useState } from "react";
  * ResizeObserver. This determines which box model to observe (e.g., `content-box`,
  * `border-box`).
  *
- * @returns An object containing the current dimensions of the observed element:
- * - `height`: The height of the element.
- * - `width`: The width of the element.
+ * @returns {Output} - The current dimension of the observed element.
  */
 export default function useDimensions<TElement extends Element>(
   elementRef: React.RefObject<TElement | null>,
   initialValue = initialDimensions,
   options?: ResizeObserverOptions["box"],
-): Dimensions {
+): Output {
   const [visible, setVisible] = useState(false);
 
   const [dimensions, setDimensions] = useState(initialValue);
@@ -60,6 +60,4 @@ export default function useDimensions<TElement extends Element>(
   return dimensions;
 }
 
-type Dimensions = { height: number; width: number };
-
-const initialDimensions: Dimensions = { height: 0, width: 0 };
+const initialDimensions: Output = { height: 0, width: 0 };

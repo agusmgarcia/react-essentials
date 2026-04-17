@@ -3,22 +3,24 @@ import { spawn } from "child_process";
 import { emptyFunction } from "#src/functions";
 import { type Func } from "#src/types";
 
+import { type Options } from "./execute.types";
+
 export default function execute(
   command: string,
   disassociated: true,
-  options?: Partial<ExecuteOptions>,
+  options?: Partial<Options>,
 ): Promise<void>;
 
 export default function execute(
   command: string,
   disassociated: false,
-  options?: Partial<ExecuteOptions>,
+  options?: Partial<Options>,
 ): Promise<string>;
 
 export default function execute(
   command: string,
   disassociated: boolean,
-  options?: Partial<ExecuteOptions>,
+  options?: Partial<Options>,
 ): Promise<void | string> {
   return new Promise((resolve, reject) => {
     const [cmd, ...args] = parseCommandAndArgs(
@@ -118,7 +120,3 @@ function parseCommandAndArgs(
 
   return result;
 }
-
-type ExecuteOptions = {
-  excludeQuotes: boolean;
-};

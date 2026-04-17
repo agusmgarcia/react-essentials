@@ -32,10 +32,10 @@ export default abstract class BrowserStorageSlice<
   TData extends BaseData,
   TSlices extends BaseSlices = {},
 > extends StorageSlice<TData, TSlices> {
-  private readonly name: string;
-  private readonly storage: StorageType;
+  private readonly _name: string;
+  private readonly _storage: StorageType;
 
-  private removeStorageEventHandler: Func;
+  private _removeStorageEventHandler: Func;
 
   /**
    * Creates a new instance of the BrowserStorageSlice.
@@ -50,10 +50,10 @@ export default abstract class BrowserStorageSlice<
   protected constructor(name: string, storage: StorageType) {
     super();
 
-    this.name = name;
-    this.storage = storage;
+    this._name = name;
+    this._storage = storage;
 
-    this.removeStorageEventHandler = emptyFunction;
+    this._removeStorageEventHandler = emptyFunction;
 
     const prototype1 = isMethodOverridden(
       this,
@@ -81,7 +81,7 @@ export default abstract class BrowserStorageSlice<
     if (isSSR()) return;
 
     const handleStorageEvent = (event: StorageEvent) => {
-      if (event.storageArea !== window[`${this.storage}Storage`]) return;
+      if (event.storageArea !== window[`${this._storage}Storage`]) return;
 
       if (typeof event.key === "object") {
         this["regenerateSignal"]();
@@ -89,7 +89,7 @@ export default abstract class BrowserStorageSlice<
         return;
       }
 
-      if (event.key !== this.name) return;
+      if (event.key !== this._name) return;
 
       if (typeof event.newValue === "object") {
         this["regenerateSignal"]();
@@ -107,18 +107,18 @@ export default abstract class BrowserStorageSlice<
 
     window.addEventListener("storage", handleStorageEvent);
 
-    this.removeStorageEventHandler = () =>
+    this._removeStorageEventHandler = () =>
       window.removeEventListener("storage", handleStorageEvent);
   }
 
   protected override onDestroy(signal: AbortSignal): void {
-    this.removeStorageEventHandler();
+    this._removeStorageEventHandler();
     super.onDestroy(signal);
   }
 
   protected override getDataFromStorage(): TData | undefined {
     if (isSSR()) return undefined;
-    const item = window[`${this.storage}Storage`].getItem(this.name);
+    const item = window[`${this._storage}Storage`].getItem(this._name);
     if (typeof item === "object") return undefined;
     return JSON.parse(item);
   }
@@ -126,8 +126,11 @@ export default abstract class BrowserStorageSlice<
   protected override setDataIntoStorage(data: TData | undefined): void {
     if (isSSR()) return;
     if (typeof data === "undefined")
-      window[`${this.storage}Storage`].removeItem(this.name);
+      window[`${this._storage}Storage`].removeItem(this._name);
     else
-      window[`${this.storage}Storage`].setItem(this.name, JSON.stringify(data));
+      window[`${this._storage}Storage`].setItem(
+        this._name,
+        JSON.stringify(data),
+      );
   }
 }

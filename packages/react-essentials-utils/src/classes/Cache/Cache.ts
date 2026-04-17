@@ -19,9 +19,9 @@ export default class Cache {
    */
   static readonly NOT_ENOUGH_SPACE_ERROR = new Error("Not enough space");
 
-  private readonly options: Options;
-  private readonly mutexes: Record<string, Mutex>;
-  private readonly signal: AbortSignal;
+  private readonly _options: Options;
+  private readonly _mutexes: Record<string, Mutex>;
+  private readonly _signal: AbortSignal;
 
   /**
    * Creates an instance of the Cache class.
@@ -29,14 +29,14 @@ export default class Cache {
    * @param options - Optional configuration for the cache.
    */
   constructor(options?: Partial<Options>) {
-    this.options = {
+    this._options = {
       maxCacheTime: options?.maxCacheTime || 900_000,
       maxErrorTime: options?.maxErrorTime || 1_000,
       mutexFactory: options?.mutexFactory || ((key) => new DefaultMutex(key)),
       storage: options?.storage || new DefaultStorage(),
     };
-    this.mutexes = {};
-    this.signal = new AbortController().signal;
+    this._mutexes = {};
+    this._signal = new AbortController().signal;
   }
 
   private async rawSet<TResult>(
@@ -49,19 +49,20 @@ export default class Cache {
     signal: AbortSignal | undefined,
     expiresAt: number | Func<number, [result: TResult]> | undefined,
   ): Promise<Entry> {
-    if (!this.mutexes[key]) this.mutexes[key] = this.options.mutexFactory(key);
+    if (!this._mutexes[key])
+      this._mutexes[key] = this._options.mutexFactory(key);
 
-    if (!this.mutexes[""])
-      this.mutexes[""] = this.options.mutexFactory(undefined);
+    if (!this._mutexes[""])
+      this._mutexes[""] = this._options.mutexFactory(undefined);
 
-    signal = signal || this.signal;
+    signal = signal || this._signal;
     let newEntry: Entry;
 
     try {
-      return this.mutexes[""].runShared(() =>
-        this.mutexes[key].runExclusive(async () => {
+      return this._mutexes[""].runShared(() =>
+        this._mutexes[key].runExclusive(async () => {
           signal.throwIfAborted();
-          const entry = await this.options.storage.getEntry(key, signal);
+          const entry = await this._options.storage.getEntry(key, signal);
 
           if (!entry || byPassExpiration || Date.now() >= entry.expiresAt) {
             try {
@@ -81,7 +82,7 @@ export default class Cache {
                 createdAt: now,
                 expiresAt:
                   typeof expiresAt === "undefined"
-                    ? now + this.options.maxCacheTime
+                    ? now + this._options.maxCacheTime
                     : typeof expiresAt === "number"
                       ? expiresAt
                       : expiresAt(result),
@@ -89,7 +90,7 @@ export default class Cache {
               };
 
               if (Date.now() < newEntry.expiresAt)
-                await this.options.storage.setEntry(key, newEntry, signal);
+                await this._options.storage.setEntry(key, newEntry, signal);
 
               return newEntry;
             } catch (error) {
@@ -101,11 +102,11 @@ export default class Cache {
               newEntry = {
                 createdAt: now,
                 error,
-                expiresAt: now + this.options.maxErrorTime,
+                expiresAt: now + this._options.maxErrorTime,
               };
 
               if (Date.now() < newEntry.expiresAt)
-                await this.options.storage.setEntry(key, newEntry, signal);
+                await this._options.storage.setEntry(key, newEntry, signal);
 
               return newEntry;
             }
@@ -117,24 +118,27 @@ export default class Cache {
     } catch (error) {
       if (error !== Cache.NOT_ENOUGH_SPACE_ERROR) throw error;
 
-      return await this.mutexes[""].runExclusive(async () => {
-        const entry = await this.options.storage.getEntry(key, this.signal);
+      return await this._mutexes[""].runExclusive(async () => {
+        const entry = await this._options.storage.getEntry(key, this._signal);
 
-        const keys = await this.options.storage.getKeys(this.signal);
+        const keys = await this._options.storage.getKeys(this._signal);
         await Promise.all(
           keys.map(async (key) => {
-            const entry = await this.options.storage.getEntry(key, this.signal);
+            const entry = await this._options.storage.getEntry(
+              key,
+              this._signal,
+            );
             if (!entry) return;
 
             if (Date.now() < entry.expiresAt) return;
-            await this.options.storage.deleteEntry(key, this.signal);
+            await this._options.storage.deleteEntry(key, this._signal);
           }),
         );
 
         if (!!entry && entry.createdAt > newEntry.createdAt) return entry;
 
         if (Date.now() < newEntry.expiresAt)
-          await this.options.storage.setEntry(key, newEntry, this.signal);
+          await this._options.storage.setEntry(key, newEntry, this._signal);
 
         return newEntry;
       });

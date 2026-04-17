@@ -31,14 +31,14 @@ export default abstract class GlobalSlice<
   TState extends BaseState,
   TSlices extends BaseSlices = {},
 > {
-  private readonly subscriptions: Subscription<TState, any>[];
-  private readonly intervals: Func[];
+  private readonly _subscriptions: Subscription<TState, any>[];
+  private readonly _intervals: Func[];
 
-  private controller: AbortController;
-  private subscriptionIndex: number;
-  private initialized: boolean;
-  private innerSlices: TSlices | undefined;
-  private innerState: TState;
+  private _controller: AbortController;
+  private _subscriptionIndex: number;
+  private _initialized: boolean;
+  private _slices: TSlices | undefined;
+  private _state: TState;
 
   /**
    * Creates a new instance of the GlobalSlice abstract class.
@@ -51,14 +51,14 @@ export default abstract class GlobalSlice<
    * to be called by subclasses that extend `GlobalSlice`.
    */
   protected constructor(initialState: TState) {
-    this.subscriptions = [];
-    this.intervals = [];
+    this._subscriptions = [];
+    this._intervals = [];
 
-    this.controller = new AbortController();
-    this.subscriptionIndex = Number.MIN_SAFE_INTEGER;
-    this.initialized = false;
-    this.innerSlices = undefined;
-    this.innerState = initialState;
+    this._controller = new AbortController();
+    this._subscriptionIndex = Number.MIN_SAFE_INTEGER;
+    this._initialized = false;
+    this._slices = undefined;
+    this._state = initialState;
 
     const prototype = isMethodOverridden(
       this,
@@ -84,19 +84,19 @@ export default abstract class GlobalSlice<
    * will result in an error.
    */
   protected get slices(): TSlices {
-    if (!this.innerSlices)
+    if (!this._slices)
       throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
 
-    return this.innerSlices;
+    return this._slices;
   }
 
   private set slices(slices: TSlices) {
-    if (!!this.innerSlices)
+    if (!!this._slices)
       throw new Error(
         `'${this.constructor.name}' has been already set its slices`,
       );
 
-    this.innerSlices = new Proxy(slices, new SlicesProxyHandler(this));
+    this._slices = new Proxy(slices, new SlicesProxyHandler(this));
   }
 
   /**
@@ -109,7 +109,7 @@ export default abstract class GlobalSlice<
    * @returns {TState} The current state of the global slice.
    */
   get state(): TState {
-    return this.innerState;
+    return this._state;
   }
 
   /**
@@ -126,12 +126,12 @@ export default abstract class GlobalSlice<
    * sent for the most recent state update, preventing race conditions from multiple rapid updates.
    */
   protected set state(state: TState) {
-    this.innerState = state;
+    this._state = state;
 
-    const subscriptionIndex = ++this.subscriptionIndex;
+    const subscriptionIndex = ++this._subscriptionIndex;
 
-    this.subscriptions.forEach((subscription) => {
-      if (subscriptionIndex !== this.subscriptionIndex) return;
+    this._subscriptions.forEach((subscription) => {
+      if (subscriptionIndex !== this._subscriptionIndex) return;
 
       const prevSelection = subscription.prevSelection;
       const newSelection = subscription.selector(this.state);
@@ -141,7 +141,7 @@ export default abstract class GlobalSlice<
         subscription.listener(
           newSelection,
           this === subscription.slice
-            ? this.controller.signal
+            ? this._controller.signal
             : subscription.slice.regenerateSignal(),
         );
     });
@@ -161,17 +161,17 @@ export default abstract class GlobalSlice<
    * @throws {Error} Throws an error if the slice has already been initialized.
    */
   protected onInit(signal: AbortSignal): void {
-    if (signal !== this.controller.signal)
+    if (signal !== this._controller.signal)
       throw new Error(
         `'${this.constructor.name}'.onInit: You must pass the signal from the parent method`,
       );
 
-    if (this.initialized)
+    if (this._initialized)
       throw new Error(
         `'${this.constructor.name}' has been already initialized`,
       );
 
-    this.initialized = true;
+    this._initialized = true;
   }
 
   /**
@@ -189,17 +189,17 @@ export default abstract class GlobalSlice<
    * @throws {Error} Throws an error if the slice has not been initialized.
    */
   protected onDestroy(signal: AbortSignal): void {
-    this.subscriptions.splice(0, this.subscriptions.length);
+    this._subscriptions.splice(0, this._subscriptions.length);
 
-    this.intervals.forEach((unsubscribe) => unsubscribe());
-    this.intervals.splice(0, this.intervals.length);
+    this._intervals.forEach((unsubscribe) => unsubscribe());
+    this._intervals.splice(0, this._intervals.length);
 
-    if (!this.initialized)
+    if (!this._initialized)
       throw new Error(`'${this.constructor.name}' hasn't been initialized yet`);
 
-    this.initialized = false;
+    this._initialized = false;
 
-    if (signal !== this.controller.signal)
+    if (signal !== this._controller.signal)
       throw new Error(
         `'${this.constructor.name}'.onDestroy: You must pass the signal from the parent method`,
       );
@@ -213,7 +213,7 @@ export default abstract class GlobalSlice<
    * @returns An `Unsubscribe` function that stops the timeout when called.
    */
   protected setTimeout(callback: TimeoutCallback, duration: number): Func {
-    return this.innerSetInterval(callback, true, duration);
+    return this.internalSetInterval(callback, true, duration);
   }
 
   /**
@@ -224,10 +224,10 @@ export default abstract class GlobalSlice<
    * @returns An `Unsubscribe` function that stops the interval when called.
    */
   protected setInterval(callback: IntervalCallback, duration: number): Func {
-    return this.innerSetInterval(callback, false, duration);
+    return this.internalSetInterval(callback, false, duration);
   }
 
-  private innerSetInterval(
+  private internalSetInterval(
     callback: IntervalCallback,
     once: boolean,
     duration: number,
@@ -259,11 +259,11 @@ export default abstract class GlobalSlice<
 
     const unsubscribe = () => {
       clearTimeout(handler);
-      this.intervals.splice(this.intervals.indexOf(unsubscribe), 1);
+      this._intervals.splice(this._intervals.indexOf(unsubscribe), 1);
       controller.abort();
     };
 
-    this.intervals.push(unsubscribe);
+    this._intervals.push(unsubscribe);
     return unsubscribe;
   }
 
@@ -293,16 +293,16 @@ export default abstract class GlobalSlice<
 
   subscribe(...rest: any[]): Func {
     const subscription = extractSubscriptionParameters(this, ...rest);
-    this.subscriptions.push(subscription);
+    this._subscriptions.push(subscription);
 
     return () =>
-      this.subscriptions.splice(this.subscriptions.indexOf(subscription), 1);
+      this._subscriptions.splice(this._subscriptions.indexOf(subscription), 1);
   }
 
   private regenerateSignal(): AbortSignal {
-    this.controller.abort("New signal created");
-    this.controller = new AbortController();
-    return this.controller.signal;
+    this._controller.abort("New signal created");
+    this._controller = new AbortController();
+    return this._controller.signal;
   }
 }
 

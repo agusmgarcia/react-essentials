@@ -108,14 +108,14 @@ describe("StorageCache", () => {
 });
 
 class StorageMock implements Storage {
-  private readonly records: Map<string, string>;
+  private readonly _records: Map<string, string>;
 
   constructor() {
-    this.records = new Map();
+    this._records = new Map();
   }
 
   get length(): number {
-    return this.records.size;
+    return this._records.size;
   }
 
   clear(): void {
@@ -123,21 +123,21 @@ class StorageMock implements Storage {
   }
 
   getItem(key: string): string | null {
-    const value = this.records.get(key);
+    const value = this._records.get(key);
     return typeof value !== "undefined" ? value : null;
   }
 
   key(index: number): string | null {
-    const key = this.records.keys().toArray().at(index);
+    const key = this._records.keys().toArray().at(index);
     return typeof key !== "undefined" ? key : null;
   }
 
   removeItem(key: string): void {
-    this.records.delete(key);
+    this._records.delete(key);
   }
 
   setItem(key: string, value: string): void {
-    this.records.set(key, value);
+    this._records.set(key, value);
   }
 }
 

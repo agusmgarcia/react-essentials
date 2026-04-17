@@ -10,20 +10,9 @@ import process from "process";
 import { files, npm } from "#src/modules";
 
 import { type Input, type Output } from "./createEslintConfig.types";
-import {
-  APP_FILE_COMPOSITION,
-  APP_FOLDER_STRUCTURE,
-  AZURE_FUNC_FILE_COMPOSITION,
-  AZURE_FUNC_FOLDER_STRUCTURE,
-  createAppIndependentModules,
-  createAzureFuncIndependentModules,
-  createLibIndependentModules,
-  createNodeIndependentModules,
-  LIB_FILE_COMPOSITION,
-  LIB_FOLDER_STRUCTURE,
-  NODE_FILE_COMPOSITION,
-  NODE_FOLDER_STRUCTURE,
-} from "./createEslintConfig.utils";
+import { eslintFileComposition } from "./eslintFileComposition";
+import { eslintFolderStructure } from "./eslintFolderStructure";
+import { eslintIndependentModules } from "./eslintIndependentModules";
 
 /**
  * Generates an ESLint configuration object tailored for React and TypeScript projects,
@@ -54,43 +43,43 @@ export default async function createEslintConfig(
         "project-structure/file-composition": [
           "error",
           core === "app"
-            ? APP_FILE_COMPOSITION
+            ? eslintFileComposition.APP
             : core === "azure-func"
-              ? AZURE_FUNC_FILE_COMPOSITION
+              ? eslintFileComposition.AZURE_FUNC
               : core === "lib"
-                ? LIB_FILE_COMPOSITION
-                : NODE_FILE_COMPOSITION,
+                ? eslintFileComposition.LIB
+                : eslintFileComposition.NODE,
         ],
 
         "project-structure/folder-structure": [
           "error",
           core === "app"
-            ? APP_FOLDER_STRUCTURE
+            ? eslintFolderStructure.APP
             : core === "azure-func"
-              ? AZURE_FUNC_FOLDER_STRUCTURE
+              ? eslintFolderStructure.AZURE_FUNC
               : core === "lib"
-                ? LIB_FOLDER_STRUCTURE
-                : NODE_FOLDER_STRUCTURE,
+                ? eslintFolderStructure.LIB
+                : eslintFolderStructure.NODE,
         ],
 
         "project-structure/independent-modules": [
           "error",
           core === "app"
-            ? createAppIndependentModules(
+            ? eslintIndependentModules.createApp(
                 monorepoDetails?.location,
                 tsconfig?.compilerOptions?.paths,
               )
             : core === "azure-func"
-              ? createAzureFuncIndependentModules(
+              ? eslintIndependentModules.createAzureFunc(
                   monorepoDetails?.location,
                   tsconfig?.compilerOptions?.paths,
                 )
               : core === "lib"
-                ? createLibIndependentModules(
+                ? eslintIndependentModules.createLib(
                     monorepoDetails?.location,
                     tsconfig?.compilerOptions?.paths,
                   )
-                : createNodeIndependentModules(
+                : eslintIndependentModules.createNode(
                     monorepoDetails?.location,
                     tsconfig?.compilerOptions?.paths,
                   ),

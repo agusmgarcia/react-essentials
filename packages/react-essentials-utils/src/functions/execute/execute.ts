@@ -3,6 +3,8 @@ import { spawn } from "child_process";
 import { emptyFunction } from "#src/functions";
 import { type Func } from "#src/types";
 
+import { type Options } from "./execute.types";
+
 /**
  * Executes a shell command using Node.js child processes.
  *
@@ -15,7 +17,7 @@ import { type Func } from "#src/types";
 export default function execute(
   command: string,
   disassociated: true,
-  options?: Partial<ExecuteOptions>,
+  options?: Partial<Options>,
 ): Promise<void>;
 
 /**
@@ -30,13 +32,13 @@ export default function execute(
 export default function execute(
   command: string,
   disassociated: false,
-  options?: Partial<ExecuteOptions>,
+  options?: Partial<Options>,
 ): Promise<string>;
 
 export default function execute(
   command: string,
   disassociated: boolean,
-  options?: Partial<ExecuteOptions>,
+  options?: Partial<Options>,
 ): Promise<void | string> {
   return new Promise((resolve, reject) => {
     const [cmd, ...args] = parseCommandAndArgs(
@@ -136,13 +138,3 @@ function parseCommandAndArgs(
 
   return result;
 }
-
-/**
- * Optional settings.
- */
-type ExecuteOptions = {
-  /**
-   * If `true`, excludes quotes from parsed command arguments.
-   */
-  excludeQuotes: boolean;
-};

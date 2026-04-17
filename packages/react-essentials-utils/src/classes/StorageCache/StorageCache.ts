@@ -34,17 +34,17 @@ export default class StorageCache extends Cache {
 }
 
 class Mutex implements CacheTypes.Mutex {
-  private readonly storage: Options["storage"];
-  private readonly key: string;
+  private readonly _storage: Options["storage"];
+  private readonly _key: string;
 
   constructor(storage: Options["storage"], key: string | undefined) {
-    this.storage = storage;
-    this.key = key || "";
+    this._storage = storage;
+    this._key = key || "";
   }
 
   async runShared<TResult>(callback: AsyncFunc<TResult>): Promise<TResult> {
     return await window.navigator.locks.request(
-      `${this.key}__${await this.getStorageId()}`,
+      `${this._key}__${await this.getStorageId()}`,
       { mode: "shared" },
       callback,
     );
@@ -52,31 +52,31 @@ class Mutex implements CacheTypes.Mutex {
 
   async runExclusive<TResult>(callback: AsyncFunc<TResult>): Promise<TResult> {
     return await window.navigator.locks.request(
-      `${this.key}__${await this.getStorageId()}`,
+      `${this._key}__${await this.getStorageId()}`,
       { mode: "exclusive" },
       callback,
     );
   }
 
   private async getStorageId(): Promise<string> {
-    const storageIdKey = `${strings.capitalize(this.storage)}StorageId`;
+    const storageIdKey = `${strings.capitalize(this._storage)}StorageId`;
 
     return (
       (await window.navigator.locks.request(
         storageIdKey,
         { mode: "shared" },
         () =>
-          window[`${this.storage}Storage`].getItem(storageIdKey) || undefined,
+          window[`${this._storage}Storage`].getItem(storageIdKey) || undefined,
       )) ||
       (await window.navigator.locks.request(
         storageIdKey,
         { mode: "exclusive" },
         () => {
           const id =
-            window[`${this.storage}Storage`].getItem(storageIdKey) ||
+            window[`${this._storage}Storage`].getItem(storageIdKey) ||
             createUUID();
 
-          window[`${this.storage}Storage`].setItem(storageIdKey, id);
+          window[`${this._storage}Storage`].setItem(storageIdKey, id);
 
           return id;
         },

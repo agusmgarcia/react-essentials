@@ -1,1 +1,3 @@
-export type {};
+export type Options = {
+  excludeQuotes: boolean;
+};
