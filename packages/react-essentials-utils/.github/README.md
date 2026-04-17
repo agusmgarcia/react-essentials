@@ -186,6 +186,19 @@ type Func2 = Func<number>; // => () => number
 type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
 ```
 
+## Group by
+
+```typescript
+import { groupBy } from "@agusmgarcia/react-essentials-utils";
+
+const input = [
+  { group: 10, id: 1 },
+  { group: 20, id: 2 },
+  { group: 10, id: 3 },
+];
+const result = groupBy(input, (item) => item.group); // [{ key: 10, values: [{ group: 10, id: 1 }, { group: 10, id: 3 }]}, { key: 20, values: [{ group: 20, id: 2 }] }]
+```
+
 ## Is method overridden
 
 ```typescript

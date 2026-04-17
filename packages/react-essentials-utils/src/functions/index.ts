@@ -1,6 +1,7 @@
 export * from "./aggregateResponse";
 export * from "./delay";
 export * from "./emptyFunction";
+export * from "./groupBy";
 export * from "./isMethodOverridden";
 export * from "./isSSR";
 export * from "./useDevicePixelRatio";
