@@ -33,9 +33,9 @@
     "deploy": "tsx src/binaries/deploy.ts --path=../../.github/workflows",
     "format": "tsx src/binaries/format.ts",
     "postbuild": "chmod +x bin/*.js",
+    "postpack": "move-cli tsconfig.json src/outputs/tsconfig.base.json && move-cli tsconfig.json2 tsconfig.json",
     "prebuild": "npm i --ignore-scripts --no-audit --no-fund",
     "prepack": "move-cli tsconfig.json tsconfig.json2 && move-cli src/outputs/tsconfig.base.json tsconfig.json",
-    "postpack": "move-cli tsconfig.json src/outputs/tsconfig.base.json && move-cli tsconfig.json2 tsconfig.json",
     "regenerate": "tsx src/binaries/regenerate.ts --path=../../.github/workflows",
     "start": "tsx src/binaries/start.ts",
     "test": "tsx src/binaries/test.ts"
@@ -43,8 +43,6 @@
   "dependencies": {
     "@next/env": "^16.0.0",
     "@tailwindcss/postcss": "^4.0.0",
-    "@types/jest": "^30.0.0",
-    "@types/react": "^18.2.0 || ^19.0.0",
     "babel-plugin-react-compiler": "1.0.0",
     "concurrently": "^9.0.0",
     "css-loader": "^7.0.0",
@@ -72,11 +70,13 @@
     "yaml": "^2.0.0"
   },
   "peerDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "~18.18.0",
+    "@types/react": "^18.2.0 || ^19.0.0",
     "ts-node": "^10.0.0",
     "typescript": "^5.0.0"
   },
   "devDependencies": {
-    "@types/node": "~18.18.0",
     "@types/semver": "^7.7.1",
     "move-cli": "^2.0.0",
     "tsx": "^4.21.0"
