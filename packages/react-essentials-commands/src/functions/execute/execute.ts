@@ -67,17 +67,30 @@ export default function execute(
 
     listeners.push(
       (function (): Func {
-        function handle(code: number) {
+        function handle(code: number | null, signal: NodeJS.Signals | null) {
           listeners.forEach((unlisten) => unlisten());
-          if (!code) resolve(!!stdout ? stdout : undefined);
-          else
+
+          if (typeof code === "number" && !code) {
+            resolve(!!stdout ? stdout : undefined);
+            return;
+          }
+
+          if (!!signal) {
             reject(
-              !!stderr
-                ? new Error(stderr)
-                : !!error
-                  ? error
-                  : new Error(`Command ${command} exit with code ${code}`),
+              new Error(
+                `Command ${command} was terminated by signal ${signal}`,
+              ),
             );
+            return;
+          }
+
+          reject(
+            !!stderr
+              ? new Error(stderr)
+              : !!error
+                ? error
+                : new Error(`Command ${command} exit with code ${code}`),
+          );
         }
 
         const listener = child.on("close", handle);
@@ -94,22 +107,41 @@ function parseCommandAndArgs(
   const result = new Array<string>();
 
   let element = "";
-  let doubleQuotesEncountered = false;
+  let inSingleQuotes = false;
+  let inDoubleQuotes = false;
+  let escapeNext = false;
 
   for (let i = 0; i < command.length; i++) {
     const char = command[i];
 
-    if (char === " " && !doubleQuotesEncountered) {
+    if (escapeNext) {
+      element += char;
+      escapeNext = false;
+      continue;
+    }
+
+    if (char === "\\") {
+      escapeNext = true;
+      continue;
+    }
+
+    if (char === "'" && !inDoubleQuotes) {
+      inSingleQuotes = !inSingleQuotes;
+      if (!excludeQuotes) element += char;
+      continue;
+    }
+
+    if (char === '"' && !inSingleQuotes) {
+      inDoubleQuotes = !inDoubleQuotes;
+      if (!excludeQuotes) element += char;
+      continue;
+    }
+
+    if (char === " " && !inSingleQuotes && !inDoubleQuotes) {
       if (!!element) {
         result.push(element);
         element = "";
       }
-      continue;
-    }
-
-    if (char === '"') {
-      doubleQuotesEncountered = !doubleQuotesEncountered;
-      if (!excludeQuotes) element += char;
       continue;
     }
 
