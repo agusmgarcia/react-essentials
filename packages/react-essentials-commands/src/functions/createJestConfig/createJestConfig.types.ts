@@ -11,6 +11,18 @@ export type Input = [
    * - "node": for Node.js applications
    */
   core: NonNullable<GetPackageJSONTypes.Response["core"]>,
+
+  /**
+   * Optional configurations for the jest setup.
+   */
+  configs?: Partial<{
+    /**
+     * Externals configuration for jest.
+     * This is a static array of strings.
+     * It specifies which modules should be converted by jest.
+     */
+    externals: string[];
+  }>,
 ];
 
 export type Output = Config;

@@ -7,8 +7,6 @@ import { errors } from "#src/modules";
 
 import StorageCache from "./StorageCache";
 
-jest.mock("uuid", () => ({ v4: () => "id" }));
-
 describe("StorageCache", () => {
   beforeEach(() => {
     Object.defineProperty(window, "localStorage", {
