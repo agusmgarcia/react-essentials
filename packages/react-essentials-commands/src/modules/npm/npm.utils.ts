@@ -9,7 +9,7 @@ export async function getMonorepoDetails(): Promise<
   { location: string; name: string } | undefined
 > {
   return await execute("npm query .workspace", false)
-    .then((result) => result.replace(EOL, ""))
+    .then((result) => result.replaceAll(EOL, ""))
     .then(JSON.parse)
     .then((ws) => ws.find((w: any) => w.realpath === process.cwd()));
 }
@@ -20,7 +20,7 @@ export async function getNewTag(
   let tag = await execute(
     `npm version --no-git-tag-version ${typeOfNewVersionOrTag}`,
     false,
-  ).then((tag) => tag.replace(EOL, ""));
+  ).then((tag) => tag.replaceAll(EOL, ""));
 
   const match = /(.*)v(\d+)\.(\d+)\.(\d+)/.exec(tag);
   if (!!match?.length)
