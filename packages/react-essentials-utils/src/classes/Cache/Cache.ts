@@ -1,14 +1,7 @@
-import { Mutex as AsyncMutex } from "async-mutex";
-
-import { errors } from "#src/modules";
 import { type AsyncFunc, type Func } from "#src/types";
 
-import {
-  type Entry,
-  type Mutex,
-  type Options,
-  type Storage,
-} from "./Cache.types";
+import { type Entry, type Mutex, type Options } from "./Cache.types";
+import { DefaultMutex, DefaultStorage } from "./Cache.utils";
 
 /**
  * A utility class for caching asynchronous operations with expiration times.
@@ -17,7 +10,9 @@ export default class Cache {
   /**
    * Error thrown when there is not enough space to store a cache entry.
    */
-  static readonly NOT_ENOUGH_SPACE_ERROR = new Error("Not enough space");
+  protected static readonly NOT_ENOUGH_SPACE_ERROR = new Error(
+    "Not enough space",
+  );
 
   private readonly _options: Options;
   private readonly _mutexes: Record<string, Mutex>;
@@ -206,49 +201,5 @@ export default class Cache {
     );
     if ("result" in item) return item.result;
     throw item.error;
-  }
-}
-
-class DefaultMutex implements Mutex {
-  private readonly key: string | undefined;
-  private readonly mutex: AsyncMutex;
-
-  constructor(key: string | undefined) {
-    this.key = key;
-    this.mutex = new AsyncMutex();
-  }
-
-  runExclusive<TResult>(callback: AsyncFunc<TResult>): Promise<TResult> {
-    return !!this.key
-      ? this.mutex.runExclusive(callback)
-      : errors.emit("Method not supported");
-  }
-
-  runShared<TResult>(callback: AsyncFunc<TResult>): Promise<TResult> {
-    return !!this.key ? errors.emit("Method not supported") : callback();
-  }
-}
-
-class DefaultStorage implements Storage {
-  private readonly entries: Record<string, Entry>;
-
-  constructor() {
-    this.entries = {};
-  }
-
-  async deleteEntry(key: string): Promise<void> {
-    delete this.entries[key];
-  }
-
-  async getKeys(): Promise<string[]> {
-    return Object.keys(this.entries);
-  }
-
-  async getEntry(key: string): Promise<Entry | undefined> {
-    return this.entries[key];
-  }
-
-  async setEntry(key: string, entry: Entry): Promise<void> {
-    this.entries[key] = entry;
   }
 }
