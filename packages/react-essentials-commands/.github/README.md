@@ -95,6 +95,7 @@ Here the list of the files:
 - postcss.config.js
 - prettier.config.js
 - tsconfig.json
+- types.d.ts
 - webpack.config.ts
 
 #### Specific files

@@ -33,7 +33,7 @@ function getTemplate(
             "#src/*": ["src/*"],
           },
         },
-        exclude: ["*.ts", ".next", "dist", "node_modules"],
+        exclude: [".next", "dist", "node_modules"],
         extends: context.essentialsCommands
           ? "./src/outputs/tsconfig.base.json"
           : `${context.essentialsCommandsName}/tsconfig.json`,
@@ -57,7 +57,7 @@ function getTemplate(
             },
             rootDir: "./src",
           },
-          exclude: ["*.ts", ".next", "dist", "node_modules"],
+          exclude: ["webpack.config.ts", ".next", "dist", "node_modules"],
           extends: context.essentialsCommands
             ? "./src/outputs/tsconfig.base.json"
             : `${context.essentialsCommandsName}/tsconfig.json`,
@@ -75,11 +75,17 @@ function getTemplate(
               },
               rootDir: "./src",
             },
-            exclude: ["*.ts", ".next", "bin", "dist", "node_modules"],
+            exclude: [
+              "webpack.config.ts",
+              ".next",
+              "bin",
+              "dist",
+              "node_modules",
+            ],
             extends: context.essentialsCommands
               ? "./src/outputs/tsconfig.base.json"
               : `${context.essentialsCommandsName}/tsconfig.json`,
-            include: ["**/*.ts", "**/*.tsx"],
+            include: ["types.d.ts", "**/*.ts", "**/*.tsx"],
           }
         : {
             compilerOptions: {
@@ -92,7 +98,7 @@ function getTemplate(
               },
               rootDir: "./src",
             },
-            exclude: ["*.ts", ".next", "dist", "node_modules"],
+            exclude: ["webpack.config.ts", ".next", "dist", "node_modules"],
             extends: context.essentialsCommands
               ? "./src/outputs/tsconfig.base.json"
               : `${context.essentialsCommandsName}/tsconfig.json`,

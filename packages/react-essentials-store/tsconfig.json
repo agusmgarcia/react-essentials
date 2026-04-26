@@ -10,6 +10,6 @@
     },
     "rootDir": "./src"
   },
-  "exclude": ["*.ts", ".next", "bin", "dist", "node_modules"],
-  "include": ["**/*.ts", "**/*.tsx"]
+  "exclude": ["webpack.config.ts", ".next", "bin", "dist", "node_modules"],
+  "include": ["types.d.ts", "**/*.ts", "**/*.tsx"]
 }

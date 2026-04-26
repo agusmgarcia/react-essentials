@@ -20,6 +20,7 @@ import { createReadmeMiddleware } from "./createReadmeMiddleware";
 import { createReleaseMiddleware } from "./createReleaseMiddleware";
 import { createTailwindConfigMiddleware } from "./createTailwindConfigMiddleware";
 import { createTsConfigMiddleware } from "./createTsConfigMiddleware";
+import { createTypesDMiddleware } from "./createTypesDMiddleware";
 import { createWebpackConfigMiddleware } from "./createWebpackConfigMiddleware";
 
 const middlewares = [
@@ -45,6 +46,7 @@ const middlewares = [
   createReleaseMiddleware,
   createTailwindConfigMiddleware,
   createTsConfigMiddleware,
+  createTypesDMiddleware,
   createWebpackConfigMiddleware,
 ];
 

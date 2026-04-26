@@ -321,6 +321,7 @@ export const LIB = createFolderStructure({
       },
       { name: "postcss.config.js" },
       { name: "tsconfig.json" },
+      { name: "types.d.ts" },
       { name: "webpack.config.ts" },
     ],
     enforceExistence: [
