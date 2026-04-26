@@ -38,6 +38,16 @@ describe("dates", () => {
     expect(dates.validate(currentDate)).toBe(true);
   });
 
+  test("getCurrentDate with timeZone", () => {
+    const currentDate = dates.getCurrentDate("UTC");
+    expect(dates.validate(currentDate)).toBe(true);
+  });
+
+  test("getCurrentDate with timeZone and timeZoneName", () => {
+    const currentDate = dates.getCurrentDate("UTC", "short");
+    expect(dates.validate(currentDate)).toBe(true);
+  });
+
   test("getDate", () => {
     expect(dates.getDate("2023-10-01")).toBe(1);
   });
