@@ -16,7 +16,7 @@ export async function deleteBranch(branch: string): Promise<void> {
 
 export async function getCurrentBranch(): Promise<string | undefined> {
   return await execute("git branch --show-current", false).then((branch) =>
-    branch?.replace(EOL, ""),
+    branch?.trim(),
   );
 }
 
@@ -145,20 +145,19 @@ export async function createCommit(
   await execute(`git push -u ${remote} ${branch} --no-verify -f`, true);
 }
 
-export async function getInitialCommit(): Promise<string | undefined> {
-  return await execute("git rev-list --max-parents=0 HEAD", false).then(
-    (commit) => commit?.replace(EOL, "") || undefined,
-  );
-}
-
 // <=============================== REMOTES ===============================> //
 
-const REMOTE_URL_REGEXP =
-  /^(.+?):\/\/(?:.+?:)?(?:.+?@)?(.+?)\/(.+?)\/(.+?).git$/;
+const SSH_REMOTE_URL_REGEXP = /^git@(.+?):(.+?)\/(.+?)\.git$/;
+const DEFAULT_REMOTE_URL_REGEXP =
+  /^(.+?):\/\/(?:.+?:)?(?:.+?@)?(.+?)\/(.+?)\/(.+?)\.git$/;
 
 async function getRemoteName(): Promise<string | undefined> {
   return await execute("git remote", false).then(
-    (remote) => remote?.replace(EOL, "") || undefined,
+    (remote) =>
+      remote
+        ?.split(EOL)
+        .map((line) => line.trim())
+        .filter(Boolean)[0] || undefined,
   );
 }
 
@@ -167,14 +166,19 @@ export async function getRemoteURL(): Promise<string | undefined> {
     .then((remote) =>
       !!remote ? execute(`git remote get-url ${remote}`, false) : undefined,
     )
-    .then((remoteURL) => remoteURL?.replace(EOL, ""))
+    .then((remoteURL) => remoteURL?.trim())
     .then((remoteURL) => {
       if (!remoteURL) return undefined;
 
-      const matches = REMOTE_URL_REGEXP.exec(remoteURL);
-      if (!matches || matches.length !== 5) return undefined;
+      const sshMatches = SSH_REMOTE_URL_REGEXP.exec(remoteURL);
+      if (!!sshMatches && sshMatches.length === 4)
+        return `https://${sshMatches[1]}/${sshMatches[2]}/${sshMatches[3]}`.toLowerCase();
 
-      return `${matches[1]}://${matches[2]}/${matches[3]}/${matches[4]}`.toLowerCase();
+      const defaultMatches = DEFAULT_REMOTE_URL_REGEXP.exec(remoteURL);
+      if (!!defaultMatches && defaultMatches.length === 5)
+        return `${defaultMatches[1]}://${defaultMatches[2]}/${defaultMatches[3]}/${defaultMatches[4]}`.toLowerCase();
+
+      return undefined;
     });
 }
 
@@ -198,6 +202,8 @@ export async function getDetailedTags(
     .then((tags) => tags?.split(EOL) || [])
     .then((tags) => tags.filter(filterTags(options?.scope || "")))
     .then((tags) => tags.sort(sortTags));
+
+  if (!tags.length) return [];
 
   return await execute(`git rev-parse ${tags.join(" ")}`, false)
     .then((output) => output?.split(EOL) || [])
