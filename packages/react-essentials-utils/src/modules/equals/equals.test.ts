@@ -14,6 +14,15 @@ describe("equals", () => {
       expect(equals.strict(true, false)).toBe(false);
     });
 
+    it("should return true for NaN compared with NaN", () => {
+      expect(equals.strict(NaN, NaN)).toBe(true);
+    });
+
+    it("should return false for NaN compared with a number", () => {
+      expect(equals.strict(NaN, 0)).toBe(false);
+      expect(equals.strict(0, NaN)).toBe(false);
+    });
+
     it("should return true for the same object reference", () => {
       const obj = { a: 1 };
       expect(equals.strict(obj, obj)).toBe(true);
@@ -41,6 +50,14 @@ describe("equals", () => {
     it("should return false for arrays with different elements", () => {
       expect(equals.shallow([1, 2, 3], [1, 2, 4])).toBe(false);
     });
+
+    it("should return true for NaN compared with NaN", () => {
+      expect(equals.shallow(NaN, NaN)).toBe(true);
+    });
+
+    it("should return true for objects containing NaN values", () => {
+      expect(equals.shallow({ a: NaN }, { a: NaN })).toBe(true);
+    });
   });
 
   describe("deep", () => {
@@ -58,6 +75,18 @@ describe("equals", () => {
 
     it("should return false for arrays with different nested elements", () => {
       expect(equals.deep([1, [2, 3]], [1, [2, 4]])).toBe(false);
+    });
+
+    it("should return true for NaN compared with NaN", () => {
+      expect(equals.deep(NaN, NaN)).toBe(true);
+    });
+
+    it("should return true for deeply nested objects containing NaN", () => {
+      expect(equals.deep({ a: { b: NaN } }, { a: { b: NaN } })).toBe(true);
+    });
+
+    it("should return false for NaN compared with a number in nested objects", () => {
+      expect(equals.deep({ a: { b: NaN } }, { a: { b: 0 } })).toBe(false);
     });
   });
 });
