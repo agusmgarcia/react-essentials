@@ -38,7 +38,7 @@ export default function createReactStore<
 }: Input<TSliceFactories>): Output<TSliceFactories> {
   return {
     StoreProvider: (props) => {
-      const storeRef = useRef<Store<TSliceFactories>>(null);
+      const storeRef = useRef<Store<TSliceFactories> | null>(null);
 
       if (!storeRef.current)
         storeRef.current = new Store<TSliceFactories>(
