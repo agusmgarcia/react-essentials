@@ -30,6 +30,7 @@ export default function delay(ms: number, signal?: AbortSignal): Promise<void> {
         signal.throwIfAborted();
       } catch (error) {
         reject(error);
+        return;
       }
 
       signal.addEventListener("abort", signalHandler);

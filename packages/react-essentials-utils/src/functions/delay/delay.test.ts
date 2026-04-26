@@ -36,4 +36,23 @@ describe("delay", () => {
     expect(spy).toHaveBeenCalledWith("abort", expect.any(Function));
     spy.mockRestore();
   });
+
+  it("does not start a timer when the signal is already aborted", async () => {
+    const controller = new AbortController();
+    controller.abort();
+
+    const setTimeoutSpy = jest.spyOn(global, "setTimeout");
+    const addEventListenerSpy = jest.spyOn(
+      controller.signal,
+      "addEventListener",
+    );
+
+    await expect(delay(100, controller.signal)).rejects.toThrow();
+
+    expect(setTimeoutSpy).not.toHaveBeenCalled();
+    expect(addEventListenerSpy).not.toHaveBeenCalled();
+
+    setTimeoutSpy.mockRestore();
+    addEventListenerSpy.mockRestore();
+  });
 });
