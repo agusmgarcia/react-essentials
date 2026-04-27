@@ -33,9 +33,9 @@
     "deploy": "tsx src/binaries/deploy.ts --path=../../.github/workflows",
     "format": "tsx src/binaries/format.ts",
     "postbuild": "chmod +x bin/*.js",
-    "postpack": "move-cli tsconfig.json src/outputs/tsconfig.base.json && move-cli tsconfig.json2 tsconfig.json",
+    "postpack": "move-cli tsconfig.json dist/outputs/tsconfig.base.json && move-cli tsconfig.json2 tsconfig.json",
     "prebuild": "npm i --ignore-scripts --no-audit --no-fund",
-    "prepack": "move-cli tsconfig.json tsconfig.json2 && move-cli src/outputs/tsconfig.base.json tsconfig.json",
+    "prepack": "move-cli tsconfig.json tsconfig.json2 && move-cli dist/outputs/tsconfig.base.json tsconfig.json",
     "regenerate": "tsx src/binaries/regenerate.ts --path=../../.github/workflows",
     "start": "tsx src/binaries/start.ts",
     "test": "tsx src/binaries/test.ts"
