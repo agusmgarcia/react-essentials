@@ -30,6 +30,12 @@ jobs:
           cache: npm
           node-version: latest
 
+      - name: Install dependencies
+        run: npm i --ignore-scripts --no-audit --no-fund
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.node-auth-token }}
+
       - name: Publish
         run: npm publish
         shell: bash

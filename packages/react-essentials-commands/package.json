@@ -9,12 +9,12 @@
       "node": "./dist/index.node.js",
       "default": "./dist/index.js"
     },
+    "./tsconfig.json": "./tsconfig.json",
     "./*": {
       "types": "./dist/outputs/*.d.ts",
       "node": "./dist/outputs/*.node.js",
       "default": "./dist/outputs/*.js"
-    },
-    "./tsconfig.json": "./tsconfig.json"
+    }
   },
   "author": "Agus Garcia",
   "description": "Set of opinionated commands for NextJS applications, libraries and Azure functions",
