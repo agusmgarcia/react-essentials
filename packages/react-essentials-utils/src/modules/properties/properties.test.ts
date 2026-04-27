@@ -86,8 +86,8 @@ describe("properties", () => {
   describe("sort", () => {
     it("sorts object properties according to preferred order", () => {
       const input = { a: 1, b: 2, c: 3 };
-      const result = properties.sort(input, ["a", "b"]);
-      expect(Object.keys(result)).toEqual(["a", "b", "c"]);
+      const result = properties.sort(input, ["b", "a"]);
+      expect(Object.keys(result)).toEqual(["b", "a", "c"]);
     });
 
     it("sorts nested object properties according to preferred order", () => {
@@ -102,9 +102,9 @@ describe("properties", () => {
         { a: 1, b: 2 },
         { a: 3, b: 4 },
       ];
-      const result = properties.sort(input, ["*.a", "*.b"]);
-      expect(Object.keys(result[0])).toEqual(["a", "b"]);
-      expect(Object.keys(result[1])).toEqual(["a", "b"]);
+      const result = properties.sort(input, ["*.b", "*.a"]);
+      expect(Object.keys(result[0])).toEqual(["b", "a"]);
+      expect(Object.keys(result[1])).toEqual(["b", "a"]);
     });
 
     it("sorts deeply nested objects and arrays", () => {
@@ -115,13 +115,33 @@ describe("properties", () => {
         ],
       };
       const result = properties.sort(input, [
-        "arr.*.foo.x",
         "arr.*.foo.y",
+        "arr.*.foo.x",
         "arr.*.bar",
       ]);
-      expect(Object.keys(result.arr[0].foo)).toEqual(["x", "y"]);
-      expect(Object.keys(result.arr[1].foo)).toEqual(["x", "y"]);
+      expect(Object.keys(result.arr[0].foo)).toEqual(["y", "x"]);
+      expect(Object.keys(result.arr[1].foo)).toEqual(["y", "x"]);
       expect(Object.keys(result.arr[0])).toEqual(["foo", "bar"]);
+    });
+
+    it("omits sorting for the specified object path while still sorting grandchildren", () => {
+      const input = {
+        exports: {
+          // eslint-disable-next-line sort/object-properties
+          b: { y: 2, x: 1 },
+          // eslint-disable-next-line sort/object-properties
+          a: { y: 4, x: 3 },
+        },
+      };
+      const result = properties.sort(
+        input,
+        ["exports.a.x", "exports.a.y", "exports.b.x", "exports.b.y"],
+        ["exports"],
+      );
+
+      expect(Object.keys(result.exports)).toEqual(["b", "a"]);
+      expect(Object.keys(result.exports.b)).toEqual(["x", "y"]);
+      expect(Object.keys(result.exports.a)).toEqual(["x", "y"]);
     });
 
     it("sorts properties alphabetically if not in preferred", () => {
@@ -136,10 +156,10 @@ describe("properties", () => {
     });
 
     it("returns primitives as is", () => {
-      expect(properties.sort(123 as any, ["a"])).toBe(123);
-      expect(properties.sort("foo" as any, ["a"])).toBe("foo");
-      expect(properties.sort(null as any, ["a"])).toBe(null);
-      expect(properties.sort(undefined as any, ["a"])).toBe(undefined);
+      expect(properties.sort(123)).toBe(123);
+      expect(properties.sort("foo")).toBe("foo");
+      expect(properties.sort(null)).toBe(null);
+      expect(properties.sort(undefined)).toBe(undefined);
     });
 
     it("does not mutate the original object", () => {
@@ -151,8 +171,8 @@ describe("properties", () => {
 
     it("sorts keys with dots in their names correctly", () => {
       const input = { a: 2, "a.b": 1 };
-      const result = properties.sort(input, ["a", "a.b"]);
-      expect(Object.keys(result)).toEqual(["a", "a.b"]);
+      const result = properties.sort(input, ["a.b", "a"]);
+      expect(Object.keys(result)).toEqual(["a.b", "a"]);
     });
   });
 });

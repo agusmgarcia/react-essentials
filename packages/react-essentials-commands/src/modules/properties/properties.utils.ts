@@ -77,18 +77,38 @@ export function has<TProperty extends string>(
 export function sort<TElement>(
   input: TElement,
   preferred: NestedPaths<TElement>[] = [],
+  omit: NestedPaths<TElement>[] = [],
 ): TElement {
-  return recursiveSort(input, preferred, "");
+  return recursiveSort(input, preferred, omit, "");
 }
 
 export function recursiveSort<TElement>(
   input: TElement,
   preferred: NestedPaths<TElement>[],
+  omit: NestedPaths<TElement>[],
   base: string,
 ): TElement {
   if (typeof input !== "object" || !input) return input;
 
-  const baseParts = base.split(".").filter((b) => !!b);
+  const baseParts = base
+    .replace(/\.$/, "")
+    .split(".")
+    .filter((b) => !!b);
+
+  const skipSort = omit.some((omitPath) => {
+    const omitParts = omitPath.split(".");
+
+    if (omitParts.length !== baseParts.length) return false;
+
+    return omitParts.every(
+      (omitPart, index) => omitPart === "*" || omitPart === baseParts[index],
+    );
+  });
+
+  const keys = Array.isArray(input)
+    ? input.map((_, index) => `${index}`)
+    : Object.keys(input);
+
   const scopePreferred = preferred
     .map((p) => {
       const pParts = p.split(".");
@@ -104,7 +124,15 @@ export function recursiveSort<TElement>(
     })
     .filter((p) => p.startsWith(base))
     .map((p) => p.replace(base, ""))
-    .map((p) => p.split(".", 1)[0])
+    .map((p) => {
+      const exactKey = keys.find((key) => key === p);
+      if (exactKey) return exactKey;
+
+      const nestedKey = keys.find((key) => p.startsWith(`${key}.`));
+      if (nestedKey) return nestedKey;
+
+      return p.split(".", 1)[0];
+    })
     .filter((p) => !!p);
 
   function sortKeys(key1: string, key2: string): number {
@@ -121,20 +149,19 @@ export function recursiveSort<TElement>(
   }
 
   if (Array.isArray(input))
-    return input
-      .sort(sortKeys)
-      .map((value, index) =>
-        recursiveSort(value, preferred, `${base}${index}.`),
-      ) as TElement;
+    return (skipSort ? input : input.sort(sortKeys)).map((value, index) =>
+      recursiveSort(value, preferred, omit, `${base}${index}.`),
+    ) as TElement;
 
-  return Object.keys(input)
-    .sort(sortKeys)
-    .reduce((result, key) => {
-      result[key as keyof TElement] = recursiveSort(
-        input[key as keyof TElement],
-        preferred as any,
-        `${base}${key.replace(/\./g, "@@@@")}.`,
-      );
-      return result;
-    }, {} as TElement);
+  return (
+    skipSort ? Object.keys(input) : Object.keys(input).sort(sortKeys)
+  ).reduce((result, key) => {
+    (result as any)[key] = recursiveSort(
+      (input as any)[key],
+      preferred as any,
+      omit,
+      `${base}${key.replace(/\./g, "@@@@")}.`,
+    );
+    return result;
+  }, {} as TElement);
 }
