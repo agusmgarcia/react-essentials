@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.23.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.23.0)
+
+> April 27, 2026
+
+### Features ✅
+
+- **types.d.ts**: add middleware
+- start creating dummy index files
+- **tsconfig**: enable stricter configs
+- start using eslint file-composition rules
+- start using eslint independent-modules rules
+- start using eslint project-structure rules
+- **createWebpackConfig**: always import for node and web
+- start using webpack.config.ts
+
+### Fixes 🎯
+
+- **createReactStore**: minor type fix
+
+### Chores ⚙️
+
+- adjust eslint errors
+- separate eslint configurations into its module
+- bump dependencies
+
 ## [v0.22.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.22.0)
 
 > February 3, 2026
