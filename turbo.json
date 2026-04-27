@@ -8,25 +8,42 @@
         "src/**/*",
         "!src/**/*.test.*",
         "package.json",
-        "webpack.config.[jt]s"
+        "webpack.config.ts"
       ],
       "outputs": ["bin", "dist"]
     },
     "check": {
-      "cache": false,
-      "dependsOn": ["build"]
+      "cache": true,
+      "dependsOn": ["build"],
+      "inputs": [
+        "src/**/*.test.*",
+        "eslint.config.js",
+        "jest.config.js",
+        "postcss.config.js",
+        "prettier.config.js",
+        "tsconfig.json"
+      ]
     },
     "deploy": {
       "cache": false,
-      "dependsOn": ["build"]
+      "dependsOn": ["check", "test"]
     },
     "format": {
-      "cache": false,
-      "dependsOn": ["build"]
+      "cache": true,
+      "dependsOn": ["build"],
+      "inputs": [
+        "src/**/*.test.*",
+        "eslint.config.js",
+        "jest.config.js",
+        "postcss.config.js",
+        "prettier.config.js",
+        "tsconfig.json"
+      ]
     },
     "test": {
-      "cache": false,
-      "dependsOn": ["build"]
+      "cache": true,
+      "dependsOn": ["build"],
+      "inputs": ["jest.config.js", "src/**/*.test.*"]
     }
   }
 }
