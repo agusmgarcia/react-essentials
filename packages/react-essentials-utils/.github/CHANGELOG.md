@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.15.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.15.0)
+
+> April 27, 2026
+
+### Features ✅
+
+- **types.d.ts**: add middleware
+- **createJestConfig**: include uuid inside the testing
+- **groupBy**: add utility
+- start creating dummy index files
+- start using eslint file-composition rules
+- start using eslint independent-modules rules
+- start using eslint project-structure rules
+- **folders**: add isFolder method
+- start using webpack.config.ts
+
+### Fixes 🎯
+
+- **equals**: handle NaN scenarios
+- **dates**: change the way current date is determined
+- **delay**: return inmediatly if the signal is aborted
+- **Cache**: set NOT_ENOUGH_SPACE_ERROR to protected
+- **execute**: handle single quotes
+
+### Chores ⚙️
+
+- adjust eslint errors
+- move dependencies to peers
+- separate eslint configurations into its module
+- bump dependencies
+
 ## [v0.14.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.14.0)
 
 > February 3, 2026
