@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.16.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.16.0)
+
+> April 27, 2026
+
+### Features ✅
+
+- **types.d.ts**: add middleware
+- **createJestConfig**: include uuid inside the testing
+- start creating dummy index files
+- **createHttpMiddleware1**: add missing functions
+- **tsconfig**: enable stricter configs
+- mark react and react-dom as peer dependencies for lib
+- start using eslint file-composition rules
+- move base tsconfig.json to the root
+- start using eslint independent-modules rules
+- start using eslint project-structure rules
+- **folders**: add isFolder method
+- **createWebpackConfig**: remove binaries from alias
+- **createWebpackConfig**: always import for node and web
+- **createWebpackConfig**: stop finding dependencies automatically
+- **createWebpackConfig**: stop discriminating externals
+- rename \_out by outputs
+- rename \_bin by binaries
+- start using webpack.config.ts
+
+### Fixes 🎯
+
+- **npm**: adjust command's output
+- **git**: handle ssh remote urls
+- **execute**: handle single quotes
+- **createJestConfig**: exclude test from pages folder
+
+### Chores ⚙️
+
+- adjust eslint errors
+- move dependencies to peers
+- separate eslint configurations into its module
+- make typescript as peer
+- **createWebpackConfig**: move into separated folders
+
 ## [v0.15.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.15.1)
 
 > February 3, 2026
