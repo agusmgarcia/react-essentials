@@ -36,6 +36,7 @@ export default function useDimensions<TElement extends Element>(
 
   useEffect(() => {
     if (!visible) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDimensions(initialValue);
       return;
     }

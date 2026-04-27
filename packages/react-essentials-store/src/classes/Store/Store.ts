@@ -182,8 +182,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
 class SliceProxyHandler<
   TSlice extends GlobalSlice<any, any>,
   TSliceFactories extends BaseSliceFactories,
-> implements ProxyHandler<TSlice>
-{
+> implements ProxyHandler<TSlice> {
   private readonly methods: Record<string, any>;
   private readonly state: SlicesOf<TSliceFactories>;
   private readonly middleware: Middleware<TSliceFactories>;

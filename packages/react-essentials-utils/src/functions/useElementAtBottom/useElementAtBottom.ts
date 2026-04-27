@@ -32,7 +32,6 @@ export default function useElementAtBottom<TElement extends HTMLElement>(
   useEffect(() => {
     const element = elementRef.current;
     if (!element) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAtBottom(initialValue);
       return;
     }

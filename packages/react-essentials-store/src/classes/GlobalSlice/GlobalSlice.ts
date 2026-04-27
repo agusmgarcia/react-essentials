@@ -382,9 +382,10 @@ function extractSubscriptionParameters<TState extends BaseState>(
   };
 }
 
-class SlicesProxyHandler<TState extends BaseState, TSlices extends BaseSlices>
-  implements ProxyHandler<TSlices>
-{
+class SlicesProxyHandler<
+  TState extends BaseState,
+  TSlices extends BaseSlices,
+> implements ProxyHandler<TSlices> {
   private readonly slices: Record<string, GlobalSlice<any, any>>;
   private readonly slice: GlobalSlice<TState, TSlices>;
 
@@ -406,9 +407,10 @@ class SlicesProxyHandler<TState extends BaseState, TSlices extends BaseSlices>
   }
 }
 
-class SliceProxyHandler<TState extends BaseState, TSlices extends BaseSlices>
-  implements ProxyHandler<GlobalSlice<any, any>>
-{
+class SliceProxyHandler<
+  TState extends BaseState,
+  TSlices extends BaseSlices,
+> implements ProxyHandler<GlobalSlice<any, any>> {
   private readonly methods: Record<string, (...args: any) => any>;
   private readonly slice: GlobalSlice<TState, TSlices>;
 
