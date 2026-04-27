@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.15.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.15.1)
+
+> April 27, 2026
+
+### Fixes 🎯
+
+- **properties**: add ability to sort to omit props
+
 ## [v0.15.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.15.0)
 
 > April 27, 2026
