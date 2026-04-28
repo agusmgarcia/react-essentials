@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.23.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.23.1)
+
+> April 28, 2026
+
+### Fixes 🎯
+
+- adjust import order
+
 ## [v0.23.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.23.0)
 
 > April 27, 2026
