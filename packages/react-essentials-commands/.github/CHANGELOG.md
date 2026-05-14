@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.16.3](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.16.3)
+
+> May 14, 2026
+
+### Fixes 🎯
+
+- **createEslintConfig**: add support for getStaticProps and getStaticPaths
+
 ## [v0.16.2](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.16.2)
 
 > April 27, 2026
