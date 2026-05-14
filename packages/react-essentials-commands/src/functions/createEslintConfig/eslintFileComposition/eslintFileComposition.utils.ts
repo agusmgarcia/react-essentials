@@ -110,6 +110,16 @@ export const APP = createFileComposition({
           scope: "fileExport",
           selector: "function",
         },
+        {
+          format: "getStaticProps",
+          scope: "fileExport",
+          selector: "arrowFunction",
+        },
+        {
+          format: "getStaticPaths",
+          scope: "fileExport",
+          selector: "arrowFunction",
+        },
         ...NESTED_SELECTORS,
         ...COMPONENT_FILE_ROOT,
         ...FUNCTION_FILE_ROOT,
