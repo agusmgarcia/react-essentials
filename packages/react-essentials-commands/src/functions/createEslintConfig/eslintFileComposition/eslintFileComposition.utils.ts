@@ -29,6 +29,14 @@ const NESTED_SELECTORS: FileRoot[] = [
   },
 ];
 
+const GLOBAL_VARIABLE_NESTED_SELECTOR: FileRoot[] = [
+  {
+    format: "__{SNAKE_CASE}__",
+    scope: "nestedSelectors",
+    selector: "variable",
+  },
+];
+
 const COMPONENT_FILE_ROOT: FileRoot[] = [
   {
     format: "{PascalCase}",
@@ -140,6 +148,7 @@ export const APP = createFileComposition({
           scope: "fileExport",
           selector: "type",
         },
+        ...GLOBAL_VARIABLE_NESTED_SELECTOR,
         ...TYPE_FILE_ROOT,
       ],
     },
@@ -206,6 +215,7 @@ export const APP = createFileComposition({
           scope: "fileExport",
           selector: "type",
         },
+        ...GLOBAL_VARIABLE_NESTED_SELECTOR,
         ...TYPE_FILE_ROOT,
       ],
     },
@@ -326,6 +336,7 @@ export const APP = createFileComposition({
           scope: "fileExport",
           selector: "type",
         },
+        ...GLOBAL_VARIABLE_NESTED_SELECTOR,
         ...TYPE_FILE_ROOT,
       ],
     },
@@ -405,6 +416,7 @@ export const AZURE_FUNC = createFileComposition({
           scope: "fileExport",
           selector: "type",
         },
+        ...GLOBAL_VARIABLE_NESTED_SELECTOR,
         ...TYPE_FILE_ROOT,
       ],
     },
@@ -461,6 +473,7 @@ export const AZURE_FUNC = createFileComposition({
           scope: "fileExport",
           selector: "type",
         },
+        ...GLOBAL_VARIABLE_NESTED_SELECTOR,
         ...TYPE_FILE_ROOT,
       ],
     },
@@ -512,6 +525,7 @@ export const AZURE_FUNC = createFileComposition({
           scope: "fileExport",
           selector: "type",
         },
+        ...GLOBAL_VARIABLE_NESTED_SELECTOR,
         ...TYPE_FILE_ROOT,
       ],
     },
@@ -656,6 +670,7 @@ export const LIB = createFileComposition({
           scope: "fileExport",
           selector: "type",
         },
+        ...GLOBAL_VARIABLE_NESTED_SELECTOR,
         ...TYPE_FILE_ROOT,
       ],
     },
@@ -724,6 +739,7 @@ export const LIB = createFileComposition({
           scope: "fileExport",
           selector: "type",
         },
+        ...GLOBAL_VARIABLE_NESTED_SELECTOR,
         ...TYPE_FILE_ROOT,
       ],
     },
@@ -820,6 +836,7 @@ export const NODE = createFileComposition({
           scope: "fileExport",
           selector: "type",
         },
+        ...GLOBAL_VARIABLE_NESTED_SELECTOR,
         ...TYPE_FILE_ROOT,
       ],
     },
