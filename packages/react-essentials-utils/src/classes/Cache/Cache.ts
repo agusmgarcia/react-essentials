@@ -1,3 +1,4 @@
+import { properties } from "#src/modules";
 import { type AsyncFunc, type Func } from "#src/types";
 
 import { type Entry, type Mutex, type Options } from "./Cache.types";
@@ -164,7 +165,7 @@ export default class Cache {
     expiresAt?: number | Func<number, [result: TResult]>,
   ): Promise<TResult> {
     const item = await this.rawSet(key, factory, false, signal, expiresAt);
-    if ("result" in item) return item.result as TResult;
+    if (properties.has(item, "result")) return item.result as TResult;
     throw item.error;
   }
 
@@ -199,7 +200,7 @@ export default class Cache {
       signal,
       expiresAt,
     );
-    if ("result" in item) return item.result;
+    if (properties.has(item, "result")) return item.result;
     throw item.error;
   }
 }

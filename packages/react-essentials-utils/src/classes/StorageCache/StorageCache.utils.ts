@@ -1,7 +1,7 @@
 import { v4 as createUUID } from "uuid";
 
 import { type CacheTypes } from "#src/classes";
-import { errors, strings } from "#src/modules";
+import { errors, properties, strings } from "#src/modules";
 import { type AsyncFunc } from "#src/types";
 
 import { type Options } from "./StorageCache.types";
@@ -89,32 +89,27 @@ export class Storage implements CacheTypes.Storage {
     try {
       const entry: unknown = JSON.parse(item);
 
-      if (typeof entry !== "object") return undefined;
-
-      if (!entry) return undefined;
-
-      if (!("createdAt" in entry) || typeof entry.createdAt !== "number")
+      if (
+        !properties.has(entry, "createdAt", "number") ||
+        !properties.has(entry, "expiresAt", "number")
+      )
         return undefined;
 
-      if (!("expiresAt" in entry) || typeof entry.expiresAt !== "number")
-        return undefined;
+      if (properties.has(entry, "result")) return entry;
 
-      if ("result" in entry) return entry as CacheTypes.Entry;
+      if (properties.has(entry, "error", "string"))
+        return { ...entry, error: new Error(entry.error) };
 
-      if (!("error" in entry) || typeof entry.error !== "string")
-        return undefined;
-
-      return { ...entry, error: new Error(entry.error) } as CacheTypes.Entry;
+      return undefined;
     } catch {
       return undefined;
     }
   }
 
   async setEntry(key: string, entry: CacheTypes.Entry): Promise<void> {
-    const raw =
-      "error" in entry
-        ? { ...entry, error: errors.getMessage(entry.error) }
-        : entry;
+    const raw = properties.has(entry, "error")
+      ? { ...entry, error: errors.getMessage(entry.error) }
+      : entry;
 
     try {
       window[`${this.storage}Storage`].setItem(key, JSON.stringify(raw));

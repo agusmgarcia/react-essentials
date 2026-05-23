@@ -66,7 +66,7 @@ export function has<TProperty extends string>(
   if (!(property in element)) return false;
 
   const isNull = type === "null";
-  type = type === "null" ? "object" : type;
+  type = isNull ? "object" : type;
 
   if (!!type && typeof (element as any)[property] !== type) return false;
   if (isNull && !!(element as any)[property]) return false;
