@@ -291,6 +291,8 @@ export const APP = createFileComposition({
           scope: "fileExport",
           selector: "function",
         },
+        ...NESTED_SELECTORS,
+        ...FUNCTION_FILE_ROOT,
       ],
     },
     {
