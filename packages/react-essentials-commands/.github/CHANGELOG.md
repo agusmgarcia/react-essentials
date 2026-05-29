@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.16.4](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.16.4)
+
+> May 29, 2026
+
+### Fixes 🎯
+
+- **eslint**: allow functions in index_store
+- **eslint**: allow global variables in types files
+
+### Chores ⚙️
+
+- **properties**: start using it across project
+
 ## [v0.16.3](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.16.3)
 
 > May 14, 2026
