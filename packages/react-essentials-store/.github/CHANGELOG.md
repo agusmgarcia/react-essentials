@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.23.2](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.23.2)
+
+> May 29, 2026
+
+### Fixes 🎯
+
+- **eslint**: allow global variables in types files
+
 ## [v0.23.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.23.1)
 
 > April 28, 2026
