@@ -1,16 +1,9 @@
-import { type GetPackageJSONTypes } from "#src/functions";
-
-export type Input = [
+export type Input = {
   /**
-   * The core type of the package, which can be one of:
-   * - "app": for web applications
-   * - "lib": for libraries that can be used in both Node.js and browser environments
+   * The core type of the package.
    */
-  core: Extract<
-    NonNullable<GetPackageJSONTypes.Response["core"]>,
-    "app" | "lib"
-  >,
-];
+  core: "app" | "lib";
+};
 
 export type Output = {
   plugins: string[];

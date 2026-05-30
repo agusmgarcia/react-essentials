@@ -7,7 +7,7 @@ import { type Input, type Output } from "./createPostCSSConfig.types";
  *               Supported values typically include "app", "lib", or others.
  * @returns An object containing the PostCSS plugins configuration, including Tailwind CSS.
  */
-export default function createPostCSSConfig(..._input: Input): Output {
+export default function createPostCSSConfig(_input: Input): Output {
   return {
     plugins: ["@tailwindcss/postcss"],
   };

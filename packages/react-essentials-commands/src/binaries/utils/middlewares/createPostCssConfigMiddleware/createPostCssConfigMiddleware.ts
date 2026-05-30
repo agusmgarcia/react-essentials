@@ -30,6 +30,6 @@ async function deletePostCSSConfigFiles(
 function getTemplate(context: CreateFileMiddlewareTypes.Context): string {
   return `const { createPostCSSConfig } = require("${context.essentialsCommands ? "./dist" : context.essentialsCommandsName}");
 
-module.exports = createPostCSSConfig("${context.core}");
+module.exports = createPostCSSConfig({ core: "${context.core}" });
 `;
 }
