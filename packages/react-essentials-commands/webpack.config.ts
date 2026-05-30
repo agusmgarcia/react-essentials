@@ -1,6 +1,7 @@
 import { createWebpackConfig } from "./src";
 
-export default createWebpackConfig("lib", {
+export default createWebpackConfig({
+  core: "lib",
   externals: [
     "eslint/config",
     "eslint-config-next/core-web-vitals",

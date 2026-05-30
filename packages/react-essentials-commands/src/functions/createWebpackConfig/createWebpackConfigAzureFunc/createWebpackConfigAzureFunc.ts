@@ -8,17 +8,15 @@ import { folders } from "#src/modules";
 import { type Input, type Output } from "./createWebpackConfigAzureFunc.types";
 
 export default async function createWebpackConfigAzureFunc(
-  input: Input,
+  input: Input & { core: "azure-func" },
   packageJSON: GetPackageJSONTypes.Response,
 ): Promise<Output> {
-  if (input[0] !== "azure-func") throw new Error("Unexpected scenario");
-
   return [
     {
       entry: await getFunctionEntries(packageJSON),
       externals: [
         ...Object.keys(packageJSON.dependencies || {}),
-        ...(input[1]?.externals || []),
+        ...(input?.externals || []),
       ],
       module: {
         rules: [
@@ -52,7 +50,9 @@ export default async function createWebpackConfigAzureFunc(
       resolve: {
         alias: {
           "#src": path.resolve("src"),
-          ...input[1]?.alias,
+          ...(typeof input?.alias === "function"
+            ? input.alias("node")
+            : input?.alias),
         },
         extensions: [".js", ".ts"],
       },

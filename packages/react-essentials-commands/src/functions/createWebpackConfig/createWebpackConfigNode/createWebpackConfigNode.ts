@@ -7,17 +7,15 @@ import packageJSONEssentialsCommands from "../../../../package.json";
 import { type Input, type Output } from "./createWebpackConfigNode.types";
 
 export default async function createWebpackConfigNode(
-  input: Input,
+  input: Input & { core: "node" },
   packageJSON: GetPackageJSONTypes.Response,
 ): Promise<Output> {
-  if (input[0] !== "node") throw new Error("Unexpected scenario");
-
   return [
     {
       entry: path.resolve("src", "index.ts"),
       externals: [
         ...Object.keys(packageJSON.dependencies || {}),
-        ...(input[1]?.externals || []),
+        ...(input?.externals || []),
       ],
       module: {
         rules: [
@@ -68,7 +66,9 @@ export default async function createWebpackConfigNode(
       resolve: {
         alias: {
           "#src": path.resolve("src"),
-          ...input[1]?.alias,
+          ...(typeof input?.alias === "function"
+            ? input.alias("node")
+            : input?.alias),
         },
         extensions: [".js", ".ts"],
       },

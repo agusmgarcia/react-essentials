@@ -9,18 +9,16 @@ import { type Input, type Output } from "./createWebpackConfigLib.types";
 import { NODE_DEPENDENCIES } from "./createWebpackConfigLib.utils";
 
 export default async function createWebpackConfigLib(
-  input: Input,
+  input: Input & { core: "lib" },
   packageJSON: GetPackageJSONTypes.Response,
 ): Promise<Output> {
-  if (input[0] !== "lib") throw new Error("Unexpected scenario");
-
   return [
     {
       entry: await getOutEntries(packageJSON),
       externals: [
         ...Object.keys(packageJSON.dependencies || {}),
         ...Object.keys(packageJSON.peerDependencies || {}),
-        ...(input[1]?.externals || []),
+        ...(input?.externals || []),
         "react/jsx-runtime",
       ],
       module: {
@@ -76,9 +74,9 @@ export default async function createWebpackConfigLib(
       resolve: {
         alias: {
           "#src": path.resolve("src"),
-          ...(typeof input[1]?.alias === "function"
-            ? input[1].alias("web")
-            : input[1]?.alias),
+          ...(typeof input?.alias === "function"
+            ? input.alias("web")
+            : input?.alias),
         },
         extensions: [".js", ".jsx", ".ts", ".tsx"],
         fallback: NODE_DEPENDENCIES.reduce(
@@ -95,7 +93,7 @@ export default async function createWebpackConfigLib(
       externals: [
         ...Object.keys(packageJSON.dependencies || {}),
         ...Object.keys(packageJSON.peerDependencies || {}),
-        ...(input[1]?.externals || []),
+        ...(input?.externals || []),
         "react/jsx-runtime",
       ],
       module: {
@@ -148,9 +146,9 @@ export default async function createWebpackConfigLib(
       resolve: {
         alias: {
           "#src": path.resolve("src"),
-          ...(typeof input[1]?.alias === "function"
-            ? input[1].alias("node")
-            : input[1]?.alias),
+          ...(typeof input?.alias === "function"
+            ? input.alias("node")
+            : input?.alias),
         },
         extensions: [".js", ".jsx", ".ts", ".tsx"],
       },
@@ -161,7 +159,7 @@ export default async function createWebpackConfigLib(
       externals: [
         ...Object.keys(packageJSON.dependencies || {}),
         ...Object.keys(packageJSON.peerDependencies || {}),
-        ...(input[1]?.externals || []),
+        ...(input?.externals || []),
         "react/jsx-runtime",
       ],
       module: {
@@ -209,9 +207,9 @@ export default async function createWebpackConfigLib(
       resolve: {
         alias: {
           "#src": path.resolve("src"),
-          ...(typeof input[1]?.alias === "function"
-            ? input[1].alias("node")
-            : input[1]?.alias),
+          ...(typeof input?.alias === "function"
+            ? input.alias("node")
+            : input?.alias),
         },
         extensions: [".js", ".jsx", ".ts", ".tsx"],
       },

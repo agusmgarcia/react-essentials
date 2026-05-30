@@ -30,6 +30,6 @@ async function deleteWebpackConfigFiles(
 function getTemplate(context: CreateFileMiddlewareTypes.Context): string {
   return `import { createWebpackConfig } from "${context.essentialsCommands ? "./src/configs" : context.essentialsCommandsName}";
 
-export default createWebpackConfig("${context.core}");
+export default createWebpackConfig({ core: "${context.core}" });
 `;
 }

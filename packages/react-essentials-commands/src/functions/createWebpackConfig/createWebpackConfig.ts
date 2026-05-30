@@ -23,14 +23,14 @@ import { createWebpackConfigNode } from "./createWebpackConfigNode";
  * - Applies custom TypeScript path transformers and supports UMD library output.
  */
 export default async function createWebpackConfig(
-  ...input: Input
+  input: Input,
 ): Promise<Output> {
   const packageJSON = await getPackageJSON();
 
-  if (input[0] === "azure-func")
+  if (input.core === "azure-func")
     return await createWebpackConfigAzureFunc(input, packageJSON);
 
-  if (input[0] === "lib")
+  if (input.core === "lib")
     return await createWebpackConfigLib(input, packageJSON);
 
   return await createWebpackConfigNode(input, packageJSON);
