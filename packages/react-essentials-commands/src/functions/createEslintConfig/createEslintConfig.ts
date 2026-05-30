@@ -23,7 +23,7 @@ import { eslintIndependentModules } from "./eslintIndependentModules";
  * @returns An ESLint configuration object compatible with the flat config API.
  */
 export default async function createEslintConfig(
-  ...[core]: Input
+  input: Input,
 ): Promise<Output> {
   const [monorepoDetails, tsconfig] = await Promise.all([
     npm.getMonorepoDetails(),
@@ -42,39 +42,39 @@ export default async function createEslintConfig(
       rules: {
         "project-structure/file-composition": [
           "error",
-          core === "app"
+          input.core === "app"
             ? eslintFileComposition.APP
-            : core === "azure-func"
+            : input.core === "azure-func"
               ? eslintFileComposition.AZURE_FUNC
-              : core === "lib"
+              : input.core === "lib"
                 ? eslintFileComposition.LIB
                 : eslintFileComposition.NODE,
         ],
 
         "project-structure/folder-structure": [
           "error",
-          core === "app"
+          input.core === "app"
             ? eslintFolderStructure.APP
-            : core === "azure-func"
+            : input.core === "azure-func"
               ? eslintFolderStructure.AZURE_FUNC
-              : core === "lib"
+              : input.core === "lib"
                 ? eslintFolderStructure.LIB
                 : eslintFolderStructure.NODE,
         ],
 
         "project-structure/independent-modules": [
           "error",
-          core === "app"
+          input.core === "app"
             ? eslintIndependentModules.createApp(
                 monorepoDetails?.location,
                 tsconfig?.compilerOptions?.paths,
               )
-            : core === "azure-func"
+            : input.core === "azure-func"
               ? eslintIndependentModules.createAzureFunc(
                   monorepoDetails?.location,
                   tsconfig?.compilerOptions?.paths,
                 )
-              : core === "lib"
+              : input.core === "lib"
                 ? eslintIndependentModules.createLib(
                     monorepoDetails?.location,
                     tsconfig?.compilerOptions?.paths,
@@ -164,7 +164,8 @@ export default async function createEslintConfig(
     ...eslintConfigNextCoreWebVitals,
     {
       rules: {
-        "@next/next/no-html-link-for-pages": core === "app" ? "error" : "off",
+        "@next/next/no-html-link-for-pages":
+          input.core === "app" ? "error" : "off",
       },
     },
 

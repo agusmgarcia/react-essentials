@@ -33,6 +33,6 @@ async function deleteEslintConfigFiles(
 function getTemplate(context: CreateFileMiddlewareTypes.Context): string {
   return `const { createEslintConfig } = require("${context.essentialsCommands ? "./dist" : context.essentialsCommandsName}");
 
-module.exports = createEslintConfig("${context.core}");
+module.exports = createEslintConfig({ core: "${context.core}" });
 `;
 }

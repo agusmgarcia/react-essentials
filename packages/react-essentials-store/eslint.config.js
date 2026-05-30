@@ -2,4 +2,4 @@ const {
   createEslintConfig,
 } = require("@agusmgarcia/react-essentials-commands");
 
-module.exports = createEslintConfig("lib");
+module.exports = createEslintConfig({ core: "lib" });
