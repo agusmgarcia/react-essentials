@@ -9,15 +9,13 @@ import { type Input, type Output } from "./createJestConfig.types";
  *               Supported values typically include "app", "lib", or others.
  * @returns A Jest configuration object compatible with Next.js and the specified core type.
  */
-export default async function createJestConfig(
-  ...[core, configs]: Input
-): Promise<Output> {
+export default async function createJestConfig(input: Input): Promise<Output> {
   const createNextJestConfig = nextJest({ dir: "./" })({
     cacheDirectory: "node_modules/.jestcache",
     clearMocks: true,
-    displayName: core !== "lib" ? "Source" : undefined,
+    displayName: input.core !== "lib" ? "Source" : undefined,
     moduleNameMapper:
-      core === "app"
+      input.core === "app"
         ? {
             "^#public\\/(.*)$": "<rootDir>/public/$1",
             "^#src\\/(.*)$": "<rootDir>/src/$1",
@@ -26,19 +24,19 @@ export default async function createJestConfig(
             "^#src\\/(.*)$": "<rootDir>/src/$1",
           },
     testEnvironment:
-      core === "app"
+      input.core === "app"
         ? "jsdom"
-        : core === "azure-func"
+        : input.core === "azure-func"
           ? "node"
-          : core === "lib"
+          : input.core === "lib"
             ? undefined
             : "node",
     testMatch:
-      core === "app"
+      input.core === "app"
         ? ["<rootDir>/src/**/*.test.ts?(x)"]
-        : core === "azure-func"
+        : input.core === "azure-func"
           ? ["<rootDir>/src/**/*.test.ts"]
-          : core === "lib"
+          : input.core === "lib"
             ? undefined
             : ["<rootDir>/src/**/*.test.ts"],
   });
@@ -47,14 +45,14 @@ export default async function createJestConfig(
 
   const transformIgnorePatterns = mergeTransformIgnorePatterns(
     nextJestConfig.transformIgnorePatterns,
-    [...(configs?.externals || []), "uuid"],
+    [...(input?.externals || []), "uuid"],
   );
 
   return {
     ...nextJestConfig,
     coverageProvider: "v8",
     projects:
-      core === "lib"
+      input.core === "lib"
         ? [
             {
               ...nextJestConfig,

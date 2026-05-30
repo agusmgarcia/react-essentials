@@ -31,6 +31,6 @@ async function deleteJestConfigFiles(
 function getTemplate(context: CreateFileMiddlewareTypes.Context): string {
   return `const { createJestConfig } = require("${context.essentialsCommands ? "./dist" : context.essentialsCommandsName}");
 
-module.exports = createJestConfig("${context.core}");
+module.exports = createJestConfig({ core: "${context.core}" });
 `;
 }

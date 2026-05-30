@@ -1,3 +1,3 @@
 const { createJestConfig } = require("@agusmgarcia/react-essentials-commands");
 
-module.exports = createJestConfig("lib");
+module.exports = createJestConfig({ core: "lib" });

@@ -1,3 +1,3 @@
 const { createJestConfig } = require("./dist/index.node");
 
-module.exports = createJestConfig("lib");
+module.exports = createJestConfig({ core: "lib" });
