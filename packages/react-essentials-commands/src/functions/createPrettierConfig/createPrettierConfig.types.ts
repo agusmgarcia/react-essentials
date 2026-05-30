@@ -1,27 +1,16 @@
 import { type Config } from "prettier";
 import { type PluginOptions } from "prettier-plugin-tailwindcss";
 
-import { type GetPackageJSONTypes } from "#src/functions";
-
-export type Input = [
+export type Input = {
   /**
-   * The core type of the package, which can be one of:
-   * - "app": for web applications
-   * - "lib": for libraries that can be used in both Node.js and browser environments
-   * - "azure-func": for Azure Functions
-   * - "node": for Node.js applications
+   * The core type of the package.
    */
-  core: NonNullable<GetPackageJSONTypes.Response["core"]>,
+  core: "app" | "azure-func" | "lib" | "node";
 
   /**
-   * Optional configurations for the webpack setup.
+   * To disable tailwind plugin.
    */
-  configs?: Partial<{
-    /**
-     * To disable tailwind plugin.
-     */
-    disableTailwind: boolean;
-  }>,
-];
+  disableTailwind?: boolean;
+};
 
 export type Output = Config & PluginOptions;

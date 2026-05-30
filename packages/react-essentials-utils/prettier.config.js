@@ -2,4 +2,4 @@ const {
   createPrettierConfig,
 } = require("@agusmgarcia/react-essentials-commands");
 
-module.exports = createPrettierConfig("lib", { disableTailwind: true });
+module.exports = createPrettierConfig({ core: "lib", disableTailwind: true });

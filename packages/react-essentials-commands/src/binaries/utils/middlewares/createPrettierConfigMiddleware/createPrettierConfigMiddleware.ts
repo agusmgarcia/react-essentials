@@ -32,6 +32,6 @@ async function deletePrettierConfigFiles(
 function getTemplate(context: CreateFileMiddlewareTypes.Context): string {
   return `const { createPrettierConfig } = require("${context.essentialsCommands ? "./dist" : context.essentialsCommandsName}");
 
-module.exports = createPrettierConfig("${context.core}");
+module.exports = createPrettierConfig({ core: "${context.core}" });
 `;
 }
