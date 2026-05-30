@@ -11,9 +11,9 @@
     },
     "./tsconfig.json": "./tsconfig.json",
     "./*": {
-      "types": "./dist/outputs/*.d.ts",
-      "node": "./dist/outputs/*.node.js",
-      "default": "./dist/outputs/*.js"
+      "types": "./dist/outputs/*/index.d.ts",
+      "node": "./dist/outputs/*/index.node.js",
+      "default": "./dist/outputs/*/index.js"
     }
   },
   "author": "Agus Garcia",
@@ -59,6 +59,8 @@
     "postcss-loader": "^8.0.0",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.7.0",
+    "rollup": "^4.0.0",
+    "rollup-plugin-dts": "^6.0.0",
     "semver": "^7.0.0",
     "style-loader": "^4.0.0",
     "tailwindcss": "^4.0.0",

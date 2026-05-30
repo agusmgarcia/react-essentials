@@ -64,7 +64,8 @@ export default async function createWebpackConfigLib(
             : path.join(
                 "dist",
                 "outputs",
-                `${data.chunk?.name || "[name]"}.js`,
+                data.chunk?.name || "[name]",
+                "index.js",
               ),
         globalObject: "this",
         libraryTarget: "umd",
@@ -136,7 +137,8 @@ export default async function createWebpackConfigLib(
             : path.join(
                 "dist",
                 "outputs",
-                `${data.chunk?.name || "[name]"}.node.js`,
+                data.chunk?.name || "[name]",
+                "index.node.js",
               ),
         globalObject: "this",
         libraryTarget: "umd",
@@ -223,43 +225,43 @@ async function getOutEntries(
 ): Promise<Record<string, webpack.EntryObject[string]>> {
   return await folders
     .readFolder(path.resolve("src", "outputs"))
-    .then((fs) =>
-      fs.filter(
-        (f) => f.endsWith(".ts") || f.endsWith(".tsx") || f.endsWith(".json"),
-      ),
-    )
     .then((files) =>
-      files.reduce(
-        (result, file) => {
-          const fileName = file.endsWith(".ts")
-            ? file.split(".ts")[0]
-            : file.endsWith(".tsx")
-              ? file.split(".tsx")[0]
-              : file.split(".json")[0];
+      files.map(async (file) => {
+        if (file.endsWith(".json"))
+          return { [file]: path.resolve("src", "outputs", file) };
 
-          result[fileName] = file.endsWith(".json")
-            ? path.resolve("src", "outputs", file)
-            : {
-                import: path.resolve("src", "outputs", file),
-                library: {
-                  name: `${packageJSON.name}/[name]`,
-                  type: "umd",
-                  umdNamedDefine: true,
-                },
-              };
-          return result;
-        },
-        {
-          index: {
-            import: path.resolve("src", "index.ts"),
+        if (
+          !(await folders
+            .readFolder(path.resolve("src", "outputs", file))
+            .then((files) => files.includes("index.ts")))
+        )
+          return undefined;
+
+        return {
+          [file]: {
+            import: path.resolve("src", "outputs", file, "index.ts"),
             library: {
-              name: packageJSON.name,
+              name: `${packageJSON.name}/[name]`,
               type: "umd",
               umdNamedDefine: true,
             },
           },
-        } as Record<string, webpack.EntryObject[string]>,
-      ),
+        };
+      }),
+    )
+    .then((promises) => Promise.all(promises))
+    .then((entries) => entries.filter((e) => !!e))
+    .then((entries) =>
+      entries.reduce((result, entry) => ({ ...entry, ...result }), {
+        index: {
+          import: path.resolve("src", "index.ts"),
+          library: {
+            name: packageJSON.name,
+            type: "umd",
+            umdNamedDefine: true,
+          },
+        },
+      } as Record<string, webpack.EntryObject[string]>),
     );
 }
 

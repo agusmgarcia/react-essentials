@@ -27,6 +27,12 @@ export function removeFile(path: string): Promise<void> {
   );
 }
 
+export function renameFile(path: string, newPath: string): Promise<void> {
+  return new Promise<void>((resolve, reject) =>
+    fs.rename(path, newPath, (error) => (!error ? resolve() : reject(error))),
+  );
+}
+
 export async function upsertFile(path: string, data: string): Promise<void> {
   return new Promise<void>((resolve, reject) =>
     fs.writeFile(path, data, { encoding: "utf-8", flag: "w+" }, (error) =>

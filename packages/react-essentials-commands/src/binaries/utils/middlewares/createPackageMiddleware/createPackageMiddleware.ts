@@ -226,9 +226,9 @@ async function getTemplate(
                   types: "./dist/index.d.ts",
                 },
                 "./*": {
-                  default: "./dist/outputs/*.js",
-                  node: "./dist/outputs/*.node.js",
-                  types: "./dist/outputs/*.d.ts",
+                  default: "./dist/outputs/*/index.js",
+                  node: "./dist/outputs/*/index.node.js",
+                  types: "./dist/outputs/*/index.d.ts",
                 },
               },
               files: ["bin", "dist"],

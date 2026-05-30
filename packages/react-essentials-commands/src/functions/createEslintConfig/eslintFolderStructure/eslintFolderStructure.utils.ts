@@ -288,9 +288,8 @@ export const LIB = createFolderStructure({
     outputs_folder: {
       children: [
         { name: "{camelCase}.json" },
-        { name: "{camelCase}.ts" },
-        { name: "{PascalCase}.ts" },
-        { name: "{PascalCase}.tsx" },
+        { name: "{camelCase}", ruleId: "_camel_case_folder" },
+        { name: "{PascalCase}", ruleId: "_pascal_case_folder" },
       ],
     },
     types_folder: {
