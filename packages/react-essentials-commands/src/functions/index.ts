@@ -4,6 +4,5 @@ export * from "./createNextConfig";
 export * from "./createPostCSSConfig";
 export * from "./createPrettierConfig";
 export * from "./createWebpackConfig";
-export * from "./emptyFunction";
 export * from "./execute";
 export * from "./getPackageJSON";

@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 
-import { emptyFunction } from "#src/functions";
+import { emptyFunction } from "#src/outputs/emptyFunction";
 import { type Func } from "#src/types";
 
 import { type Options } from "./execute.types";
