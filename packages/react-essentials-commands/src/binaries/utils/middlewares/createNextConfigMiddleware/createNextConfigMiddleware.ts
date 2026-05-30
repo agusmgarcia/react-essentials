@@ -34,6 +34,6 @@ async function deleteNextConfigFiles(
 function getTemplate(context: CreateFileMiddlewareTypes.Context): string {
   return `const { createNextConfig } = require("${context.essentialsCommands ? "./dist" : context.essentialsCommandsName}");
 
-module.exports = createNextConfig("${context.core}");
+module.exports = createNextConfig({ core: "${context.core}" });
 `;
 }
