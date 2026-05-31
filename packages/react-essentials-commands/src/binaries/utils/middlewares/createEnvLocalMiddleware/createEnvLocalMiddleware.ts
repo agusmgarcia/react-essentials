@@ -4,8 +4,8 @@ import {
   createFileMiddleware,
   type CreateFileMiddlewareTypes,
 } from "#src/binaries/utils";
-import { folders } from "#src/modules";
 import { files } from "#src/outputs/files";
+import { folders } from "#src/outputs/folders";
 import { properties } from "#src/outputs/properties";
 
 const MIDDLEWARE = createFileMiddleware<Record<string, any>>({

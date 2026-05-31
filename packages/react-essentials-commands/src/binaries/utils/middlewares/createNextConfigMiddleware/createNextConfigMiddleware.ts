@@ -2,8 +2,8 @@ import {
   createFileMiddleware,
   type CreateFileMiddlewareTypes,
 } from "#src/binaries/utils";
-import { folders } from "#src/modules";
 import { files } from "#src/outputs/files";
+import { folders } from "#src/outputs/folders";
 
 const MIDDLEWARE = createFileMiddleware<string>({
   path: "next.config.js",

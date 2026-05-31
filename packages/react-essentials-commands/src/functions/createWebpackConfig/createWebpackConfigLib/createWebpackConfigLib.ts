@@ -3,7 +3,7 @@ import getCustomTransformers from "ts-transform-paths";
 import { default as webpack } from "webpack";
 
 import { type GetPackageJSONTypes } from "#src/functions";
-import { folders } from "#src/modules";
+import { folders } from "#src/outputs/folders";
 
 import { type Input, type Output } from "./createWebpackConfigLib.types";
 import { NODE_DEPENDENCIES } from "./createWebpackConfigLib.utils";

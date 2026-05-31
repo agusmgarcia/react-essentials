@@ -3,7 +3,7 @@ import getCustomTransformers from "ts-transform-paths";
 import { type default as webpack } from "webpack";
 
 import { type GetPackageJSONTypes } from "#src/functions";
-import { folders } from "#src/modules";
+import { folders } from "#src/outputs/folders";
 
 import { type Input, type Output } from "./createWebpackConfigAzureFunc.types";
 

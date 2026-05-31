@@ -5,9 +5,9 @@ import dts from "rollup-plugin-dts";
 
 import { runCommand } from "#src/binaries/utils";
 import { execute, getPackageJSON } from "#src/functions";
-import { folders } from "#src/modules";
 import { errors } from "#src/outputs/errors";
 import { files } from "#src/outputs/files";
+import { folders } from "#src/outputs/folders";
 
 export default async function build(): Promise<void> {
   try {

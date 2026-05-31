@@ -5,8 +5,8 @@ import {
 } from "prettier";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 
-import { folders } from "#src/modules";
 import { files } from "#src/outputs/files";
+import { folders } from "#src/outputs/folders";
 import { type AsyncFunc } from "#src/types";
 
 import { type Context, type Options } from "./createFileMiddleware.types";
