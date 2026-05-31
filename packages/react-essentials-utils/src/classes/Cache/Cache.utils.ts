@@ -1,6 +1,6 @@
+import { errors } from "@agusmgarcia/react-essentials-commands/errors";
 import { Mutex as AsyncMutex } from "async-mutex";
 
-import { errors } from "#src/modules";
 import { type AsyncFunc } from "#src/types";
 
 import { type Entry, type Mutex, type Storage } from "./Cache.types";

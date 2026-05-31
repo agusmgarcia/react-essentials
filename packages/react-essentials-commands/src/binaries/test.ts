@@ -2,7 +2,8 @@ import process from "process";
 
 import { runCommand } from "#src/binaries/utils";
 import { execute } from "#src/functions";
-import { args, errors } from "#src/modules";
+import { args } from "#src/modules";
+import { errors } from "#src/outputs/errors";
 
 export default async function test(): Promise<void> {
   try {

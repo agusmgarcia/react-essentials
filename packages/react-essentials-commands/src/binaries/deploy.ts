@@ -2,7 +2,8 @@ import path from "path";
 import process from "process";
 
 import { execute } from "#src/functions";
-import { args, errors, git, npm, question } from "#src/modules";
+import { args, git, npm, question } from "#src/modules";
+import { errors } from "#src/outputs/errors";
 
 export default async function deploy(): Promise<void> {
   try {

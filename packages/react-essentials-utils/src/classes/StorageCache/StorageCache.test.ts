@@ -1,9 +1,8 @@
 /**
  * @jest-environment jsdom
  */
+import { errors } from "@agusmgarcia/react-essentials-commands/errors";
 import { Mutex as AsyncMutex } from "async-mutex";
-
-import { errors } from "#src/modules";
 
 import StorageCache from "./StorageCache";
 

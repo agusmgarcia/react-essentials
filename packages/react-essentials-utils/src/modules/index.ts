@@ -1,7 +1,6 @@
 export * from "./children";
 export * from "./dates";
 export * from "./equals";
-export * from "./errors";
 export * from "./files";
 export * from "./filters";
 export * from "./finds";

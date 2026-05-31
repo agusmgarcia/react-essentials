@@ -1,5 +1,4 @@
 export * from "./args";
-export * from "./errors";
 export * from "./files";
 export * from "./folders";
 export * from "./git";

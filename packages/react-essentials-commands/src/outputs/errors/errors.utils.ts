@@ -1,5 +1,4 @@
-import { properties } from "@agusmgarcia/react-essentials-commands/properties";
-
+import { properties } from "#src/outputs/properties";
 import { type AsyncFunc, type Func } from "#src/types";
 
 /**
