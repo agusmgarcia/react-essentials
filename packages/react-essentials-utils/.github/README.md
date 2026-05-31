@@ -138,6 +138,7 @@ files.isFile("src/index.json"); // => true if the path belongs to a file or thro
 files.readFile("src/index.json"); // => a string representing the content of the file
 files.readRequiredFile("src/index.json"); // => a string representing the content of the file or throw error if it doesn't exist
 files.removeFile("src/index.json"); // => remove the file
+files.renameFile("src/index.json", "src/index2.json"); // => rename the file
 files.upsertFile("src/index.json", JSON.stringify({})); // => create or update the file
 ```
 

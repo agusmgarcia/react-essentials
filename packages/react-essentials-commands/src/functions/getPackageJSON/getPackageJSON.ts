@@ -1,4 +1,4 @@
-import { files } from "#src/modules";
+import { files } from "#src/outputs/files";
 
 import { type Response } from "./getPackageJSON.types";
 

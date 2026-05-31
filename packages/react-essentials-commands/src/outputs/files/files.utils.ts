@@ -1,5 +1,6 @@
-import { properties } from "@agusmgarcia/react-essentials-commands/properties";
 import fs from "fs";
+
+import { properties } from "#src/outputs/properties";
 
 /**
  * Checks if the given path points to a file.
@@ -59,6 +60,20 @@ export function removeFile(path: string): Promise<void> {
     fs.rm(path, { force: true, recursive: true }, (error) =>
       !error ? resolve() : reject(error),
     ),
+  );
+}
+
+/**
+ * Renames a file from the given path to a new path.
+ *
+ * @param path - The current file system path.
+ * @param newPath - The new file system path.
+ * @returns A promise that resolves when the rename operation is complete.
+ * @throws Will reject the promise if an error occurs during renaming.
+ */
+export function renameFile(path: string, newPath: string): Promise<void> {
+  return new Promise<void>((resolve, reject) =>
+    fs.rename(path, newPath, (error) => (!error ? resolve() : reject(error))),
   );
 }
 

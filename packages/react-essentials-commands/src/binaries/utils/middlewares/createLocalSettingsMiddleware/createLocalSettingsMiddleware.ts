@@ -2,7 +2,7 @@ import {
   createFileMiddleware,
   type CreateFileMiddlewareTypes,
 } from "#src/binaries/utils";
-import { files } from "#src/modules";
+import { files } from "#src/outputs/files";
 import { properties } from "#src/outputs/properties";
 
 export default createFileMiddleware<Record<string, any>>({

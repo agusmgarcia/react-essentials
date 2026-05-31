@@ -1,4 +1,4 @@
-import { files } from "#src/modules";
+import { files } from "#src/outputs/files";
 
 export default async function createTailwindConfigMiddleware(): Promise<void> {
   await Promise.all([

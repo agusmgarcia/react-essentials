@@ -7,7 +7,8 @@ import eslintPluginSort from "eslint-plugin-sort";
 import path from "path";
 import process from "process";
 
-import { files, npm } from "#src/modules";
+import { npm } from "#src/modules";
+import { files } from "#src/outputs/files";
 
 import { type Input, type Output } from "./createEslintConfig.types";
 import { eslintFileComposition } from "./eslintFileComposition";
