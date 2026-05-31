@@ -5,7 +5,8 @@ import {
   type CreateFileMiddlewareTypes,
 } from "#src/binaries/utils";
 import { execute, getPackageJSON } from "#src/functions";
-import { files, git, npm, properties } from "#src/modules";
+import { files, git, npm } from "#src/modules";
+import { properties } from "#src/outputs/properties";
 
 const MIDDLEWARE = createFileMiddleware<Record<string, any>>({
   mapOutput: (output) =>

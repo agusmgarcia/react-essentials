@@ -1,4 +1,5 @@
-import { properties } from "#src/modules";
+import { properties } from "@agusmgarcia/react-essentials-commands/properties";
+
 import { type AsyncFunc, type Func } from "#src/types";
 
 import { type Entry, type Mutex, type Options } from "./Cache.types";

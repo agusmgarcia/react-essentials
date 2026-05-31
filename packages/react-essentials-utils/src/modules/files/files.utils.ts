@@ -1,6 +1,5 @@
+import { properties } from "@agusmgarcia/react-essentials-commands/properties";
 import fs from "fs";
-
-import { properties } from "#src/modules";
 
 /**
  * Checks if the given path points to a file.

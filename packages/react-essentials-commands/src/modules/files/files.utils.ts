@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { properties } from "#src/modules";
+import { properties } from "#src/outputs/properties";
 
 export async function readFile(path: string): Promise<string> {
   try {

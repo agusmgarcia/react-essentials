@@ -1,4 +1,4 @@
-import { properties } from "#src/modules";
+import { properties } from "#src/outputs/properties";
 
 export function getMessage(
   error: unknown,

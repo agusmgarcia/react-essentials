@@ -4,6 +4,5 @@ export * from "./files";
 export * from "./folders";
 export * from "./git";
 export * from "./npm";
-export * from "./properties";
 export * from "./question";
 export * from "./strings";

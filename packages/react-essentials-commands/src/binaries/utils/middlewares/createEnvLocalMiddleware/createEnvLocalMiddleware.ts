@@ -4,7 +4,8 @@ import {
   createFileMiddleware,
   type CreateFileMiddlewareTypes,
 } from "#src/binaries/utils";
-import { files, folders, properties } from "#src/modules";
+import { files, folders } from "#src/modules";
+import { properties } from "#src/outputs/properties";
 
 const MIDDLEWARE = createFileMiddleware<Record<string, any>>({
   mapOutput: (output) => properties.sort(output),
