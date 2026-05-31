@@ -5,4 +5,5 @@ export * from "./outputs/errors";
 export * from "./outputs/files";
 export * from "./outputs/folders";
 export * from "./outputs/properties";
+export * from "./outputs/strings";
 export * from "./types";

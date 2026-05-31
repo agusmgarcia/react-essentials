@@ -1,9 +1,9 @@
 import { errors } from "@agusmgarcia/react-essentials-commands/errors";
 import { properties } from "@agusmgarcia/react-essentials-commands/properties";
+import { strings } from "@agusmgarcia/react-essentials-commands/strings";
 import { v4 as createUUID } from "uuid";
 
 import { type CacheTypes } from "#src/classes";
-import { strings } from "#src/modules";
 import { type AsyncFunc } from "#src/types";
 
 import { type Options } from "./StorageCache.types";

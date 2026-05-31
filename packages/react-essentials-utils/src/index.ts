@@ -3,6 +3,7 @@ export * from "@agusmgarcia/react-essentials-commands/errors";
 export * from "@agusmgarcia/react-essentials-commands/files";
 export * from "@agusmgarcia/react-essentials-commands/folders";
 export * from "@agusmgarcia/react-essentials-commands/properties";
+export * from "@agusmgarcia/react-essentials-commands/strings";
 export * from "./classes";
 export * from "./functions";
 export * from "./modules";

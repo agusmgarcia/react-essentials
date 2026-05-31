@@ -2,7 +2,7 @@ import {
   createFileMiddleware,
   type CreateFileMiddlewareTypes,
 } from "#src/binaries/utils";
-import { strings } from "#src/modules";
+import { strings } from "#src/outputs/strings";
 
 export default createFileMiddleware<string>({
   path: ".github/README.md",
