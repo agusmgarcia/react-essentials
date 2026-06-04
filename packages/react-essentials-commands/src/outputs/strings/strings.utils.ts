@@ -1,7 +1,8 @@
+import { type Replacements } from "./strings.types";
+
 /**
  * Capitalizes the first letter of a given string and returns the modified string.
  *
- * @template TString - A string type that represents the input string.
  * @param string - The input string to be capitalized.
  * @returns The input string with its first letter converted to uppercase.
  */
@@ -15,7 +16,6 @@ export function capitalize<TString extends string>(
 /**
  * Uncapitalizes the first letter of a given string and returns the modified string.
  *
- * @template TString - A string type that represents the input string.
  * @param string - The input string to be uncapitalized.
  * @returns The input string with its first letter converted to lowercase.
  */
@@ -28,8 +28,6 @@ export function uncapitalize<TString extends string>(
 
 const searchValue = /\$\{(.+?)\}/g;
 const multipleValues = /^(.+?)\?(.+?)\:(.+?)$/;
-
-type Replacements = Record<string, string | number | boolean | undefined>;
 
 /**
  * Replaces placeholders in a string with corresponding values from a replacements object.

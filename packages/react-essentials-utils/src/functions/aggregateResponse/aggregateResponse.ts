@@ -6,7 +6,6 @@ import { type AsyncFunc } from "#src/types";
  * Calls the provided asynchronous callback function to fetch all pages of data,
  * starting from the first page, and concatenates the `items` arrays from each page.
  *
- * @template TItem - The result type.
  * @param callback - An async function that fetches a page of results, given a page index and page size.
  * @param pageSize - The number of items per page to request from the callback.
  * @returns A promise that resolves to an array containing all items from all pages.

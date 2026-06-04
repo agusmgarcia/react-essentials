@@ -5,7 +5,6 @@ import { useDevicePixelRatio, useDimensions } from "#src/functions";
 /**
  * Custom hook that determines whether a given HTML element is scrolled to the top.
  *
- * @template TElement - The type of the HTML element being observed.
  * @param elementRef - A React ref object pointing to the target HTML element.
  * @param initialValue - An optional initial value for the `atTop` state. Defaults to `true`.
  * @returns A boolean indicating whether the element is scrolled to the top.

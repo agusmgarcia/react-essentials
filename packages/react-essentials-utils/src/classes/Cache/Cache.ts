@@ -145,8 +145,6 @@ export default class Cache {
   /**
    * Retrieves a cached value by key or creates it using the provided factory function if it doesn't exist or has expired.
    *
-   * @typeParam TResult - The type of the result produced by the factory function.
-   *
    * @param key - The unique key identifying the cached item.
    * @param factory - A function that produces the value to be cached. It can return either a value or a Promise resolving to a value.
    * @param signal - An AbortSignal to cancel the operation if needed.
@@ -172,8 +170,6 @@ export default class Cache {
 
   /**
    * Stores a value in the cache under the specified key, with an optional expiration time.
-   *
-   * @typeParam TValue - The type of the value to be cached.
    *
    * @param key - The unique key identifying the cached item.
    * @param factoryOrValue - The value to store in the cache or a function that produces the value to be cached.

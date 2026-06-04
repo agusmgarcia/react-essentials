@@ -31,9 +31,6 @@ export type TimeoutCallback =
 
 /**
  * Represents a subscription to a slice of state.
- *
- * @template TState - The type of the base state.
- * @template TSelection - The type of the selected state (defaults to TState).
  */
 export type Subscription<TState extends BaseState, TSelection = TState> = {
   /**

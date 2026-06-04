@@ -57,9 +57,6 @@ export function getMessage(
  *
  * If the `callback` function throws an error the `catchCallback` function is called with the error.
  *
- * @typeParam TResult - The return type of the `callback` function.
- * @typeParam TResultCatch - The return type of the `catchCallback` function.
- *
  * @param callback - The function to execute.
  * @param catchCallback - The function to execute if an error is thrown. Receives the error as its argument.
  *
@@ -74,9 +71,6 @@ export function handle<TResult, TResultCatch>(
  * Executes an asynchronous function and catches any errors that occur.
  *
  * If the `callback` function returns a rejected promise the `catchCallback` function is called with the error.
- *
- * @typeParam TResult - The return type of the `callback` function.
- * @typeParam TResultCatch - The return type of the `catchCallback` function.
  *
  * @param callback - The function to execute.
  * @param catchCallback - The function to execute if a promise is rejected. Receives the error as its argument.

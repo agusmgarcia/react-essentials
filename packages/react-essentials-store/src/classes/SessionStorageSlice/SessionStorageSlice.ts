@@ -9,9 +9,6 @@ import { type BaseData, type BaseSlices } from "./SessionStorageSlice.types";
  * and the corresponding entry in `sessionStorage`. It also listens for storage events to keep the state
  * in sync across multiple browser tabs or windows.
  *
- * @typeParam TData - The type of the data managed by this slice. Must extend `BaseData`.
- * @typeParam TSlices - The type of additional slices, defaults to an empty object.
- *
  * @remarks
  * - This class should be extended to implement specific storage slice logic.
  * - It is designed to be used in non-SSR (client-side) environments.

@@ -1,13 +1,13 @@
-import { type CreateWebpackConfigAzureFunc } from "./createWebpackConfigAzureFunc";
-import { type CreateWebpackConfigLib } from "./createWebpackConfigLib";
-import { type CreateWebpackConfigNode } from "./createWebpackConfigNode";
+import { type CreateWebpackConfigAzureFuncTypes } from "./createWebpackConfigAzureFunc";
+import { type CreateWebpackConfigLibTypes } from "./createWebpackConfigLib";
+import { type CreateWebpackConfigNodeTypes } from "./createWebpackConfigNode";
 
 export type Input =
-  | CreateWebpackConfigAzureFunc.Input
-  | CreateWebpackConfigLib.Input
-  | CreateWebpackConfigNode.Input;
+  | CreateWebpackConfigAzureFuncTypes.Input
+  | CreateWebpackConfigLibTypes.Input
+  | CreateWebpackConfigNodeTypes.Input;
 
 export type Output =
-  | CreateWebpackConfigAzureFunc.Output
-  | CreateWebpackConfigLib.Output
-  | CreateWebpackConfigNode.Output;
+  | CreateWebpackConfigAzureFuncTypes.Output
+  | CreateWebpackConfigLibTypes.Output
+  | CreateWebpackConfigNodeTypes.Output;

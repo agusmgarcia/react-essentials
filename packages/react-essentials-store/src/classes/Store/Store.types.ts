@@ -2,7 +2,10 @@ import { type Func } from "@agusmgarcia/react-essentials-utils";
 
 import { type GlobalSlice } from "#src/classes";
 
-type ProtectedMethods =
+/**
+ * Methods that are protected for the GlobalSlices
+ */
+export type ProtectedMethods =
   | "getDataFromStorage"
   | "onDestroy"
   | "onFetch"
@@ -14,9 +17,6 @@ type ProtectedMethods =
 /**
  * Represents a mapping of string keys to slice factory constructors.
  * Each value is a constructor function that creates an instance of a GlobalSlice.
- *
- * @typeParam string - The key representing the name of the slice.
- * @typeParam new (...args: any) => GlobalSlice<any, any> - The constructor for a GlobalSlice, accepting any arguments.
  */
 export type BaseSliceFactories = Record<
   string,
@@ -26,7 +26,6 @@ export type BaseSliceFactories = Record<
 /**
  * Represents a middleware function that can intercept or modify state changes.
  *
- * @typeParam TSliceFactories - The type of the slice factories used in the store.
  * @param callback - The next function to call in the middleware chain.
  * @param state - The current state of the store, derived from the slice factories.
  * @returns Any value, depending on the middleware implementation.
@@ -47,8 +46,6 @@ export type Middleware<TSliceFactories extends BaseSliceFactories> = Func<
 
 /**
  * Configuration options for the store.
- *
- * @typeParam TSliceFactories - The type of the slice factories used in the store.
  */
 export type Configs<TSliceFactories extends BaseSliceFactories> = {
   /**
@@ -100,7 +97,6 @@ export type Configs<TSliceFactories extends BaseSliceFactories> = {
  * If none of the slice factories require constructor parameters, the configs parameter is optional.
  * Otherwise, configs (with required params) must be provided.
  *
- * @typeParam TSliceFactories - The type of the slice factories used in the store.
  * @param sliceFactories - The mapping of slice names to their factory constructors.
  * @param configs - Optional configuration options for the store, including middleware, devTools, and slice parameters.
  */
@@ -115,8 +111,6 @@ export type Input<TSliceFactories extends BaseSliceFactories> =
  * For each key in the slice factories, if the corresponding constructor requires parameters,
  * the key is included in the resulting type with its value being the tuple of constructor parameters.
  * If the constructor does not require parameters (i.e., its parameter list is empty), the key is omitted.
- *
- * @typeParam TSliceFactories - The mapping of slice names to their factory constructors.
  */
 export type ParamsOf<TSliceFactories extends BaseSliceFactories> = {
   [TKey in keyof TSliceFactories as ConstructorParameters<
@@ -131,8 +125,6 @@ export type ParamsOf<TSliceFactories extends BaseSliceFactories> = {
  *
  * For each key in the TSliceFactories mapping, this type produces the corresponding instance type
  * (i.e., the type returned by the constructor of the slice factory).
- *
- * @typeParam TSliceFactories - The mapping of slice names to their factory constructors.
  */
 export type SlicesOf<TSliceFactories extends BaseSliceFactories> = {
   [TKey in keyof TSliceFactories]: InstanceType<TSliceFactories[TKey]>;
@@ -143,8 +135,6 @@ export type SlicesOf<TSliceFactories extends BaseSliceFactories> = {
  *
  * This type maps each slice name to its corresponding instance type.
  * The resulting type is a plain object containing only the stateful properties of each slice.
- *
- * @typeParam TSliceFactories - The mapping of slice names to their factory constructors.
  */
 export type StateOf<TSliceFactories extends BaseSliceFactories> = {
   [TKey in keyof SlicesOf<TSliceFactories>]: RemoveLastParameter<
@@ -158,8 +148,6 @@ export type StateOf<TSliceFactories extends BaseSliceFactories> = {
  *
  * This type maps each slice name to its corresponding state. The resulting type is a plain object
  * containing only the stateful properties.
- *
- * @typeParam TSliceFactories - The mapping of slice names to their factory constructors.
  */
 export type ReduxStateOf<TSliceFactories extends BaseSliceFactories> = {
   [TKey in keyof SlicesOf<TSliceFactories>]: SlicesOf<TSliceFactories>[TKey]["state"];
@@ -168,7 +156,6 @@ export type ReduxStateOf<TSliceFactories extends BaseSliceFactories> = {
 /**
  * Represents a listener function that is called with the current state of the store.
  *
- * @typeParam TSliceFactories - The type of the slice factories used in the store.
  * @param state - The current state of the store, derived from the slice factories.
  */
 export type Listener<TSliceFactories extends BaseSliceFactories> = Func<

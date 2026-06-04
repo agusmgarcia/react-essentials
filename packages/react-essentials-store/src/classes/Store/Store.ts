@@ -16,8 +16,6 @@ import {
 /**
  * Represents a reactive store that manages multiple state slices, middleware, and listeners.
  *
- * @typeParam TSliceFactories - A mapping of slice names to their factory constructors.
- *
  * The `Store` class is responsible for:
  * - Instantiating and managing state slices using provided factories.
  * - Applying middleware to slice methods.
@@ -37,8 +35,6 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
    *
    * @param sliceFactories - An object containing factory classes for each slice of the store.
    * @param configs - Optional configuration object for the store, including middleware, parameters for slice factories, and devTools options.
-   *
-   * @template TSliceFactories - The type representing the collection of slice factories.
    *
    * @remarks
    * - Initializes each slice using its corresponding factory and parameters.
@@ -92,7 +88,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
    * - Calls the `onInit` method of each slice to perform any necessary setup.
    * - Ensures that each slice properly calls its base `onInit` method; throws an error if not.
    *
-   * @throws {Error} If a slice does not call `super.onInit()` during its initialization.
+   * @throws If a slice does not call `super.onInit()` during its initialization.
    */
   init(): void {
     setupDevTools(
@@ -133,7 +129,7 @@ export default class Store<TSliceFactories extends BaseSliceFactories> {
    * - Ensures that each slice properly calls its base `onDestroy` method; throws an error if not.
    * - Removes all registered listeners from the store.
    *
-   * @throws {Error} If a slice does not call `super.onDestroy()` during its destruction.
+   * @throws If a slice does not call `super.onDestroy()` during its destruction.
    */
   destroy(): void {
     Object.keys(this._slices).forEach((key) => {

@@ -76,7 +76,6 @@ export type Storage = {
 
 /**
  * Represents a mutual exclusion lock interface for running asynchronous functions exclusively.
- * @template TResult The result type returned by the callback function.
  */
 export type Mutex = {
   /**

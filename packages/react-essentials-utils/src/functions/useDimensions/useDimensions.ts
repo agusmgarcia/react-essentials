@@ -6,8 +6,6 @@ import { type Output } from "./useDimensions.types";
  * A custom React hook that observes and retrieves the dimensions (height and width)
  * of a referenced DOM element using the ResizeObserver API.
  *
- * @template TElement - The type of the DOM element being observed.
- *
  * @param elementRef - A React ref object pointing to the DOM element whose dimensions
  * need to be observed. The ref should be created using `React.useRef`.
  *
@@ -18,7 +16,7 @@ import { type Output } from "./useDimensions.types";
  * ResizeObserver. This determines which box model to observe (e.g., `content-box`,
  * `border-box`).
  *
- * @returns {Output} - The current dimension of the observed element.
+ * @returns The current dimension of the observed element.
  */
 export default function useDimensions<TElement extends Element>(
   elementRef: React.RefObject<TElement | null>,

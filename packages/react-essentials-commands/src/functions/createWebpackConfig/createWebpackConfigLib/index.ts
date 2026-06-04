@@ -1,2 +1,2 @@
 export { default as createWebpackConfigLib } from "./createWebpackConfigLib";
-export type * as CreateWebpackConfigLib from "./createWebpackConfigLib.types";
+export type * as CreateWebpackConfigLibTypes from "./createWebpackConfigLib.types";

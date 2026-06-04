@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
  * A custom React hook that provides the current device pixel ratio (DPR).
  * It listens for changes in the device's pixel ratio and updates the value accordingly.
  *
- * @returns {number} The current device pixel ratio.
+ * @returns The current device pixel ratio.
  *
  * @remarks
  * This hook uses the `window.devicePixelRatio` property and a `matchMedia` listener

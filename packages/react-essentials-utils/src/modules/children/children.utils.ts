@@ -5,8 +5,6 @@ import { type Func } from "#src/types";
 /**
  * Maps over children of a specific type in a React node tree and applies a transformation.
  *
- * @template TType - The type of children to map over. This is a React component type
- *                   (a function that returns a React element).
  * @param type - The type of children to map over. This is a React component type
  *                   (a function that returns a React element).
  * @param children - The React node tree to search within. This can be a single React node,
@@ -29,7 +27,6 @@ export function mapOfType<TType extends Func<React.ReactElement, [props: any]>>(
 /**
  * Maps over children of a specific type in a React node tree and applies a transformation.
  *
- * @template TType - The type of children to map over. This is a "boolean" type.
  * @param type - The type of children to map over. This is a "boolean" type.
  * @param children - The React node tree to search within. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.
@@ -48,7 +45,6 @@ export function mapOfType<TType extends "boolean">(
 /**
  * Maps over children of a specific type in a React node tree and applies a transformation.
  *
- * @template TType - The type of children to map over. This is a "null" type.
  * @param type - The type of children to map over. This is a "null" type.
  * @param children - The React node tree to search within. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.
@@ -67,7 +63,6 @@ export function mapOfType<TType extends "null">(
 /**
  * Maps over children of a specific type in a React node tree and applies a transformation.
  *
- * @template TType - The type of children to map over. This is a "number" type.
  * @param type - The type of children to map over. This is a "number" type.
  * @param children - The React node tree to search within. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.
@@ -86,7 +81,6 @@ export function mapOfType<TType extends "number">(
 /**
  * Maps over children of a specific type in a React node tree and applies a transformation.
  *
- * @template TType - The type of children to map over. This is a "string" type.
  * @param type - The type of children to map over. This is a "string" type.
  * @param children - The React node tree to search within. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.
@@ -105,7 +99,6 @@ export function mapOfType<TType extends "string">(
 /**
  * Maps over children of a specific type in a React node tree and applies a transformation.
  *
- * @template TType - The type of children to map over. This is a "undefined" type.
  * @param type - The type of children to map over. This is a "undefined" type.
  * @param children - The React node tree to search within. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.
@@ -193,8 +186,6 @@ function assignKeyIfNeeded(
 /**
  * Determines if the given React node is of a specific React component type.
  *
- * @template TType - The type of the React component to check against. This is a React component type
- *                   (a function that returns a React element).
  * @param type - The React component type to check against.
  * @param children - The React node to check. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.
@@ -208,7 +199,6 @@ export function isOfType<TType extends Func<React.ReactElement, [props: any]>>(
 /**
  * Determines if the given React node is of type "boolean".
  *
- * @template TType - The type of the React node to check against. This is a "boolean" type.
  * @param type - The type to check against. This is a "boolean" type.
  * @param children - The React node to check. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.
@@ -222,7 +212,6 @@ export function isOfType<TType extends "boolean">(
 /**
  * Determines if the given React node is of type "null".
  *
- * @template TType - The type of the React node to check against. This is a "null" type.
  * @param type - The type to check against. This is a "null" type.
  * @param children - The React node to check. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.
@@ -236,7 +225,6 @@ export function isOfType<TType extends "null">(
 /**
  * Determines if the given React node is of type "number".
  *
- * @template TType - The type of the React node to check against. This is a "number" type.
  * @param type - The type to check against. This is a "number" type.
  * @param children - The React node to check. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.
@@ -250,7 +238,6 @@ export function isOfType<TType extends "number">(
 /**
  * Determines if the given React node is of type "string".
  *
- * @template TType - The type of the React node to check against. This is a "string" type.
  * @param type - The type to check against. This is a "string" type.
  * @param children - The React node to check. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.
@@ -264,7 +251,6 @@ export function isOfType<TType extends "string">(
 /**
  * Determines if the given React node is of type "undefined".
  *
- * @template TType - The type of the React node to check against. This is an "undefined" type.
  * @param type - The type to check against. This is an "undefined" type.
  * @param children - The React node to check. This can be a single React node,
  *                   an array of nodes, or any other valid ReactNode.

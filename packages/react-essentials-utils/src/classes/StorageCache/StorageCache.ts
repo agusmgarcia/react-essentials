@@ -11,8 +11,6 @@ import { Mutex, Storage } from "./StorageCache.utils";
  *
  * @remarks
  * This class is designed to work in environments where browser storage is available.
- *
- * @extends Cache
  */
 export default class StorageCache extends Cache {
   /**

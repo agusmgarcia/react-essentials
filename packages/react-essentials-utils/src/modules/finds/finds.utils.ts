@@ -1,7 +1,6 @@
 /**
  * Determines if the current element is the first element in the array.
  *
- * @template TElement - The type of elements in the array.
  * @param _element - The current element being processed in the array.
  * @param index - The index of the current element in the array.
  * @param _array - The array being processed.
@@ -20,11 +19,10 @@ export function first<TElement>(
  * Determines if the current element is the single element in the array.
  * Throws an error if the array contains more than one element.
  *
- * @template TElement - The type of elements in the array.
  * @param _element - The current element being processed in the array.
  * @param index - The index of the current element in the array.
  * @param array - The array being processed.
- * @throws {Error} If the array contains more than one element.
+ * @throws If the array contains more than one element.
  * @returns `true` if the current element is the single element in the array; otherwise, `false`.
  */
 export function single<TElement>(
@@ -42,7 +40,6 @@ export function single<TElement>(
  * Determines if the current element is the single element in the array or the default element.
  * Returns `false` if the array contains more than one element.
  *
- * @template TElement - The type of elements in the array.
  * @param _element - The current element being processed in the array.
  * @param index - The index of the current element in the array.
  * @param array - The array being processed.

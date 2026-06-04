@@ -14,11 +14,8 @@ import { type BaseData, type BaseSlices } from "./StorageSlice.types";
  * (such as localStorage, sessionStorage, or any custom storage). It subscribes to changes in the
  * `response` state and persists the data into storage using the provided abstract methods.
  *
- * @typeParam TData - The type of the data managed by the slice, extending {@link BaseData}.
- * @typeParam TSlices - The type of additional slices, extending {@link BaseSlices}. Defaults to an empty object.
- *
  * @remarks
- * - Subclasses must implement {@link getDataFromStorage} and {@link setDataIntoStorage} to define
+ * - Subclasses must implement {@link StorageSlice.getDataFromStorage} and {@link StorageSlice.setDataIntoStorage} to define
  *   how data is retrieved from and saved to the storage.
  * - The `onInit` method sets up a subscription to automatically persist data changes.
  */

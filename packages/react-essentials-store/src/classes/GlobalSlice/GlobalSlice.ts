@@ -16,9 +16,6 @@ import {
 /**
  * Abstract base class for managing global state slices with subscription capabilities.
  *
- * @template TState - The type representing the state managed by this slice.
- * @template TSlices - The type representing additional slices that can be injected (default: {}).
- *
  * This class provides:
  * - State management with controlled access and updates.
  * - Subscription mechanism for listening to state or selection changes.
@@ -74,8 +71,8 @@ export default abstract class GlobalSlice<
   /**
    * Gets the collection of slices associated with this global slice.
    *
-   * @throws {Error} Throws an error if the slices have not been initialized yet.
-   * @returns {TSlices} The initialized slices object.
+   * @throws Throws an error if the slices have not been initialized yet.
+   * @returns The initialized slices object.
    *
    * @remarks
    * This property provides access to the internal slices managed by this global slice.
@@ -100,31 +97,12 @@ export default abstract class GlobalSlice<
   }
 
   /**
-   * Gets the current state of the global slice.
-   *
-   * @remarks
-   * This getter provides access to the internal state managed by the global slice instance.
-   * It returns the current value of the state, which is of type `TState`.
-   *
-   * @returns {TState} The current state of the global slice.
+   * The current state of the global slice.
    */
   get state(): TState {
     return this._state;
   }
 
-  /**
-   * Updates the internal state of the global slice and notifies all relevant subscribers.
-   *
-   * @param state - The new state to set for the global slice.
-   *
-   * @remarks
-   * When the state is updated, this setter compares the previous and new state for each subscription
-   * using the provided selector and equality function. If the selection has changed according to the
-   * equality function, the corresponding listener is invoked with the new and previous selection.
-   *
-   * The setter also increments an internal subscription index to ensure that notifications are only
-   * sent for the most recent state update, preventing race conditions from multiple rapid updates.
-   */
   protected set state(state: TState) {
     this._state = state;
 
@@ -158,7 +136,7 @@ export default abstract class GlobalSlice<
    * Subclasses may override this method to perform additional setup logic during initialization,
    * but should call `super.onInit()` to preserve the base class behavior.
    *
-   * @throws {Error} Throws an error if the slice has already been initialized.
+   * @throws Throws an error if the slice has already been initialized.
    */
   protected onInit(signal: AbortSignal): void {
     if (signal !== this._controller.signal)
@@ -186,7 +164,7 @@ export default abstract class GlobalSlice<
    * Subclasses may override this method to perform additional teardown logic during destruction,
    * but should call `super.onDestroy()` to preserve the base class behavior.
    *
-   * @throws {Error} Throws an error if the slice has not been initialized.
+   * @throws Throws an error if the slice has not been initialized.
    */
   protected onDestroy(signal: AbortSignal): void {
     this._subscriptions.splice(0, this._subscriptions.length);
@@ -282,8 +260,6 @@ export default abstract class GlobalSlice<
    * @param listener - A listener function to be called when the selected part of the state changes.
    * @param equality - (Optional) A function to compare the previous and new selection. Defaults to strict equality.
    * @returns An `Unsubscribe` function that removes the subscription when called.
-   *
-   * @typeParam TSelection - The type of the selected state, inferred from the selector.
    */
   subscribe<TSelection>(
     selector: Subscription<TState, TSelection>["selector"],

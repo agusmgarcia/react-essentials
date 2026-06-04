@@ -20,9 +20,6 @@ import {
  * data to and from the URL query string. It periodically checks for changes in the query string
  * and updates its internal state accordingly. It also updates the query string when the data changes.
  *
- * @typeParam TData - The type of the data managed by this slice.
- * @typeParam TSlices - The type of additional slices, defaults to an empty object.
- *
  * @remarks
  * - Uses polling (with configurable interval) to detect query string changes.
  * - Supports SSR by disabling all browser-specific logic when running on the server.

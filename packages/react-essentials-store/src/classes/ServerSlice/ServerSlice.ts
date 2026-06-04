@@ -10,17 +10,11 @@ import { type BaseResponse, type BaseSlices } from "./ServerSlice.types";
 /**
  * Abstract base class for managing server-side state and asynchronous data fetching in a slice-based architecture.
  *
- * @template TResponse - The type of the response data managed by this slice.
- * @template TRequest - The type of the request object used to fetch data.
- * @template TSlices - The type of additional slices that this slice depends on.
- *
- * @extends GlobalSlice
- *
  * @remarks
  * - Handles loading, error, and response state for server requests.
  * - Supports aborting in-flight requests when new requests are made or dependencies change.
  * - Subscribes to dependent slices and reloads data when they change.
- * - Requires implementation of the {@link onFetch} method to perform the actual data fetching.
+ * - Requires implementation of the {@link ServerSlice.onFetch} method to perform the actual data fetching.
  */
 export default abstract class ServerSlice<
   TResponse extends BaseResponse,
@@ -72,39 +66,23 @@ export default abstract class ServerSlice<
   }
 
   /**
-   * Gets the current error from the server slice state.
-   *
-   * @returns The current error, or `undefined` if there is no error.
+   * The current error, or `undefined` if there is no error.
    *
    * @remarks
-   * - This getter provides access to the latest error stored in the slice's state.
    * - The error is updated when a fetch operation fails.
    */
   get error(): unknown {
     return this.state.error;
   }
 
-  /**
-   * Sets the error in the server slice state.
-   *
-   * @param error - The new error to set in the state.
-   *
-   * @remarks
-   * - This setter updates the state with the provided error.
-   * - It also sets `loading` to `false`.
-   * - Intended to be used by subclasses to update the error after a failed fetch operation.
-   */
   protected set error(error: unknown) {
     super.state = { ...this.state, error, loading: false };
   }
 
   /**
-   * Gets the loading state of the server slice.
-   *
-   * @returns A boolean indicating whether a fetch operation is currently in progress.
+   * A boolean indicating whether a fetch operation is currently in progress.
    *
    * @remarks
-   * - This getter provides access to the loading status stored in the slice's state.
    * - The loading state is set to `true` when a fetch operation starts and `false` when it completes.
    */
   get loading(): boolean {
@@ -116,28 +94,15 @@ export default abstract class ServerSlice<
   }
 
   /**
-   * Gets the current response from the server slice state.
-   *
-   * @returns The current response of type `TResponse`.
+   * The current response of type `TResponse`.
    *
    * @remarks
-   * - This getter provides access to the latest response stored in the slice's state.
    * - The response is updated when a fetch operation completes successfully.
    */
   get response(): TResponse {
     return this.state.response;
   }
 
-  /**
-   * Sets the response in the server slice state.
-   *
-   * @param response - The new response of type `TResponse` to set in the state.
-   *
-   * @remarks
-   * - This protected setter updates the state with the provided response.
-   * - It also resets the error to `undefined` and sets `loading` to `false`.
-   * - Intended to be used by subclasses to update the response after a fetch operation.
-   */
   protected set response(response: TResponse) {
     super.state = { error: undefined, loading: false, response };
   }
@@ -217,7 +182,7 @@ export default abstract class ServerSlice<
    * @param signal - An `AbortSignal` that can be used to cancel the fetch operation if needed.
    * @returns A promise that resolves when the reload operation is complete.
    *
-   * @throws {Error} If called before the slice has been initialized with a request.
+   * @throws If called before the slice has been initialized with a request.
    *
    * @remarks
    * - Forces a reload even if the request has not changed.
@@ -239,7 +204,7 @@ export default abstract class ServerSlice<
    * @param signal - An `AbortSignal` that can be used to cancel the fetch operation if needed.
    * @returns A promise that resolves when the reload operation is complete.
    *
-   * @throws {Error} If the `onRequestBuild` method has been overridden in a subclass.
+   * @throws If the `onRequestBuild` method has been overridden in a subclass.
    *
    * @remarks
    * - Forces a reload with the provided request, regardless of the current state.

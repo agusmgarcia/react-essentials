@@ -1,5 +1,6 @@
 import { equals, filters } from "#src/modules";
-import { type Func } from "#src/types";
+
+import { type ArrayComparatorFn } from "./merges.types";
 
 /**
  * Merges two objects or arrays strictly, ensuring deep equality checks.
@@ -120,5 +121,3 @@ function merge(
 
   return next;
 }
-
-type ArrayComparatorFn = Func<boolean, [element1: any, element2: any]>;

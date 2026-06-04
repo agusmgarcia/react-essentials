@@ -5,7 +5,6 @@ import { type NestedPaths } from "./properties.types";
 /**
  * Checks if the given `element` has a property named `property`.
  *
- * @typeParam TProperty - The name of the property to check for.
  * @param element - The object to check.
  * @param property - The property name to look for on the object.
  * @returns `true` if the property exists on the object otherwise `false`.
@@ -18,7 +17,6 @@ export function has<TProperty extends string>(
 /**
  * Checks if the given `element` has a property named `property` and matches the given type..
  *
- * @typeParam TProperty - The name of the property to check for.
  * @param element - The object to check.
  * @param property - The property name to look for on the object.
  * @param type - The expected JavaScript type of the property value.
@@ -33,7 +31,6 @@ export function has<TProperty extends string>(
 /**
  * Checks if the given `element` has a property named `property` and matches the given type..
  *
- * @typeParam TProperty - The name of the property to check for.
  * @param element - The object to check.
  * @param property - The property name to look for on the object.
  * @param type - The expected JavaScript type of the property value.
@@ -48,7 +45,6 @@ export function has<TProperty extends string>(
 /**
  * Checks if the given `element` has a property named `property` and matches the given type..
  *
- * @typeParam TProperty - The name of the property to check for.
  * @param element - The object to check.
  * @param property - The property name to look for on the object.
  * @param type - The expected JavaScript type of the property value.
@@ -63,7 +59,6 @@ export function has<TProperty extends string>(
 /**
  * Checks if the given `element` has a property named `property` and matches the given type..
  *
- * @typeParam TProperty - The name of the property to check for.
  * @param element - The object to check.
  * @param property - The property name to look for on the object.
  * @param type - The expected JavaScript type of the property value.
@@ -78,7 +73,6 @@ export function has<TProperty extends string>(
 /**
  * Checks if the given `element` has a property named `property` and matches the given type..
  *
- * @typeParam TProperty - The name of the property to check for.
  * @param element - The object to check.
  * @param property - The property name to look for on the object.
  * @param type - The expected JavaScript type of the property value.
@@ -93,7 +87,6 @@ export function has<TProperty extends string>(
 /**
  * Checks if the given `element` has a property named `property` and matches the given type..
  *
- * @typeParam TProperty - The name of the property to check for.
  * @param element - The object to check.
  * @param property - The property name to look for on the object.
  * @param type - The expected JavaScript type of the property value.
@@ -108,7 +101,6 @@ export function has<TProperty extends string>(
 /**
  * Checks if the given `element` has a property named `property` and matches the given type..
  *
- * @typeParam TProperty - The name of the property to check for.
  * @param element - The object to check.
  * @param property - The property name to look for on the object.
  * @param type - The expected JavaScript type of the property value.
@@ -148,7 +140,6 @@ export function has<TProperty extends string>(
 /**
  * Sorts the properties of an object or array according to a preferred order of nested property paths.
  *
- * @template TElement - The type of the input object or array.
  * @param input - The object or array whose properties should be sorted.
  * @param preferred - An optional array of nested property paths (as strings) that defines the preferred order of properties.
  *                    Paths can use dot notation for nesting and `*` as a wildcard for arrays.

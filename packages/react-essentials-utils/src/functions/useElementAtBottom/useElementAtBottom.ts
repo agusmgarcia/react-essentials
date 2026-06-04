@@ -5,7 +5,6 @@ import { useDevicePixelRatio, useDimensions } from "#src/functions";
 /**
  * Custom hook to determine if a referenced HTML element is scrolled to the bottom.
  *
- * @template TElement - The type of the HTML element being referenced.
  * @param elementRef - A React ref object pointing to the target HTML element.
  * @param initialValue - An optional initial value for the `atBottom` state. Defaults to `false`.
  * @returns A boolean indicating whether the element is scrolled to the bottom.

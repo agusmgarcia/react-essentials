@@ -26,8 +26,6 @@ STATE_CONTEXT.displayName = "StateContext";
 
 /**
  * Creates a React store provider and a selector hook for state management using context.
- *
- * @template TSliceFactories - The type of slice factories used to create the store.
  */
 export default function createReactStore<
   TSliceFactories extends BaseSliceFactories,
