@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.17.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.17.0)
+
+> June 19, 2026
+
+### Features ✅
+
+- **createWebpackConfig**: allow outputs to be modules
+- **createPrettierConfig**: use object instead of array for input
+- **createPostCSSConfig**: use object instead of array for input
+- **createNextConfig**: use object instead of array for input
+- **createJestConfig**: use object instead of array for input
+- **createEslintConfig**: use object instead of array for input
+- **createWebpackConfig**: use object instead of array for input
+
+### Chores ⚙️
+
+- adjust typings
+- **strings**: move it to the commands
+- **folders**: move it to the commands
+- **files**: move it to the commands
+- **errors**: move it to the commands
+- **properties**: move it to the commands
+- **emptyFunction**: move it to the commands
+
 ## [v0.16.4](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.16.4)
 
 > May 29, 2026
