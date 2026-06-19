@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.24.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.24.0)
+
+> June 19, 2026
+
+### Features ✅
+
+- **createPrettierConfig**: use object instead of array for input
+- **createPostCSSConfig**: use object instead of array for input
+- **createJestConfig**: use object instead of array for input
+- **createEslintConfig**: use object instead of array for input
+- **createWebpackConfig**: use object instead of array for input
+
+### Chores ⚙️
+
+- bump vulnerable dependencies
+- adjust typings
+
 ## [v0.23.2](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.23.2)
 
 > May 29, 2026
