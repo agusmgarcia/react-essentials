@@ -144,7 +144,11 @@ export const APP = createFileComposition({
       rootSelectorsLimits: [{ limit: { min: 2 }, selector: "type" }],
       rules: [
         {
-          format: ["{PascalCase}Request", "{PascalCase}Response"],
+          format: [
+            "{PascalCase}Request",
+            "{PascalCase}Response",
+            "{PascalCase}Error",
+          ],
           scope: "fileExport",
           selector: "type",
         },
