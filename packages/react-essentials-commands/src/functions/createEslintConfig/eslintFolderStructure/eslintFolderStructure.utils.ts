@@ -53,79 +53,36 @@ const COMPONENT_FOLDER = {
   ],
 };
 
-export const APP = createFolderStructure({
-  projectRoot: process.cwd(),
-  rules: {
-    _camel_case_folder: CAMEL_CASE_FOLDER,
-    _pascal_case_folder: PASCAL_CASE_FOLDER,
-    clients_folder: {
-      children: [
-        { name: "index.ts" },
-        { name: "{PascalCase}Client", ruleId: "_pascal_case_folder" },
-      ],
-      enforceExistence: "index.ts",
-    },
-    component_folder: COMPONENT_FOLDER,
-    components_folder: {
-      children: [
-        { name: "index.ts" },
-        { name: "{PascalCase}", ruleId: "component_folder" },
-      ],
-      enforceExistence: "index.ts",
-    },
-    fragments_folder: {
-      children: [
-        { name: "index.ts" },
-        { name: "{PascalCase}", ruleId: "component_folder" },
-      ],
-      enforceExistence: "index.ts",
-    },
-    page_folder: {
-      children: [
-        { name: "{kebab-case}.tsx" },
-        { name: "\\[{kebab-case}\\].tsx" },
-        { name: "\\[...{kebab-case}\\].tsx" },
-        { name: "{kebab-case}", ruleId: "page_folder" },
-        { name: "\\[{kebab-case}\\]", ruleId: "page_folder" },
-        { name: "\\[...{kebab-case}\\]", ruleId: "page_folder" },
-        { name: "\\[\\[...{kebab-case}\\]\\]", ruleId: "page_folder" },
-      ],
-    },
-    pages_folder: {
-      children: [
-        { name: "index.ts" },
-        { name: "{PascalCase}", ruleId: "component_folder" },
-      ],
-      enforceExistence: "index.ts",
-    },
-    store_folder: {
-      children: [
-        { name: "index.ts" },
-        { name: "{PascalCase}Slice", ruleId: "_pascal_case_folder" },
-      ],
-      enforceExistence: "index.ts",
-    },
-    utils_folder: {
-      children: [
-        { name: "index.ts" },
-        { name: "{camelCase}", ruleId: "_camel_case_folder" },
-        { name: "{PascalCase}", ruleId: "_pascal_case_folder" },
-      ],
-      enforceExistence: "index.ts",
-    },
-  },
-  structure: {
-    children: [
-      { name: "eslint.config.js" },
-      { name: "jest.config.js" },
-      { name: "next-env.d.ts" },
-      { name: "next.config.js" },
-      { name: "package.json" },
-      {
+export function createApp(store: "default" | "redux-observable") {
+  return createFolderStructure({
+    projectRoot: process.cwd(),
+    rules: {
+      _camel_case_folder: CAMEL_CASE_FOLDER,
+      _pascal_case_folder: PASCAL_CASE_FOLDER,
+      clients_folder: {
         children: [
-          { name: "_app.tsx" },
-          { name: "_app.css" },
-          { name: "_document.tsx" },
+          { name: "index.ts" },
+          { name: "{PascalCase}Client", ruleId: "_pascal_case_folder" },
+        ],
+        enforceExistence: "index.ts",
+      },
+      component_folder: COMPONENT_FOLDER,
+      components_folder: {
+        children: [
+          { name: "index.ts" },
+          { name: "{PascalCase}", ruleId: "component_folder" },
+        ],
+        enforceExistence: "index.ts",
+      },
+      fragments_folder: {
+        children: [
+          { name: "index.ts" },
+          { name: "{PascalCase}", ruleId: "component_folder" },
+        ],
+        enforceExistence: "index.ts",
+      },
+      page_folder: {
+        children: [
           { name: "{kebab-case}.tsx" },
           { name: "\\[{kebab-case}\\].tsx" },
           { name: "\\[...{kebab-case}\\].tsx" },
@@ -134,39 +91,117 @@ export const APP = createFolderStructure({
           { name: "\\[...{kebab-case}\\]", ruleId: "page_folder" },
           { name: "\\[\\[...{kebab-case}\\]\\]", ruleId: "page_folder" },
         ],
-        name: "pages",
       },
-      { name: "postcss.config.js" },
-      { name: "prettier.config.js" },
-      { name: "public" },
-      {
+      pages_folder: {
         children: [
-          { name: "clients", ruleId: "clients_folder" },
-          { name: "components", ruleId: "components_folder" },
-          { name: "fragments", ruleId: "fragments_folder" },
-          { name: "pages", ruleId: "pages_folder" },
-          { name: "store", ruleId: "store_folder" },
-          { name: "utils", ruleId: "utils_folder" },
+          { name: "index.ts" },
+          { name: "{PascalCase}", ruleId: "component_folder" },
         ],
-        name: "src",
+        enforceExistence: "index.ts",
       },
-      { name: "tsconfig.json" },
-    ],
-    enforceExistence: [
-      "eslint.config.js",
-      "jest.config.js",
-      "next-env.d.ts",
-      "next.config.js",
-      "package.json",
-      "pages",
-      "postcss.config.js",
-      "prettier.config.js",
-      "public",
-      "src",
-      "tsconfig.json",
-    ],
-  },
-});
+      store_folder: {
+        children: [
+          { name: "index.ts" },
+          {
+            name: "{PascalCase}Slice",
+            ruleId:
+              store === "default"
+                ? "_pascal_case_folder"
+                : "store_redux_observable_folder",
+          },
+        ],
+        enforceExistence: "index.ts",
+      },
+      store_redux_observable_folder: {
+        children: [
+          { name: "index.ts" },
+          { name: "{FolderName}.json" },
+          { name: "{FolderName}.actions.ts" },
+          { name: "{FolderName}.actions.test.ts" },
+          { name: "{FolderName}.epics.ts" },
+          { name: "{FolderName}.epics.test.ts" },
+          { name: "{FolderName}.selectors.ts" },
+          { name: "{FolderName}.selectors.test.ts" },
+          { name: "{FolderName}.ts" },
+          { name: "{FolderName}.test.ts" },
+          { name: "{FolderName}.types.ts" },
+          { name: "{FolderName}.utils.ts" },
+          { name: "{FolderName}.utils.test.ts" },
+          { name: "{camelCase}", ruleId: "_camel_case_folder" },
+          { name: "{PascalCase}", ruleId: "_pascal_case_folder" },
+        ],
+        enforceExistence: [
+          "index.ts",
+          "{NodeName}.actions.ts",
+          "{NodeName}.epics.ts",
+          "{NodeName}.selectors.ts",
+          "{NodeName}.ts",
+          "{NodeName}.types.ts",
+        ],
+      },
+      utils_folder: {
+        children: [
+          { name: "index.ts" },
+          { name: "{camelCase}", ruleId: "_camel_case_folder" },
+          { name: "{PascalCase}", ruleId: "_pascal_case_folder" },
+        ],
+        enforceExistence: "index.ts",
+      },
+    },
+    structure: {
+      children: [
+        { name: "eslint.config.js" },
+        { name: "jest.config.js" },
+        { name: "next-env.d.ts" },
+        { name: "next.config.js" },
+        { name: "package.json" },
+        {
+          children: [
+            { name: "_app.tsx" },
+            { name: "_app.css" },
+            { name: "_document.tsx" },
+            { name: "{kebab-case}.tsx" },
+            { name: "\\[{kebab-case}\\].tsx" },
+            { name: "\\[...{kebab-case}\\].tsx" },
+            { name: "{kebab-case}", ruleId: "page_folder" },
+            { name: "\\[{kebab-case}\\]", ruleId: "page_folder" },
+            { name: "\\[...{kebab-case}\\]", ruleId: "page_folder" },
+            { name: "\\[\\[...{kebab-case}\\]\\]", ruleId: "page_folder" },
+          ],
+          name: "pages",
+        },
+        { name: "postcss.config.js" },
+        { name: "prettier.config.js" },
+        { name: "public" },
+        {
+          children: [
+            { name: "clients", ruleId: "clients_folder" },
+            { name: "components", ruleId: "components_folder" },
+            { name: "fragments", ruleId: "fragments_folder" },
+            { name: "pages", ruleId: "pages_folder" },
+            { name: "store", ruleId: "store_folder" },
+            { name: "utils", ruleId: "utils_folder" },
+          ],
+          name: "src",
+        },
+        { name: "tsconfig.json" },
+      ],
+      enforceExistence: [
+        "eslint.config.js",
+        "jest.config.js",
+        "next-env.d.ts",
+        "next.config.js",
+        "package.json",
+        "pages",
+        "postcss.config.js",
+        "prettier.config.js",
+        "public",
+        "src",
+        "tsconfig.json",
+      ],
+    },
+  });
+}
 
 export const AZURE_FUNC = createFolderStructure({
   projectRoot: process.cwd(),

@@ -2,8 +2,14 @@ import { createIndependentModules } from "eslint-plugin-project-structure";
 
 const ELEMENT = [
   "{dirname}/*.ts?(x)",
+  "!{dirname}/*.actions.ts",
+  "!{dirname}/*.actions.test.ts",
+  "!{dirname}/*.epics.ts",
+  "!{dirname}/*.epics.test.ts",
   "!{dirname}/*.hooks.ts",
   "!{dirname}/*.hooks.test.ts",
+  "!{dirname}/*.selectors.ts",
+  "!{dirname}/*.selectors.test.ts",
   "!{dirname}/*.test.ts?(x)",
   "!{dirname}/*.types.ts",
   "!{dirname}/*.utils.ts",
@@ -12,8 +18,10 @@ const ELEMENT = [
 
 const ELEMENT_FILE_ACCESS_PATH = [
   "./package.json",
+  "{dirname}/*.actions.ts",
   "{dirname}/*.hooks.ts",
   "{dirname}/*.json",
+  "{dirname}/*.selectors.ts",
   "{dirname}/*.types.ts",
   "{dirname}/*.utils.ts",
   "{dirname}/*?(.module).@(sass|css|scss)",
@@ -23,8 +31,65 @@ const ELEMENT_FILE_ACCESS_PATH = [
 const ELEMENT_TEST_FILE_ACCESS_PATH = [
   "./package.json",
   "{element}",
+  "{dirname}/*.actions.ts",
   "{dirname}/*.hooks.ts",
   "{dirname}/*.json",
+  "{dirname}/*.selectors.ts",
+  "{dirname}/*.types.ts",
+  "{dirname}/*.utils.ts",
+  "{dirname}/*/index.ts",
+];
+
+const ACTIONS_FILE_ACCESS_PATH = [
+  "./package.json",
+  "{dirname}/*.json",
+  "{dirname}/*.types.ts",
+  "{dirname}/*.utils.ts",
+  "{dirname}/*/index.ts",
+];
+
+const ACTIONS_TEST_FILE_ACCESS_PATH = [
+  "./package.json",
+  "{dirname}/*.actions.ts",
+  "{dirname}/*.json",
+  "{dirname}/*.types.ts",
+  "{dirname}/*.utils.ts",
+  "{dirname}/*/index.ts",
+];
+
+const EPICS_FILE_ACCESS_PATH = [
+  "./package.json",
+  "{dirname}/*.actions.ts",
+  "{dirname}/*.json",
+  "{dirname}/*.selectors.ts",
+  "{dirname}/*.types.ts",
+  "{dirname}/*.utils.ts",
+  "{dirname}/*/index.ts",
+];
+
+const EPICS_TEST_FILE_ACCESS_PATH = [
+  "./package.json",
+  "{dirname}/*.actions.ts",
+  "{dirname}/*.epics.ts",
+  "{dirname}/*.json",
+  "{dirname}/*.selectors.ts",
+  "{dirname}/*.types.ts",
+  "{dirname}/*.utils.ts",
+  "{dirname}/*/index.ts",
+];
+
+const SELECTORS_FILE_ACCESS_PATH = [
+  "./package.json",
+  "{dirname}/*.json",
+  "{dirname}/*.types.ts",
+  "{dirname}/*.utils.ts",
+  "{dirname}/*/index.ts",
+];
+
+const SELECTORS_TEST_FILE_ACCESS_PATH = [
+  "./package.json",
+  "{dirname}/*.json",
+  "{dirname}/*.selectors.ts",
   "{dirname}/*.types.ts",
   "{dirname}/*.utils.ts",
   "{dirname}/*/index.ts",
@@ -47,12 +112,7 @@ const HOOKS_TEST_FILE_ACCESS_PATH = [
   "{dirname}/*/index.ts",
 ];
 
-const SLICE = [
-  "src/store/*.ts",
-  "!src/store/*.types.ts",
-  "!src/store/*.utils.ts",
-  "!src/store/*.utils.test.ts",
-];
+const SLICE = ["src/store/*/index.ts"];
 
 const TYPES_FILE_ACCESS_PATH = ["./package.json", "{dirname}/*/index.ts"];
 
@@ -433,20 +493,69 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/clients/index.ts",
-          "src/store/index.ts",
           "{slice}",
           "src/utils/index.ts",
-          "{utilsFileAccessPaths}",
+          "{actionsTestFileAccessPaths}",
         ],
-        name: "src/store/*/**/*.utils.ts",
-        pattern: "src/store/*/**/*.utils.ts",
+        name: "src/store/*/**/*.actions.test.ts",
+        pattern: "src/store/*/**/*.ations.test.ts",
+      },
+      {
+        allowImportsFrom: [
+          "public/**/*",
+          "{slice}",
+          "src/utils/index.ts",
+          "{actionsFileAccessPaths}",
+        ],
+        name: "src/store/*/**/*.actions.ts",
+        pattern: "src/store/*/**/*.actions.ts",
       },
       {
         allowImportsFrom: [
           "public/**/*",
           "src/clients/index.ts",
-          "src/store/index.ts",
+          "{slice}",
+          "src/utils/index.ts",
+          "{epicsTestFileAccessPaths}",
+        ],
+        name: "src/store/*/**/*.epics.test.ts",
+        pattern: "src/store/*/**/*.epics.test.ts",
+      },
+      {
+        allowImportsFrom: [
+          "public/**/*",
+          "src/clients/index.ts",
+          "{slice}",
+          "src/utils/index.ts",
+          "{epicsFileAccessPaths}",
+        ],
+        name: "src/store/*/**/*.epics.ts",
+        pattern: "src/store/*/**/*.epics.ts",
+      },
+      {
+        allowImportsFrom: [
+          "public/**/*",
+          "{slice}",
+          "src/utils/index.ts",
+          "{selectorsTestFileAccessPaths}",
+        ],
+        name: "src/store/*/**/*.selectors.test.ts",
+        pattern: "src/store/*/**/*.selectors.test.ts",
+      },
+      {
+        allowImportsFrom: [
+          "public/**/*",
+          "{slice}",
+          "src/utils/index.ts",
+          "{selectorsFileAccessPaths}",
+        ],
+        name: "src/store/*/**/*.selectors.ts",
+        pattern: "src/store/*/**/*.selectors.ts",
+      },
+      {
+        allowImportsFrom: [
+          "public/**/*",
+          "src/clients/index.ts",
           "{slice}",
           "src/utils/index.ts",
           "{utilsTestFileAccessPaths}",
@@ -458,7 +567,17 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/clients/index.ts",
-          "src/store/index.ts",
+          "{slice}",
+          "src/utils/index.ts",
+          "{utilsFileAccessPaths}",
+        ],
+        name: "src/store/*/**/*.utils.ts",
+        pattern: "src/store/*/**/*.utils.ts",
+      },
+      {
+        allowImportsFrom: [
+          "public/**/*",
+          "src/clients/index.ts",
           "{slice}",
           "src/utils/index.ts",
           "{elementTestFileAccessPaths}",
@@ -470,7 +589,6 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/clients/index.ts",
-          "src/store/index.ts",
           "{slice}",
           "src/utils/index.ts",
           "{elementFileAccessPaths}",
@@ -530,11 +648,17 @@ export function createApp(
         }
       : undefined,
     reusableImportPatterns: {
+      actionsFileAccessPaths: ACTIONS_FILE_ACCESS_PATH,
+      actionsTestFileAccessPaths: ACTIONS_TEST_FILE_ACCESS_PATH,
       element: ELEMENT,
       elementFileAccessPaths: ELEMENT_FILE_ACCESS_PATH,
       elementTestFileAccessPaths: ELEMENT_TEST_FILE_ACCESS_PATH,
+      epicsFileAccessPaths: EPICS_FILE_ACCESS_PATH,
+      epicsTestFileAccessPaths: EPICS_TEST_FILE_ACCESS_PATH,
       hooksFileAccessPaths: HOOKS_FILE_ACCESS_PATH,
       hooksTestFileAccessPaths: HOOKS_TEST_FILE_ACCESS_PATH,
+      selectorsFileAccessPaths: SELECTORS_FILE_ACCESS_PATH,
+      selectorsTestFileAccessPaths: SELECTORS_TEST_FILE_ACCESS_PATH,
       slice: SLICE,
       typesFileAccessPaths: TYPES_FILE_ACCESS_PATH,
       utilsFileAccessPaths: UTILS_FILE_ACCESS_PATH,

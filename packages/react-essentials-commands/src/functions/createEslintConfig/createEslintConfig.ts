@@ -44,7 +44,7 @@ export default async function createEslintConfig(
         "project-structure/file-composition": [
           "error",
           input.core === "app"
-            ? eslintFileComposition.APP
+            ? eslintFileComposition.createApp(input.store || "default")
             : input.core === "azure-func"
               ? eslintFileComposition.AZURE_FUNC
               : input.core === "lib"
@@ -55,7 +55,7 @@ export default async function createEslintConfig(
         "project-structure/folder-structure": [
           "error",
           input.core === "app"
-            ? eslintFolderStructure.APP
+            ? eslintFolderStructure.createApp(input.store || "default")
             : input.core === "azure-func"
               ? eslintFolderStructure.AZURE_FUNC
               : input.core === "lib"
