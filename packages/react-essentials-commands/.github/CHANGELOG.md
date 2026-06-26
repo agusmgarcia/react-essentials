@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.18.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.18.0)
+
+> June 26, 2026
+
+### Features ✅
+
+- **eslint**: add ability to use redux-observable as store
+- **eslint**: let clients to specify error types
+
 ## [v0.17.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.17.0)
 
 > June 19, 2026
