@@ -361,6 +361,7 @@ export function createApp(store: "default" | "redux-observable") {
         rules: [
           {
             format: [
+              "ConstructorOptions",
               "{PascalCase}Request",
               "{PascalCase}Response",
               "{PascalCase}Error",
@@ -560,6 +561,7 @@ export const AZURE_FUNC = createFileComposition({
       rules: [
         {
           format: [
+            "ConstructorOptions",
             "{PascalCase}Request",
             "{PascalCase}Response",
             "{PascalCase}Error",
