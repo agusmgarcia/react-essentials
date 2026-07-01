@@ -20,9 +20,9 @@ async function getTemplate(
     .then((localSettings) => JSON.parse(localSettings || "{}"));
 
   return {
-    isEncrypted: false,
-    values: {
-      ...localSettings.values,
+    IsEncrypted: false,
+    Values: {
+      ...localSettings.Values,
       APP_VERSION: context.version,
       FUNCTIONS_EXTENSION_VERSION: "~4",
       FUNCTIONS_WORKER_RUNTIME: "node",
