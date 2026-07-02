@@ -1,4 +1,4 @@
-import { getPackageJSON } from "#src/functions";
+import { getPackageJSON } from "#src/functions/getPackageJSON";
 
 import { type Input, type Output } from "./createWebpackConfig.types";
 import { createWebpackConfigAzureFunc } from "./createWebpackConfigAzureFunc";

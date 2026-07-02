@@ -1,6 +1,6 @@
 import { type Serializable } from "@agusmgarcia/react-essentials-utils";
 
-import { type GlobalSliceTypes } from "#src/classes";
+import { type GlobalSliceTypes } from "#src/classes/GlobalSlice";
 
 /**
  * Represents the base state type for the global slice.

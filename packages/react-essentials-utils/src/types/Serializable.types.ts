@@ -1,4 +1,4 @@
-import { type Primitive } from "#src/types";
+import type Primitive from "./Primitive.types";
 
 /**
  * Represents a value that can be serialized, such as for JSON encoding.

@@ -1,7 +1,7 @@
 import path from "path";
 import getCustomTransformers from "ts-transform-paths";
 
-import { type GetPackageJSONTypes } from "#src/functions";
+import { type GetPackageJSONTypes } from "#src/functions/getPackageJSON";
 
 import packageJSONEssentialsCommands from "../../../../package.json";
 import { type Input, type Output } from "./createWebpackConfigNode.types";

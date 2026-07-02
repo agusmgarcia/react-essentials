@@ -1,4 +1,4 @@
-import { type ServerSliceTypes } from "#src/classes";
+import { type ServerSliceTypes } from "#src/classes/ServerSlice";
 
 /**
  * Represents the base state type for the global slice.

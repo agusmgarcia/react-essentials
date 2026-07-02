@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { useDevicePixelRatio, useDimensions } from "#src/functions";
+import { useDevicePixelRatio } from "#src/functions/useDevicePixelRatio";
+import { useDimensions } from "#src/functions/useDimensions";
 
 /**
  * Custom hook to determine if a referenced HTML element is scrolled to the bottom.

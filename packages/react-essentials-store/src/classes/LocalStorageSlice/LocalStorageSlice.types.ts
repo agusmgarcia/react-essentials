@@ -1,4 +1,4 @@
-import { type BrowserStorageSliceTypes } from "#src/classes";
+import { type BrowserStorageSliceTypes } from "#src/classes/BrowserStorageSlice";
 
 /**
  * Represents the base state type for the global slice.

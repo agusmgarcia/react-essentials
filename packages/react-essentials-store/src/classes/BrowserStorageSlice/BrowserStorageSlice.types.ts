@@ -1,4 +1,4 @@
-import { type StorageSliceTypes } from "#src/classes";
+import { type StorageSliceTypes } from "#src/classes/StorageSlice";
 
 /**
  * Represents the base state type for the global slice.

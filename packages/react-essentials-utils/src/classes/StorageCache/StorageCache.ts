@@ -1,4 +1,4 @@
-import { Cache } from "#src/classes";
+import { Cache } from "#src/classes/Cache";
 
 import { type Options } from "./StorageCache.types";
 import { Mutex, Storage } from "./StorageCache.utils";

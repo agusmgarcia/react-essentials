@@ -3,11 +3,12 @@ import process from "process";
 import { rollup } from "rollup";
 import dts from "rollup-plugin-dts";
 
-import { runCommand } from "#src/binaries/utils";
 import { execute, getPackageJSON } from "#src/functions";
 import { errors } from "#src/outputs/errors";
 import { files } from "#src/outputs/files";
 import { folders } from "#src/outputs/folders";
+
+import { runCommand } from "./runCommand";
 
 export default async function build(): Promise<void> {
   try {

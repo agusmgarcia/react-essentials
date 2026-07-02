@@ -1,6 +1,6 @@
 import { type Func } from "@agusmgarcia/react-essentials-utils";
 
-import { type GlobalSlice } from "#src/classes";
+import { type GlobalSlice } from "#src/classes/GlobalSlice";
 
 /**
  * Methods that are protected for the GlobalSlices
@@ -184,3 +184,10 @@ type RemoveLastParameter<TData, TParameter> = {
         : TData[TKey]
       : TData[TKey];
 };
+
+declare global {
+  var __REDUX_DEVTOOLS_CONNECTIONS__: Record<
+    string,
+    ReturnType<NonNullable<Window["__REDUX_DEVTOOLS_EXTENSION__"]>["connect"]>
+  >;
+}

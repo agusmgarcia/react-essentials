@@ -3,7 +3,7 @@ import process from "process";
 import { compare } from "semver";
 
 import { execute } from "#src/functions";
-import { git } from "#src/modules";
+import { git } from "#src/modules/git";
 
 export async function getMonorepoDetails(): Promise<
   { location: string; name: string } | undefined

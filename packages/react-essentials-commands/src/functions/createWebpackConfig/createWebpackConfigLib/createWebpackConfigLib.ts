@@ -2,7 +2,7 @@ import path from "path";
 import getCustomTransformers from "ts-transform-paths";
 import { default as webpack } from "webpack";
 
-import { type GetPackageJSONTypes } from "#src/functions";
+import { type GetPackageJSONTypes } from "#src/functions/getPackageJSON";
 import { folders } from "#src/outputs/folders";
 
 import { type Input, type Output } from "./createWebpackConfigLib.types";

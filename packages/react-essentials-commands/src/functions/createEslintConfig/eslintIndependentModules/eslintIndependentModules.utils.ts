@@ -1,20 +1,28 @@
 import { createIndependentModules } from "eslint-plugin-project-structure";
 
 const ELEMENT = [
-  "{dirname}/*.ts?(x)",
-  "!{dirname}/*.actions.ts",
-  "!{dirname}/*.actions.test.ts",
-  "!{dirname}/*.epics.ts",
-  "!{dirname}/*.epics.test.ts",
-  "!{dirname}/*.hooks.ts",
-  "!{dirname}/*.hooks.test.ts",
-  "!{dirname}/*.selectors.ts",
-  "!{dirname}/*.selectors.test.ts",
-  "!{dirname}/*.test.ts?(x)",
-  "!{dirname}/*.types.ts",
-  "!{dirname}/*.utils.ts",
-  "!{dirname}/*.utils.test.ts",
+  [
+    "{dirname}/*.ts?(x)",
+    "!{dirname}/*.actions.ts",
+    "!{dirname}/*.actions.test.ts",
+    "!{dirname}/*.epics.ts",
+    "!{dirname}/*.epics.test.ts",
+    "!{dirname}/*.hooks.ts",
+    "!{dirname}/*.hooks.test.ts",
+    "!{dirname}/*.selectors.ts",
+    "!{dirname}/*.selectors.test.ts",
+    "!{dirname}/*.test.ts?(x)",
+    "!{dirname}/*.types.ts",
+    "!{dirname}/*.utils.ts",
+    "!{dirname}/*.utils.test.ts",
+  ],
 ];
+
+const ALL_FAMILY_SIBLINGS = [
+  ["{family_2}/*/index.ts", "!{family_2}/index.ts", "!{family_3}/*/index.ts"],
+];
+
+const OTHER_ROOT_SIBLINGS = [["src/*/index.ts", "!{family_2}/index.ts"]];
 
 const ELEMENT_FILE_ACCESS_PATH = [
   "./package.json",
@@ -30,7 +38,21 @@ const ELEMENT_FILE_ACCESS_PATH = [
 
 const ELEMENT_TEST_FILE_ACCESS_PATH = [
   "./package.json",
-  "{element}",
+  [
+    "{dirname}/*.ts?(x)",
+    "!{dirname}/*.actions.ts",
+    "!{dirname}/*.actions.test.ts",
+    "!{dirname}/*.epics.ts",
+    "!{dirname}/*.epics.test.ts",
+    "!{dirname}/*.hooks.ts",
+    "!{dirname}/*.hooks.test.ts",
+    "!{dirname}/*.selectors.ts",
+    "!{dirname}/*.selectors.test.ts",
+    "!{dirname}/*.test.ts?(x)",
+    "!{dirname}/*.types.ts",
+    "!{dirname}/*.utils.ts",
+    "!{dirname}/*.utils.test.ts",
+  ],
   "{dirname}/*.actions.ts",
   "{dirname}/*.hooks.ts",
   "{dirname}/*.json",
@@ -112,8 +134,6 @@ const HOOKS_TEST_FILE_ACCESS_PATH = [
   "{dirname}/*/index.ts",
 ];
 
-const SLICE = ["src/store/*/index.ts"];
-
 const TYPES_FILE_ACCESS_PATH = ["./package.json", "{dirname}/*/index.ts"];
 
 const UTILS_FILE_ACCESS_PATH = [
@@ -149,7 +169,13 @@ export function createApp(
         pattern: "src/*/index.ts",
       },
       {
-        allowImportsFrom: ["{element}", "{dirname}/*.types.ts"],
+        allowImportsFrom: [
+          "{element}",
+          "{dirname}/*.types.ts",
+          "{dirname}/*actions.ts",
+          "{dirname}/*epics.ts",
+          "{dirname}/*selectors.ts",
+        ],
         name: "src/*/*/**/index.ts",
         pattern: "src/*/*/**/index.ts",
       },
@@ -187,7 +213,7 @@ export function createApp(
       // <============================ CLIENTS ============================> //
       {
         allowImportsFrom: [
-          "src/clients/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{typesFileAccessPaths}",
         ],
@@ -197,7 +223,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/clients/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{utilsFileAccessPaths}",
         ],
@@ -207,7 +233,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/clients/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{utilsTestFileAccessPaths}",
         ],
@@ -217,7 +243,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/clients/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{elementTestFileAccessPaths}",
         ],
@@ -227,7 +253,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/clients/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{elementFileAccessPaths}",
         ],
@@ -239,7 +265,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/components/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{hooksFileAccessPaths}",
         ],
@@ -249,7 +275,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/components/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{hooksTestFileAccessPaths}",
         ],
@@ -258,7 +284,7 @@ export function createApp(
       },
       {
         allowImportsFrom: [
-          "src/components/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{typesFileAccessPaths}",
         ],
@@ -268,7 +294,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/components/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{utilsFileAccessPaths}",
         ],
@@ -278,7 +304,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/components/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{utilsTestFileAccessPaths}",
         ],
@@ -288,7 +314,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/components/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{elementTestFileAccessPaths}",
         ],
@@ -298,7 +324,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/components/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{elementFileAccessPaths}",
         ],
@@ -311,7 +337,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/components/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{hooksFileAccessPaths}",
@@ -323,7 +349,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/components/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{hooksTestFileAccessPaths}",
@@ -334,7 +360,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "src/components/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{typesFileAccessPaths}",
@@ -346,7 +372,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/components/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{utilsFileAccessPaths}",
@@ -358,7 +384,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/components/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{utilsTestFileAccessPaths}",
@@ -370,7 +396,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/components/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{elementTestFileAccessPaths}",
@@ -382,7 +408,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/components/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{elementFileAccessPaths}",
@@ -397,7 +423,6 @@ export function createApp(
           "public/**/*",
           "src/components/index.ts",
           "src/fragments/index.ts",
-          "src/pages/index.ts",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{hooksFileAccessPaths}",
@@ -410,7 +435,6 @@ export function createApp(
           "public/**/*",
           "src/components/index.ts",
           "src/fragments/index.ts",
-          "src/pages/index.ts",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{hooksTestFileAccessPaths}",
@@ -422,7 +446,6 @@ export function createApp(
         allowImportsFrom: [
           "src/components/index.ts",
           "src/fragments/index.ts",
-          "src/pages/index.ts",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{typesFileAccessPaths}",
@@ -435,7 +458,6 @@ export function createApp(
           "public/**/*",
           "src/components/index.ts",
           "src/fragments/index.ts",
-          "src/pages/index.ts",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{utilsFileAccessPaths}",
@@ -448,7 +470,6 @@ export function createApp(
           "public/**/*",
           "src/components/index.ts",
           "src/fragments/index.ts",
-          "src/pages/index.ts",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{utilsTestFileAccessPaths}",
@@ -461,7 +482,6 @@ export function createApp(
           "public/**/*",
           "src/components/index.ts",
           "src/fragments/index.ts",
-          "src/pages/index.ts",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{elementTestFileAccessPaths}",
@@ -474,7 +494,6 @@ export function createApp(
           "public/**/*",
           "src/components/index.ts",
           "src/fragments/index.ts",
-          "src/pages/index.ts",
           "src/store/index.ts",
           "src/utils/index.ts",
           "{elementFileAccessPaths}",
@@ -487,8 +506,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "src/clients/index.ts",
-          "src/store/index.ts",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{typesFileAccessPaths}",
         ],
@@ -498,17 +516,17 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{actionsTestFileAccessPaths}",
         ],
         name: "src/store/*/**/*.actions.test.ts",
-        pattern: "src/store/*/**/*.ations.test.ts",
+        pattern: "src/store/*/**/*.actions.test.ts",
       },
       {
         allowImportsFrom: [
           "public/**/*",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{actionsFileAccessPaths}",
         ],
@@ -519,7 +537,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/clients/index.ts",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{epicsTestFileAccessPaths}",
         ],
@@ -530,7 +548,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/clients/index.ts",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{epicsFileAccessPaths}",
         ],
@@ -540,7 +558,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{selectorsTestFileAccessPaths}",
         ],
@@ -550,7 +568,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{selectorsFileAccessPaths}",
         ],
@@ -561,7 +579,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/clients/index.ts",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{utilsTestFileAccessPaths}",
         ],
@@ -572,7 +590,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/clients/index.ts",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{utilsFileAccessPaths}",
         ],
@@ -583,7 +601,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/clients/index.ts",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{elementTestFileAccessPaths}",
         ],
@@ -594,7 +612,7 @@ export function createApp(
         allowImportsFrom: [
           "public/**/*",
           "src/clients/index.ts",
-          "{slice}",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{elementFileAccessPaths}",
         ],
@@ -604,14 +622,14 @@ export function createApp(
 
       // <============================ UTILS ==============================> //
       {
-        allowImportsFrom: ["src/utils/index.ts", "{typesFileAccessPaths}"],
+        allowImportsFrom: ["{allFamilySiblings}", "{typesFileAccessPaths}"],
         name: "src/utils/*/**/*.types.ts",
         pattern: "src/utils/*/**/*.types.ts",
       },
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/utils/index.ts",
+          "{allFamilySiblings}",
           "{utilsFileAccessPaths}",
         ],
         name: "src/utils/*/**/*.utils.ts",
@@ -620,7 +638,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/utils/index.ts",
+          "{allFamilySiblings}",
           "{utilsTestFileAccessPaths}",
         ],
         name: "src/utils/*/**/*.utils.test.ts",
@@ -629,7 +647,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/utils/index.ts",
+          "{allFamilySiblings}",
           "{elementTestFileAccessPaths}",
         ],
         name: "src/utils/*/**/*.test.ts",
@@ -638,7 +656,7 @@ export function createApp(
       {
         allowImportsFrom: [
           "public/**/*",
-          "src/utils/index.ts",
+          "{allFamilySiblings}",
           "{elementFileAccessPaths}",
         ],
         name: "src/utils/*/**/*.ts",
@@ -655,6 +673,7 @@ export function createApp(
     reusableImportPatterns: {
       actionsFileAccessPaths: ACTIONS_FILE_ACCESS_PATH,
       actionsTestFileAccessPaths: ACTIONS_TEST_FILE_ACCESS_PATH,
+      allFamilySiblings: ALL_FAMILY_SIBLINGS,
       element: ELEMENT,
       elementFileAccessPaths: ELEMENT_FILE_ACCESS_PATH,
       elementTestFileAccessPaths: ELEMENT_TEST_FILE_ACCESS_PATH,
@@ -664,7 +683,6 @@ export function createApp(
       hooksTestFileAccessPaths: HOOKS_TEST_FILE_ACCESS_PATH,
       selectorsFileAccessPaths: SELECTORS_FILE_ACCESS_PATH,
       selectorsTestFileAccessPaths: SELECTORS_TEST_FILE_ACCESS_PATH,
-      slice: SLICE,
       typesFileAccessPaths: TYPES_FILE_ACCESS_PATH,
       utilsFileAccessPaths: UTILS_FILE_ACCESS_PATH,
       utilsTestFileAccessPaths: UTILS_TEST_FILE_ACCESS_PATH,
@@ -679,6 +697,7 @@ export function createAzureFunc(
 ) {
   return createIndependentModules({
     modules: [
+      // <============================ INDICES ============================> //
       {
         allowImportsFrom: ["{dirname}/*/index.ts"],
         name: "src/*/index.ts",
@@ -693,7 +712,7 @@ export function createAzureFunc(
       // <============================ CLIENTS ============================> //
       {
         allowImportsFrom: [
-          "src/clients/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{typesFileAccessPaths}",
         ],
@@ -702,7 +721,7 @@ export function createAzureFunc(
       },
       {
         allowImportsFrom: [
-          "src/clients/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{utilsFileAccessPaths}",
         ],
@@ -711,7 +730,7 @@ export function createAzureFunc(
       },
       {
         allowImportsFrom: [
-          "src/clients/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{utilsTestFileAccessPaths}",
         ],
@@ -720,7 +739,7 @@ export function createAzureFunc(
       },
       {
         allowImportsFrom: [
-          "src/clients/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{elementTestFileAccessPaths}",
         ],
@@ -729,7 +748,7 @@ export function createAzureFunc(
       },
       {
         allowImportsFrom: [
-          "src/clients/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{elementFileAccessPaths}",
         ],
@@ -741,7 +760,7 @@ export function createAzureFunc(
       {
         allowImportsFrom: [
           "src/clients/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{typesFileAccessPaths}",
         ],
@@ -751,7 +770,7 @@ export function createAzureFunc(
       {
         allowImportsFrom: [
           "src/clients/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{utilsFileAccessPaths}",
         ],
@@ -761,7 +780,7 @@ export function createAzureFunc(
       {
         allowImportsFrom: [
           "src/clients/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{utilsTestFileAccessPaths}",
         ],
@@ -771,7 +790,7 @@ export function createAzureFunc(
       {
         allowImportsFrom: [
           "src/clients/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{elementTestFileAccessPaths}",
         ],
@@ -781,7 +800,7 @@ export function createAzureFunc(
       {
         allowImportsFrom: [
           "src/clients/index.ts",
-          "src/fragments/index.ts",
+          "{allFamilySiblings}",
           "src/utils/index.ts",
           "{elementFileAccessPaths}",
         ],
@@ -848,30 +867,30 @@ export function createAzureFunc(
 
       // <============================= UTILS =============================> //
       {
-        allowImportsFrom: ["src/utils/index.ts", "{typesFileAccessPaths}"],
+        allowImportsFrom: ["{allFamilySiblings}", "{typesFileAccessPaths}"],
         name: "src/utils/*/**/*.types.ts",
         pattern: "src/utils/*/**/*.types.ts",
       },
       {
-        allowImportsFrom: ["src/utils/index.ts", "{utilsFileAccessPaths}"],
+        allowImportsFrom: ["{allFamilySiblings}", "{utilsFileAccessPaths}"],
         name: "src/utils/*/**/*.utils.ts",
         pattern: "src/utils/*/**/*.utils.ts",
       },
       {
-        allowImportsFrom: ["src/utils/index.ts", "{utilsFileAccessPaths}"],
+        allowImportsFrom: ["{allFamilySiblings}", "{utilsFileAccessPaths}"],
         name: "src/utils/*/**/*.utils.test.ts",
         pattern: "src/utils/*/**/*.utils.test.ts",
       },
       {
         allowImportsFrom: [
-          "src/utils/index.ts",
+          "{allFamilySiblings}",
           "{elementTestFileAccessPaths}",
         ],
         name: "src/utils/*/**/*.test.ts",
         pattern: "src/utils/*/**/*.test.ts",
       },
       {
-        allowImportsFrom: ["src/utils/index.ts", "{elementFileAccessPaths}"],
+        allowImportsFrom: ["{allFamilySiblings}", "{elementFileAccessPaths}"],
         name: "src/utils/*/**/*.ts",
         pattern: "src/utils/*/**/*.ts",
       },
@@ -884,6 +903,7 @@ export function createAzureFunc(
         }
       : undefined,
     reusableImportPatterns: {
+      allFamilySiblings: ALL_FAMILY_SIBLINGS,
       element: ELEMENT,
       elementFileAccessPaths: ELEMENT_FILE_ACCESS_PATH,
       elementTestFileAccessPaths: ELEMENT_TEST_FILE_ACCESS_PATH,
@@ -901,80 +921,22 @@ export function createLib(
 ) {
   return createIndependentModules({
     modules: [
+      // <============================ INDICES ============================> //
       {
         allowImportsFrom: [
           "src/index?(.module).@(sass|css|scss)",
-          "{noBinariesIndexPaths}",
+          "src/*/index.ts",
+          "src/outputs/*/index.ts",
+          "src/outputs/*.json",
         ],
         name: "src/index.ts",
         pattern: "src/index.ts",
       },
-
-      // <============================ BINARIES ===========================> //
-      {
-        allowImportsFrom: ["{dirname}/*/index.ts"],
-        name: "src/binaries/utils/index.ts",
-        pattern: "src/binaries/utils/index.ts",
-      },
-      {
-        allowImportsFrom: ["{element}", "{dirname}/*.types.ts"],
-        name: "src/*/*/**/index.ts",
-        pattern: "src/binaries/utils/*/**/index.ts",
-      },
-      {
-        allowImportsFrom: [
-          "src/binaries/utils/index.ts",
-          "{noBinariesIndexPaths}",
-          "{typesFileAccessPaths}",
-        ],
-        name: "src/binaries/utils/*/**/*.types.ts",
-        pattern: "src/binaries/utils/*/**/*.types.ts",
-      },
-      {
-        allowImportsFrom: [
-          "src/binaries/utils/index.ts",
-          "{noBinariesIndexPaths}",
-          "{utilsFileAccessPaths}",
-        ],
-        name: "src/binaries/utils/*/**/*.utils.ts",
-        pattern: "src/binaries/utils/*/**/*.utils.ts",
-      },
-      {
-        allowImportsFrom: [
-          "src/binaries/utils/index.ts",
-          "{noBinariesIndexPaths}",
-          "{utilsTestFileAccessPaths}",
-        ],
-        name: "src/binaries/utils/*/**/*.utils.test.ts",
-        pattern: "src/binaries/utils/*/**/*.utils.test.ts",
-      },
-      {
-        allowImportsFrom: [
-          "src/binaries/utils/index.ts",
-          "{noBinariesIndexPaths}",
-          "{elementTestFileAccessPaths}",
-        ],
-        name: "src/binaries/utils/*/**/*.test.ts",
-        pattern: "src/binaries/utils/*/**/*.test.ts",
-      },
-      {
-        allowImportsFrom: [
-          "src/binaries/utils/index.ts",
-          "{noBinariesIndexPaths}",
-          "{elementFileAccessPaths}",
-        ],
-        name: "src/binaries/utils/*/**/*.ts",
-        pattern: "src/binaries/utils/*/**/*.ts",
-      },
-
-      // <============================= TYPES =============================> //
       {
         allowImportsFrom: ["{dirname}/*.types.ts"],
         name: "src/types/index.ts",
         pattern: "src/types/index.ts",
       },
-
-      // <============================== REST =============================> //
       {
         allowImportsFrom: ["{dirname}/*/index.ts"],
         name: "src/*/index.ts",
@@ -985,32 +947,77 @@ export function createLib(
         name: "src/*/*/**/index.ts",
         pattern: "src/*/*/**/index.ts",
       },
+
+      // <============================ BINARIES ===========================> //
       {
-        allowImportsFrom: ["{noBinariesIndexPaths}", "{hooksFileAccessPaths}"],
+        allowImportsFrom: [
+          "src/*/index.ts",
+          "src/outputs/*/index.ts",
+          "src/outputs/*.json",
+          "{dirname}/*/index.ts",
+        ],
+        name: "src/binaries/*.ts",
+        pattern: "src/binaries/*.ts",
+      },
+
+      // <============================= TYPES =============================> //
+      {
+        allowImportsFrom: ["{dirname}/*.types.ts"],
+        name: "src/types/*.types.ts",
+        pattern: "src/types/*.types.ts",
+      },
+
+      // <============================== REST =============================> //
+      {
+        allowImportsFrom: [
+          "{otherRootSiblings}",
+          "src/outputs/*/index.ts",
+          "src/outputs/*.json",
+          "{allFamilySiblings}",
+          "{hooksFileAccessPaths}",
+        ],
         name: "src/*/*/**/*.hooks.ts",
         pattern: "src/*/*/**/*.hooks.ts",
       },
       {
         allowImportsFrom: [
-          "{noBinariesIndexPaths}",
+          "{otherRootSiblings}",
+          "src/outputs/*/index.ts",
+          "src/outputs/*.json",
+          "{allFamilySiblings}",
           "{hooksTestFileAccessPaths}",
         ],
         name: "src/*/*/**/*.hooks.test.ts",
         pattern: "src/*/*/**/*.hooks.test.ts",
       },
       {
-        allowImportsFrom: ["{noBinariesIndexPaths}", "{typesFileAccessPaths}"],
+        allowImportsFrom: [
+          "{otherRootSiblings}",
+          "src/outputs/*/index.ts",
+          "src/outputs/*.json",
+          "{allFamilySiblings}",
+          "{typesFileAccessPaths}",
+        ],
         name: "src/*/*/**/*.types.ts",
         pattern: "src/*/*/**/*.types.ts",
       },
       {
-        allowImportsFrom: ["{noBinariesIndexPaths}", "{utilsFileAccessPaths}"],
+        allowImportsFrom: [
+          "{otherRootSiblings}",
+          "src/outputs/*/index.ts",
+          "src/outputs/*.json",
+          "{allFamilySiblings}",
+          "{utilsFileAccessPaths}",
+        ],
         name: "src/*/*/**/*.utils.ts",
         pattern: "src/*/*/**/*.utils.ts",
       },
       {
         allowImportsFrom: [
-          "{noBinariesIndexPaths}",
+          "{otherRootSiblings}",
+          "src/outputs/*/index.ts",
+          "src/outputs/*.json",
+          "{allFamilySiblings}",
           "{utilsTestFileAccessPaths}",
         ],
         name: "src/*/*/**/*.utils.test.ts",
@@ -1018,7 +1025,10 @@ export function createLib(
       },
       {
         allowImportsFrom: [
-          "{noBinariesIndexPaths}",
+          "{otherRootSiblings}",
+          "src/outputs/*/index.ts",
+          "src/outputs/*.json",
+          "{allFamilySiblings}",
           "{elementTestFileAccessPaths}",
         ],
         name: "src/*/*/**/*.test.ts",
@@ -1026,7 +1036,10 @@ export function createLib(
       },
       {
         allowImportsFrom: [
-          "{noBinariesIndexPaths}",
+          "{otherRootSiblings}",
+          "src/outputs/*/index.ts",
+          "src/outputs/*.json",
+          "{allFamilySiblings}",
           "{elementFileAccessPaths}",
         ],
         name: "src/*/*/**/*.ts",
@@ -1041,20 +1054,13 @@ export function createLib(
         }
       : undefined,
     reusableImportPatterns: {
+      allFamilySiblings: ALL_FAMILY_SIBLINGS,
       element: ELEMENT,
       elementFileAccessPaths: ELEMENT_FILE_ACCESS_PATH,
       elementTestFileAccessPaths: ELEMENT_TEST_FILE_ACCESS_PATH,
       hooksFileAccessPaths: HOOKS_FILE_ACCESS_PATH,
       hooksTestFileAccessPaths: HOOKS_TEST_FILE_ACCESS_PATH,
-      noBinariesIndexPaths: [
-        "src/classes/index.ts",
-        "src/components/index.ts",
-        "src/functions/index.ts",
-        "src/modules/index.ts",
-        "src/outputs/*.json",
-        "src/outputs/*/index.ts",
-        "src/types/index.ts",
-      ],
+      otherRootSiblings: OTHER_ROOT_SIBLINGS,
       typesFileAccessPaths: TYPES_FILE_ACCESS_PATH,
       utilsFileAccessPaths: UTILS_FILE_ACCESS_PATH,
       utilsTestFileAccessPaths: UTILS_TEST_FILE_ACCESS_PATH,
@@ -1069,6 +1075,7 @@ export function createNode(
 ) {
   return createIndependentModules({
     modules: [
+      // <============================ INDICES ============================> //
       {
         allowImportsFrom: ["{dirname}/*/index.ts"],
         name: "src/index.ts",
@@ -1084,28 +1091,50 @@ export function createNode(
         name: "src/*/*/**/index.ts",
         pattern: "src/*/*/**/index.ts",
       },
+
+      // <============================== REST =============================> //
       {
-        allowImportsFrom: ["src/*/index.ts", "{typesFileAccessPaths}"],
+        allowImportsFrom: [
+          "{otherRootSiblings}",
+          "{allFamilySiblings}",
+          "{typesFileAccessPaths}",
+        ],
         name: "src/*/*/**/*.types.ts",
         pattern: "src/*/*/**/*.types.ts",
       },
       {
-        allowImportsFrom: ["src/*/index.ts", "{utilsFileAccessPaths}"],
+        allowImportsFrom: [
+          "{otherRootSiblings}",
+          "{allFamilySiblings}",
+          "{utilsFileAccessPaths}",
+        ],
         name: "src/*/*/**/*.utils.ts",
         pattern: "src/*/*/**/*.utils.ts",
       },
       {
-        allowImportsFrom: ["src/*/index.ts", "{utilsTestFileAccessPaths}"],
+        allowImportsFrom: [
+          "{otherRootSiblings}",
+          "{allFamilySiblings}",
+          "{utilsTestFileAccessPaths}",
+        ],
         name: "src/*/*/**/*.utils.test.ts",
         pattern: "src/*/*/**/*.utils.test.ts",
       },
       {
-        allowImportsFrom: ["src/*/index.ts", "{elementTestFileAccessPaths}"],
+        allowImportsFrom: [
+          "{otherRootSiblings}",
+          "{allFamilySiblings}",
+          "{elementTestFileAccessPaths}",
+        ],
         name: "src/*/*/**/*.test.ts",
         pattern: "src/*/*/**/*.test.ts",
       },
       {
-        allowImportsFrom: ["src/*/index.ts", "{elementFileAccessPaths}"],
+        allowImportsFrom: [
+          "{otherRootSiblings}",
+          "{allFamilySiblings}",
+          "{elementFileAccessPaths}",
+        ],
         name: "src/*/*/**/*.ts",
         pattern: "src/*/*/**/*.ts",
       },
@@ -1118,9 +1147,11 @@ export function createNode(
         }
       : undefined,
     reusableImportPatterns: {
+      allFamilySiblings: ALL_FAMILY_SIBLINGS,
       element: ELEMENT,
       elementFileAccessPaths: ELEMENT_FILE_ACCESS_PATH,
       elementTestFileAccessPaths: ELEMENT_TEST_FILE_ACCESS_PATH,
+      otherRootSiblings: OTHER_ROOT_SIBLINGS,
       typesFileAccessPaths: TYPES_FILE_ACCESS_PATH,
       utilsFileAccessPaths: UTILS_FILE_ACCESS_PATH,
       utilsTestFileAccessPaths: UTILS_TEST_FILE_ACCESS_PATH,

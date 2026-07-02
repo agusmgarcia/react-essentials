@@ -1,4 +1,4 @@
-import { BrowserStorageSlice } from "#src/classes";
+import { BrowserStorageSlice } from "#src/classes/BrowserStorageSlice";
 
 import { type BaseData, type BaseSlices } from "./LocalStorageSlice.types";
 

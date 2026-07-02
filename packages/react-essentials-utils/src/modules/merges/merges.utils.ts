@@ -1,4 +1,5 @@
-import { equals, filters } from "#src/modules";
+import { equals } from "#src/modules/equals";
+import { filters } from "#src/modules/filters";
 
 import { type ArrayComparatorFn } from "./merges.types";
 

@@ -750,7 +750,7 @@ export const LIB = createFileComposition({
     // <============================ BINARIES =============================> //
     {
       allowOnlySpecifiedSelectors: ALLOW_ONLY_SPECIFIED_SELECTORS,
-      filePattern: [["src/binaries/*.ts", "!src/binaries/*.test.ts"]],
+      filePattern: ["src/binaries/*.ts"],
       rootSelectorsLimits: [{ limit: { min: 1 }, selector: "function" }],
       rules: [
         {

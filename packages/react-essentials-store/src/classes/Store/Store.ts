@@ -1,7 +1,5 @@
-import { type GlobalSlice } from "#src/classes";
+import { type GlobalSlice } from "#src/classes/GlobalSlice";
 
-import { createMiddleware } from "./createMiddleware";
-import { setupDevTools } from "./setupDevTools";
 import {
   type BaseSliceFactories,
   type Configs,
@@ -12,6 +10,7 @@ import {
   type StateOf,
   type Unsubscribe,
 } from "./Store.types";
+import { createMiddleware, setupDevTools } from "./Store.utils";
 
 /**
  * Represents a reactive store that manages multiple state slices, middleware, and listeners.

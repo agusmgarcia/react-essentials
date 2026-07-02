@@ -5,7 +5,7 @@ import {
   isSSR,
 } from "@agusmgarcia/react-essentials-utils";
 
-import { StorageSlice } from "#src/classes";
+import { StorageSlice } from "#src/classes/StorageSlice";
 
 import {
   type BaseData,

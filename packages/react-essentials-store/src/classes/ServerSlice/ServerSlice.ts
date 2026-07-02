@@ -3,7 +3,7 @@ import {
   isMethodOverridden,
 } from "@agusmgarcia/react-essentials-utils";
 
-import { GlobalSlice } from "#src/classes";
+import { GlobalSlice } from "#src/classes/GlobalSlice";
 
 import { type BaseResponse, type BaseSlices } from "./ServerSlice.types";
 

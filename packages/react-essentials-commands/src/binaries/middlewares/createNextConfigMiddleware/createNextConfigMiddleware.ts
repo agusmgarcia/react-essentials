@@ -1,0 +1,40 @@
+import {
+  createFileMiddleware,
+  type CreateFileMiddlewareTypes,
+} from "#src/binaries/createFileMiddleware";
+import { files } from "#src/outputs/files";
+import { folders } from "#src/outputs/folders";
+
+const MIDDLEWARE = createFileMiddleware<string>({
+  path: "next.config.js",
+  template: getTemplate,
+  valid: ["app"],
+});
+
+export default async function createNextConfigMiddleware(
+  context: CreateFileMiddlewareTypes.Context,
+): Promise<void> {
+  await Promise.all([MIDDLEWARE(context), deleteNextConfigFiles(context)]);
+  if (context.core === "app")
+    context.defer(() => folders.removeFolder(".next"));
+  else context.defer(() => files.removeFile("next-env.d.ts"));
+}
+
+async function deleteNextConfigFiles(
+  context: CreateFileMiddlewareTypes.Context,
+): Promise<void> {
+  if (context.command !== "regenerate") return;
+  if (!!context.filesToRegenerate.length) return;
+  await Promise.all([
+    files.removeFile("next.config.mjs"),
+    files.removeFile("next.config.ts"),
+    files.removeFile("out"),
+  ]);
+}
+
+function getTemplate(context: CreateFileMiddlewareTypes.Context): string {
+  return `const { createNextConfig } = require("${context.essentialsCommands ? "./dist" : context.essentialsCommandsName}");
+
+module.exports = createNextConfig({ core: "${context.core}" });
+`;
+}

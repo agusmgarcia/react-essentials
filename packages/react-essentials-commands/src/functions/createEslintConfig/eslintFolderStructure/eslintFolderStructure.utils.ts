@@ -279,16 +279,8 @@ export const LIB = createFolderStructure({
     binaries_folder: {
       children: [
         { name: "{camelCase}.ts" },
-        { name: "{camelCase}.test.ts" },
-        {
-          children: [
-            { name: "index.ts" },
-            { name: "{camelCase}", ruleId: "_camel_case_folder" },
-            { name: "{PascalCase}", ruleId: "_pascal_case_folder" },
-          ],
-          enforceExistence: "index.ts",
-          name: "utils",
-        },
+        { name: "{camelCase}", ruleId: "_camel_case_folder" },
+        { name: "{PascalCase}", ruleId: "_pascal_case_folder" },
       ],
     },
     classes_folder: {

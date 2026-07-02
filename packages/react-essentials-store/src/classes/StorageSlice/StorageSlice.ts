@@ -3,7 +3,7 @@ import {
   isMethodOverridden,
 } from "@agusmgarcia/react-essentials-utils";
 
-import { ServerSlice } from "#src/classes";
+import { ServerSlice } from "#src/classes/ServerSlice";
 
 import { type BaseData, type BaseSlices } from "./StorageSlice.types";
 
