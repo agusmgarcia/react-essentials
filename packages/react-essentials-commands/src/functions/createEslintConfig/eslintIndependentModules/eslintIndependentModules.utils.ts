@@ -139,6 +139,11 @@ export function createApp(
     modules: [
       // <============================ INDICES ============================> //
       {
+        allowImportsFrom: ["{dirname}/*/index.ts", "src/utils/index.ts"],
+        name: "src/store/index.ts",
+        pattern: "src/store/index.ts",
+      },
+      {
         allowImportsFrom: ["{dirname}/*/index.ts"],
         name: "src/*/index.ts",
         pattern: "src/*/index.ts",
