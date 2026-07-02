@@ -3,6 +3,7 @@ import getCustomTransformers from "ts-transform-paths";
 import { type default as webpack } from "webpack";
 
 import { type GetPackageJSONTypes } from "#src/functions";
+import { files } from "#src/outputs/files";
 import { folders } from "#src/outputs/folders";
 
 import { type Input, type Output } from "./createWebpackConfigAzureFunc.types";
@@ -70,14 +71,19 @@ async function getFunctionEntries(
   return await folders
     .readFolder(path.resolve("src", "functions"))
     .then((elements) =>
-      elements.map(async (e) => {
-        const folderPath = path.resolve("src", "functions", e);
-        const isFolder = await folders.isFolder(folderPath);
-        return { folderName: e, isFolder };
+      elements.map(async (folderName) => {
+        if (folderName === "index.ts") return false;
+
+        const index = await files.readFile(
+          path.resolve("src", "functions", folderName, "index.ts"),
+        );
+        if (!index) return false;
+
+        return { folderName };
       }),
     )
     .then((elements) => Promise.all(elements))
-    .then((elements) => elements.filter((e) => e.isFolder))
+    .then((elements) => elements.filter((e) => !!e))
     .then((elements) => elements.map((e) => e.folderName))
     .then((folders) =>
       folders.reduce(
