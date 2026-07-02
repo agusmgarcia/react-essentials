@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.18.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.18.1)
+
+> July 2, 2026
+
+### Fixes 🎯
+
+- **createWebpackConfig**: adjust functions location
+- **createLocalSettingsMiddleware**: uppercase the properties
+
 ## [v0.18.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.18.0)
 
 > June 26, 2026
