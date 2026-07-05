@@ -8,3 +8,4 @@ export * from "./useDimensions";
 export * from "./useElementAtBottom";
 export * from "./useElementAtTop";
 export * from "./useMediaQuery";
+export * from "./useSynchronizedRef";

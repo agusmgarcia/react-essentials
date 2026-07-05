@@ -362,3 +362,14 @@ function useHook() {
   const isTablet = useMediaQuery("(max-width: 767.98px)"); // => boolean
 }
 ```
+
+## Use synchronized ref
+
+```typescript
+import { useSynchronizedRef } from "@agusmgarcia/react-essentials-utils";
+
+function useHook() {
+  const myFunction = () => {};
+  const myFunctionRef = useSynchronizedRef(myFunction);
+}
+```
