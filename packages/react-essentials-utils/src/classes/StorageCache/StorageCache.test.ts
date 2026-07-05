@@ -64,16 +64,18 @@ describe("StorageCache", () => {
 
   it("should handle errors from factory and cache them briefly", async () => {
     const cache = new StorageCache({ storage: "local" });
-    const factory = jest.fn(() => errors.emit("fail"));
+    const factory = jest.fn(() => {
+      throw "fail";
+    });
 
     await expect(
       cache.getOrCreate("err", factory, new AbortController().signal),
-    ).rejects.toThrow("fail");
+    ).rejects.toBe("fail");
 
     // Try again, should not call factory again (error is cached)
     await expect(
       cache.getOrCreate("err", factory, new AbortController().signal),
-    ).rejects.toThrow("fail");
+    ).rejects.toBe("fail");
 
     expect(factory).toHaveBeenCalledTimes(1);
   });

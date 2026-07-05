@@ -1,4 +1,3 @@
-import { errors } from "@agusmgarcia/react-essentials-commands/errors";
 import { properties } from "@agusmgarcia/react-essentials-commands/properties";
 import { strings } from "@agusmgarcia/react-essentials-commands/strings";
 import { v4 as createUUID } from "uuid";
@@ -97,10 +96,8 @@ export class Storage implements CacheTypes.Storage {
       )
         return undefined;
 
-      if (properties.has(entry, "result")) return entry;
-
-      if (properties.has(entry, "error", "string"))
-        return { ...entry, error: new Error(entry.error) };
+      if (properties.has(entry, "result") || properties.has(entry, "error"))
+        return entry;
 
       return undefined;
     } catch {
@@ -109,12 +106,8 @@ export class Storage implements CacheTypes.Storage {
   }
 
   async setEntry(key: string, entry: CacheTypes.Entry): Promise<void> {
-    const raw = properties.has(entry, "error")
-      ? { ...entry, error: errors.getMessage(entry.error) }
-      : entry;
-
     try {
-      window[`${this.storage}Storage`].setItem(key, JSON.stringify(raw));
+      window[`${this.storage}Storage`].setItem(key, JSON.stringify(entry));
     } catch (error) {
       if (!(error instanceof DOMException)) throw error;
       if (error.code !== DOMException.QUOTA_EXCEEDED_ERR) throw error;
