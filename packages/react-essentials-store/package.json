@@ -31,7 +31,6 @@
   },
   "devDependencies": {
     "@agusmgarcia/react-essentials-commands": "*",
-    "@agusmgarcia/react-essentials-utils": "*",
     "@redux-devtools/extension": "^3.3.0"
   },
   "files": [

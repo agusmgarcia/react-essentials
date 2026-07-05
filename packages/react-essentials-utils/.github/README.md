@@ -353,6 +353,23 @@ function useHook() {
 }
 ```
 
+## Use intersection observer
+
+```typescript
+import { useIntersectionObserver } from "@agusmgarcia/react-essentials-utils";
+import { useCallback, useRef } from "react";
+
+function useHook() {
+  const onEnterViewport = useCallback(() => {
+    console.log("Enter");
+  }, []);
+
+  const ref = useIntersectionObserver({ onEnterViewport, threshold: 0.6 });
+
+  return { ref };
+}
+```
+
 ## Use media query
 
 ```typescript

@@ -7,5 +7,6 @@ export * from "./useDevicePixelRatio";
 export * from "./useDimensions";
 export * from "./useElementAtBottom";
 export * from "./useElementAtTop";
+export * from "./useIntersectionObserver";
 export * from "./useMediaQuery";
 export * from "./useSynchronizedRef";
