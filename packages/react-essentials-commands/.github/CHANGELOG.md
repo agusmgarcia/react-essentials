@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.19.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.19.0)
+
+> July 6, 2026
+
+### Features ✅
+
+- **eslint**: let index store to access utils
+- **clients**: allow ConstructorOptions type
+- **eslint**: let clients to specify error types in azure
+
+### Chores ⚙️
+
+- **createEslintConfig**: improve the usage
+
 ## [v0.18.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.18.1)
 
 > July 2, 2026
