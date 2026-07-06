@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.17.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.17.0)
+
+> July 6, 2026
+
+### Features ✅
+
+- **useIntersectionObserver**: add function
+- **useSynchronizedRef**: add function
+- **StorageCache**: stop serializing error
+
+### Chores ⚙️
+
+- **createEslintConfig**: improve the usage
+
 ## [v0.16.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-utils@v0.16.0)
 
 > June 19, 2026
