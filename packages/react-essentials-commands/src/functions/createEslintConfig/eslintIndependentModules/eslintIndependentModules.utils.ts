@@ -172,9 +172,9 @@ export function createApp(
         allowImportsFrom: [
           "{element}",
           "{dirname}/*.types.ts",
-          "{dirname}/*actions.ts",
-          "{dirname}/*epics.ts",
-          "{dirname}/*selectors.ts",
+          "{dirname}/*.actions.ts",
+          "{dirname}/*.epics.ts",
+          "{dirname}/*.selectors.ts",
         ],
         name: "src/*/*/**/index.ts",
         pattern: "src/*/*/**/index.ts",
