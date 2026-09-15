@@ -48,6 +48,16 @@ const COMPONENT_FILE_ROOT: FileRoot[] = [
     scope: "fileRoot",
     selector: { limitTo: "dynamic", type: "variableExpression" },
   },
+  {
+    format: "{PascalCase}",
+    scope: "fileRoot",
+    selector: { limitTo: "createContext", type: "variableExpression" },
+  },
+  {
+    format: "{PascalCase}",
+    scope: "fileRoot",
+    selector: { limitTo: "lazy", type: "variableExpression" },
+  },
 ];
 
 const FUNCTION_FILE_ROOT: FileRoot[] = [
