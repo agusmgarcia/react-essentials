@@ -1,7 +1,7 @@
 {
   "name": "@agusmgarcia/react-essentials-store",
   "core": "lib",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "private": false,
   "exports": {
     ".": {
@@ -23,7 +23,7 @@
     "test": "react-essentials-commands-test"
   },
   "dependencies": {
-    "@agusmgarcia/react-essentials-utils": "^0.17.0",
+    "@agusmgarcia/react-essentials-utils": "^0.18.0",
     "use-context-selector": "^2.0.0"
   },
   "peerDependencies": {

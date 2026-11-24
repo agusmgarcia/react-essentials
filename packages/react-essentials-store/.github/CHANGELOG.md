@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.26.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.26.0)
+
+> November 24, 2026
+
+### Features ✅
+
+- stop using jest in favour of vitest
+
+### Chores ⚙️
+
+- bump vulnerable dependencies
+
 ## [v0.25.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-store@v0.25.0)
 
 > July 6, 2026
