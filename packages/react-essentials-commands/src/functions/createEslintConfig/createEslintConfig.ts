@@ -33,9 +33,11 @@ export default async function createEslintConfig(
       .then((tsconfig) => (tsconfig ? JSON.parse(tsconfig) : undefined)),
   ]);
 
-  return defineConfig([
-    // project-structure
-    {
+  const args: Parameters<typeof defineConfig> = [];
+
+  // project-structure
+  if (!input.ignorePlugins?.projectStructure)
+    args.push({
       files: ["**/*.js", "**/*.ts", "**/*.tsx"],
       plugins: {
         "project-structure": projectStructurePlugin,
@@ -89,19 +91,22 @@ export default async function createEslintConfig(
       settings: {
         "project-structure/cache-location": "./node_modules",
       },
-    },
+    });
 
-    // prettier
-    eslintPluginPrettierRecommended,
-    {
+  // prettier
+  if (!input.ignorePlugins?.prettier) {
+    args.push(eslintPluginPrettierRecommended);
+    args.push({
       rules: {
         "prettier/prettier": "error",
       },
-    },
+    });
+  }
 
-    // sort
-    eslintPluginSort.configs["flat/recommended"],
-    {
+  // sort
+  if (!input.ignorePlugins?.sort) {
+    args.push(eslintPluginSort.configs["flat/recommended"]);
+    args.push({
       rules: {
         "sort/destructuring-properties": "error",
         "sort/export-members": "error",
@@ -159,28 +164,33 @@ export default async function createEslintConfig(
           },
         ],
       },
-    },
+    });
+  }
 
-    // @next
-    ...eslintConfigNextCoreWebVitals,
-    {
+  // @next
+  if (!input.ignorePlugins?.next) {
+    args.push(...eslintConfigNextCoreWebVitals);
+    args.push({
       rules: {
         "@next/next/no-html-link-for-pages":
           input.core === "app" ? "error" : "off",
       },
-    },
+    });
+  }
 
-    // react
-    {
+  // react
+  if (!input.ignorePlugins?.react)
+    args.push({
       rules: {
         "react/jsx-boolean-value": ["error", "always"],
         "react/jsx-sort-props": ["error", { reservedFirst: true }],
       },
-    },
+    });
 
-    // @typescript-eslint
-    ...eslintConfigNextTypescript,
-    {
+  // @typescript-eslint
+  if (!input.ignorePlugins?.typescript) {
+    args.push(...eslintConfigNextTypescript);
+    args.push({
       rules: {
         "@typescript-eslint/consistent-type-imports": [
           "error",
@@ -204,9 +214,11 @@ export default async function createEslintConfig(
           },
         ],
       },
-    },
+    });
+  }
 
-    // Global Ignores
+  // Global Ignores
+  args.push(
     globalIgnores([
       "**/.next",
       "**/bin",
@@ -215,5 +227,7 @@ export default async function createEslintConfig(
       "**/node_modules",
       "**/*.d.ts",
     ]),
-  ]);
+  );
+
+  return defineConfig(args);
 }
