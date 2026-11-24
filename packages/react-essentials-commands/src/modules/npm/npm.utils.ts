@@ -5,13 +5,20 @@ import { compare } from "semver";
 import { execute } from "#src/functions";
 import { git } from "#src/modules/git";
 
-export async function getMonorepoDetails(): Promise<
-  { location: string; name: string } | undefined
+export async function getWorkspaces(): Promise<
+  { location: string; name: string; realpath: string }[]
 > {
   return await execute("npm query .workspace", false)
     .then((result) => result.replaceAll(EOL, ""))
-    .then(JSON.parse)
-    .then((ws) => ws.find((w: any) => w.realpath === process.cwd()));
+    .then(JSON.parse);
+}
+
+export async function getCurrentWorkspace(): Promise<
+  { location: string; name: string } | undefined
+> {
+  return await getWorkspaces().then((ws) =>
+    ws.find((w) => w.realpath === process.cwd()),
+  );
 }
 
 export async function getNewTag(

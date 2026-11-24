@@ -27,7 +27,7 @@ export default async function createEslintConfig(
   input: Input,
 ): Promise<Output> {
   const [monorepoDetails, tsconfig] = await Promise.all([
-    npm.getMonorepoDetails(),
+    npm.getCurrentWorkspace(),
     files
       .readFile(path.resolve(process.cwd(), "tsconfig.json"))
       .then((tsconfig) => (tsconfig ? JSON.parse(tsconfig) : undefined)),

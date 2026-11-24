@@ -19,7 +19,7 @@ async function getTemplate(
 ): Promise<string> {
   let fragments = "";
 
-  const scope = await npm.getMonorepoDetails().then((m) => m?.name);
+  const scope = await npm.getCurrentWorkspace().then((m) => m?.name);
 
   if (await git.isInsideRepository()) {
     const [remoteURL, detailedTags, detailedCommits] = await Promise.all([

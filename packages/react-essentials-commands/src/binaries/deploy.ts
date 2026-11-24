@@ -1,9 +1,10 @@
 import path from "path";
 import process from "process";
 
-import { execute } from "#src/functions";
+import { execute, getPackageJSON } from "#src/functions";
 import { args, git, npm, question } from "#src/modules";
 import { errors } from "#src/outputs/errors";
+import { files } from "#src/outputs/files";
 
 export default async function deploy(): Promise<void> {
   try {
@@ -12,7 +13,7 @@ export default async function deploy(): Promise<void> {
     if (!(await git.isCurrentBranchSynced()))
       throw new Error("Your branch must be in synced with remote");
 
-    const scope = await npm.getMonorepoDetails().then((m) => m?.name);
+    const scope = await npm.getCurrentWorkspace().then((m) => m?.name);
 
     const lastTagMerged = await git
       .getTags({ merged: true, scope })
@@ -42,6 +43,8 @@ export default async function deploy(): Promise<void> {
 
     const newTag = await npm.getNewTag(requiredVersion || typeOfNewVersion);
     if (!newTag) return;
+
+    await updateWorkspaceDependencies();
 
     await git.createCommit("chore: bump package version");
     await git.createTag(`${newTag}-temp`);
@@ -79,6 +82,58 @@ function findTypeOfNewVersion(
   }
 
   return bump;
+}
+
+async function updateWorkspaceDependencies(): Promise<void> {
+  const packageJSON = await getPackageJSON();
+
+  const workspaceNames = await npm
+    .getWorkspaces()
+    .then((ws) => ws.map((w) => w.name));
+
+  if (!workspaceNames.length) return;
+
+  const sections = [
+    "dependencies",
+    "peerDependencies",
+    "devDependencies",
+  ] as const;
+
+  let changed = false;
+
+  for (const section of sections) {
+    const deps = packageJSON[section];
+    if (!deps) continue;
+
+    for (const depName of Object.keys(deps)) {
+      if (!workspaceNames.includes(depName)) continue;
+
+      const currentValue = deps[depName];
+      if (currentValue === "*") continue;
+
+      const lastMergedTag = await git
+        .getTags({ merged: true, scope: depName })
+        .then((tags) => tags.at(-1));
+
+      if (!lastMergedTag) continue;
+
+      const { major, minor, patch } = git.getTagInfo(lastMergedTag);
+      const prefix = /^[^0-9]*/.exec(currentValue)?.[0] ?? "";
+      const newValue = `${prefix}${major}.${minor}.${patch}`;
+
+      if (newValue === currentValue) continue;
+
+      deps[depName] = newValue;
+      changed = true;
+    }
+  }
+
+  if (!changed) return;
+
+  await files.upsertFile(
+    path.resolve(process.cwd(), "package.json"),
+    JSON.stringify(packageJSON, null, 2) + "\n",
+  );
 }
 
 async function validatePositionOfTheTag(
