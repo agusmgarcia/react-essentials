@@ -13,7 +13,7 @@ export default async function test(): Promise<void> {
 
     await runCommand("test", () =>
       execute(
-        `jest --passWithNoTests${watch ? " --watch" : ""}${pattern.length ? ` ${pattern.join(" ")}` : ""}`,
+        `vitest run${watch ? " --watch" : ""}${pattern.length ? ` ${pattern.join(" ")}` : ""}`,
         true,
       ),
     );

@@ -88,7 +88,6 @@ Here the list of the files:
 - .nvmrc
 - eslint.config.js
 - host.json
-- jest.config.js
 - local.settings.json
 - next.config.js
 - package.json
@@ -96,6 +95,7 @@ Here the list of the files:
 - prettier.config.js
 - tsconfig.json
 - types.d.ts
+- vitest.config.js
 - webpack.config.ts
 
 #### Specific files

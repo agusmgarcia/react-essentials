@@ -1,3 +1,5 @@
+import { describe, expect, it } from "vitest";
+
 import { type AsyncFunc } from "#src/types";
 
 import aggregateResponse from "./aggregateResponse";

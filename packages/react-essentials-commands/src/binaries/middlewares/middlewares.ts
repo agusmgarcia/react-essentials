@@ -9,7 +9,6 @@ import { createHostMiddleware } from "./createHostMiddleware";
 import { createHttpTrigger1Middleware } from "./createHttpTrigger1Middleware";
 import { createIndexCSSMiddleware } from "./createIndexCSSMiddleware";
 import { createIndexMiddleware } from "./createIndexMiddleware";
-import { createJestConfigMiddleware } from "./createJestConfigMiddleware";
 import { createLocalSettingsMiddleware } from "./createLocalSettingsMiddleware";
 import { createNextConfigMiddleware } from "./createNextConfigMiddleware";
 import { createNvmrcMiddleware } from "./createNvmrcMiddleware";
@@ -21,6 +20,7 @@ import { createReleaseMiddleware } from "./createReleaseMiddleware";
 import { createTailwindConfigMiddleware } from "./createTailwindConfigMiddleware";
 import { createTsConfigMiddleware } from "./createTsConfigMiddleware";
 import { createTypesDMiddleware } from "./createTypesDMiddleware";
+import { createVitestConfigMiddleware } from "./createVitestConfigMiddleware";
 import { createWebpackConfigMiddleware } from "./createWebpackConfigMiddleware";
 
 const middlewares = [
@@ -35,7 +35,6 @@ const middlewares = [
   createHttpTrigger1Middleware,
   createIndexMiddleware,
   createIndexCSSMiddleware,
-  createJestConfigMiddleware,
   createLocalSettingsMiddleware,
   createNextConfigMiddleware,
   createNvmrcMiddleware,
@@ -47,6 +46,7 @@ const middlewares = [
   createTailwindConfigMiddleware,
   createTsConfigMiddleware,
   createTypesDMiddleware,
+  createVitestConfigMiddleware,
   createWebpackConfigMiddleware,
 ];
 

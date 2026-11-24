@@ -14,11 +14,11 @@ function getTemplate(): string[] {
     "__blobstorage__",
     "__queuestorage__",
     "eslint.config.js",
-    "jest.config.js",
     "local.settings.json",
     "package-lock.json",
     "prettier.config.js",
     "src",
+    "vitest.config.js",
     "tsconfig.json",
     "webpack.config.ts",
   ];

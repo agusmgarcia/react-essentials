@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { default as errors } from "./errors";
 
 describe("errors", () => {
@@ -80,7 +82,7 @@ describe("errors", () => {
 
       it("should call catchCallback if callback throws", () => {
         const err = new Error("fail");
-        const catchCallback = jest.fn().mockReturnValue("caught");
+        const catchCallback = vi.fn().mockReturnValue("caught");
         const result = errors.handle(() => {
           throw err;
         }, catchCallback);
@@ -89,7 +91,7 @@ describe("errors", () => {
       });
 
       it("should pass the thrown value to catchCallback (non-Error)", () => {
-        const catchCallback = jest.fn().mockReturnValue("caught");
+        const catchCallback = vi.fn().mockReturnValue("caught");
         const thrown = "fail";
         const result = errors.handle(() => {
           throw thrown;
@@ -110,7 +112,7 @@ describe("errors", () => {
 
       it("should call catchCallback if callback rejects", async () => {
         const err = new Error("async fail");
-        const catchCallback = jest.fn().mockResolvedValue("caught");
+        const catchCallback = vi.fn().mockResolvedValue("caught");
         const result = await errors.handle(async () => {
           throw err;
         }, catchCallback);
@@ -120,7 +122,7 @@ describe("errors", () => {
 
       it("should call catchCallback if callback returns a rejected promise", async () => {
         const err = new Error("promise fail");
-        const catchCallback = jest.fn().mockResolvedValue("caught");
+        const catchCallback = vi.fn().mockResolvedValue("caught");
         const result = await errors.handle(
           () => Promise.reject(err),
           catchCallback,
@@ -130,7 +132,7 @@ describe("errors", () => {
       });
 
       it("should pass the rejected value to catchCallback (non-Error)", async () => {
-        const catchCallback = jest.fn().mockResolvedValue("caught");
+        const catchCallback = vi.fn().mockResolvedValue("caught");
         const thrown = "fail";
         const result = await errors.handle(
           () => Promise.reject(thrown),

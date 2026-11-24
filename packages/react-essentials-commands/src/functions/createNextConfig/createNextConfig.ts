@@ -5,7 +5,7 @@ import { type Input, type Output } from "./createNextConfig.types";
 /**
  * Generates a Next.js configuration object based on the provided input and build phase.
  *
- * @param core - The core type of the project, which determines specific Jest settings.
+ * @param core - The core type of the project, which determines specific Next settings.
  * @returns A function that takes the current Next.js build phase and returns a configuration object.
  */
 export default function createNextConfig(input: Input): Output {

@@ -151,7 +151,6 @@ export function createApp(store: "default" | "redux-observable") {
     structure: {
       children: [
         { name: "eslint.config.js" },
-        { name: "jest.config.js" },
         { name: "next-env.d.ts" },
         { name: "next.config.js" },
         { name: "package.json" },
@@ -185,10 +184,10 @@ export function createApp(store: "default" | "redux-observable") {
           name: "src",
         },
         { name: "tsconfig.json" },
+        { name: "vitest.config.js" },
       ],
       enforceExistence: [
         "eslint.config.js",
-        "jest.config.js",
         "next-env.d.ts",
         "next.config.js",
         "package.json",
@@ -198,6 +197,7 @@ export function createApp(store: "default" | "redux-observable") {
         "public",
         "src",
         "tsconfig.json",
+        "vitest.config.js",
       ],
     },
   });
@@ -242,7 +242,6 @@ export const AZURE_FUNC = createFolderStructure({
     children: [
       { name: "eslint.config.js" },
       { name: "host.json" },
-      { name: "jest.config.js" },
       { name: "package.json" },
       { name: "prettier.config.js" },
       {
@@ -256,16 +255,17 @@ export const AZURE_FUNC = createFolderStructure({
         name: "src",
       },
       { name: "tsconfig.json" },
+      { name: "vitest.config.js" },
       { name: "webpack.config.ts" },
     ],
     enforceExistence: [
       "eslint.config.js",
       "host.json",
-      "jest.config.js",
       "package.json",
       "prettier.config.js",
       "src",
       "tsconfig.json",
+      "vitest.config.js",
       "webpack.config.ts",
     ],
   },
@@ -327,7 +327,6 @@ export const LIB = createFolderStructure({
   structure: {
     children: [
       { name: "eslint.config.js" },
-      { name: "jest.config.js" },
       { name: "package.json" },
       { name: "prettier.config.js" },
       {
@@ -348,16 +347,17 @@ export const LIB = createFolderStructure({
       { name: "postcss.config.js" },
       { name: "tsconfig.json" },
       { name: "types.d.ts" },
+      { name: "vitest.config.js" },
       { name: "webpack.config.ts" },
     ],
     enforceExistence: [
       "eslint.config.js",
-      "jest.config.js",
       "package.json",
       "postcss.config.js",
       "prettier.config.js",
       "src",
       "tsconfig.json",
+      "vitest.config.js",
       "webpack.config.ts",
     ],
   },
@@ -380,7 +380,6 @@ export const NODE = createFolderStructure({
   structure: {
     children: [
       { name: "eslint.config.js" },
-      { name: "jest.config.js" },
       { name: "package.json" },
       { name: "prettier.config.js" },
       {
@@ -392,15 +391,16 @@ export const NODE = createFolderStructure({
         name: "src",
       },
       { name: "tsconfig.json" },
+      { name: "vitest.config.js" },
       { name: "webpack.config.ts" },
     ],
     enforceExistence: [
       "eslint.config.js",
-      "jest.config.js",
       "package.json",
       "prettier.config.js",
       "src",
       "tsconfig.json",
+      "vitest.config.js",
       "webpack.config.ts",
     ],
   },

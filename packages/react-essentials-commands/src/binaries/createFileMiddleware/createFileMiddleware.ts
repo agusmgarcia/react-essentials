@@ -100,7 +100,6 @@ function parse<TElement extends string | string[] | Record<string, any>>(
     case ".github/README.md":
     case ".nvmrc":
     case "eslint.config.js":
-    case "jest.config.js":
     case "next.config.js":
     case "pages/_app.tsx":
     case "pages/_app.css":
@@ -121,6 +120,7 @@ function parse<TElement extends string | string[] | Record<string, any>>(
     case "src/index.css":
     case "src/index.ts":
     case "types.d.ts":
+    case "vitest.config.js":
     case "webpack.config.ts":
       return content as TElement;
 
@@ -197,7 +197,6 @@ function stringify<TElement extends string | string[] | Record<string, any>>(
     case ".github/README.md":
     case ".nvmrc":
     case "eslint.config.js":
-    case "jest.config.js":
     case "next.config.js":
     case "pages/_app.tsx":
     case "pages/_app.css":
@@ -218,6 +217,7 @@ function stringify<TElement extends string | string[] | Record<string, any>>(
     case "src/index.css":
     case "src/index.ts":
     case "types.d.ts":
+    case "vitest.config.js":
     case "webpack.config.ts":
       return element as string;
 

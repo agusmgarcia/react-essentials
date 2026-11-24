@@ -1,3 +1,5 @@
+import { describe, expect, it } from "vitest";
+
 import emptyFunction from "./emptyFunction";
 
 describe("emptyFunction", () => {

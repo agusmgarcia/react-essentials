@@ -1,8 +1,7 @@
-/**
- * @jest-environment jsdom
- */
+// @vitest-environment jsdom
 import { errors } from "@agusmgarcia/react-essentials-commands/errors";
 import { Mutex as AsyncMutex } from "async-mutex";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import StorageCache from "./StorageCache";
 
@@ -54,7 +53,7 @@ describe("StorageCache", () => {
 
   it("should use the factory only if value is not cached", async () => {
     const cache = new StorageCache({ storage: "local" });
-    const factory = jest.fn(() => "abc");
+    const factory = vi.fn(() => "abc");
 
     await cache.getOrCreate("key", factory, new AbortController().signal);
     await cache.getOrCreate("key", factory, new AbortController().signal);
@@ -64,7 +63,7 @@ describe("StorageCache", () => {
 
   it("should handle errors from factory and cache them briefly", async () => {
     const cache = new StorageCache({ storage: "local" });
-    const factory = jest.fn(() => {
+    const factory = vi.fn(() => {
       throw "fail";
     });
 
@@ -90,7 +89,7 @@ describe("StorageCache", () => {
 
   it("should respect expiresAt function", async () => {
     const cache = new StorageCache({ storage: "local" });
-    const expiresAt = jest.fn(() => Date.now() + 5000);
+    const expiresAt = vi.fn(() => Date.now() + 5000);
 
     await cache.getOrCreate(
       "exp",

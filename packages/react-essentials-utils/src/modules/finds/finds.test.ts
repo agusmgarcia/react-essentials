@@ -1,3 +1,5 @@
+import { describe, expect, it } from "vitest";
+
 import { default as finds } from "./finds";
 
 describe("finds utility functions", () => {

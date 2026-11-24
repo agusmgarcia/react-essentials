@@ -1,3 +1,5 @@
+import { describe, expect, it } from "vitest";
+
 import { default as merges } from "./merges";
 
 describe("merges", () => {

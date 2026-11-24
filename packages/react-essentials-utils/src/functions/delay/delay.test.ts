@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import delay from "./delay";
 
 describe("delay", () => {
@@ -27,7 +29,7 @@ describe("delay", () => {
   it("cleans up the abort event listener after rejecting", async () => {
     const controller = new AbortController();
     const signal = controller.signal;
-    const spy = jest.spyOn(signal, "removeEventListener");
+    const spy = vi.spyOn(signal, "removeEventListener");
 
     const promise = delay(100, signal);
     controller.abort();
@@ -41,11 +43,8 @@ describe("delay", () => {
     const controller = new AbortController();
     controller.abort();
 
-    const setTimeoutSpy = jest.spyOn(global, "setTimeout");
-    const addEventListenerSpy = jest.spyOn(
-      controller.signal,
-      "addEventListener",
-    );
+    const setTimeoutSpy = vi.spyOn(global, "setTimeout");
+    const addEventListenerSpy = vi.spyOn(controller.signal, "addEventListener");
 
     await expect(delay(100, controller.signal)).rejects.toThrow();
 

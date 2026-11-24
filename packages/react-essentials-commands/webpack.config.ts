@@ -8,6 +8,6 @@ export default createWebpackConfig({
     "eslint-config-next/typescript",
     "eslint-plugin-prettier/recommended",
     "next/constants",
-    "next/jest",
+    "vitest/config",
   ],
 });

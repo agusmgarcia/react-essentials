@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { delay } from "#src/functions";
 
 import Cache from "./Cache";
@@ -5,7 +7,7 @@ import Cache from "./Cache";
 describe("Cache", () => {
   it("should cache and retrieve a value", async () => {
     const cache = new Cache();
-    const factory = jest.fn(() => Promise.resolve("foo"));
+    const factory = vi.fn(() => Promise.resolve("foo"));
 
     const result = await cache.getOrCreate(
       "key",
@@ -30,7 +32,7 @@ describe("Cache", () => {
   it("should expire cache after maxCacheTime", async () => {
     let value = 1;
     const cache = new Cache({ maxCacheTime: 10 });
-    const factory = jest.fn(() => Promise.resolve(value++));
+    const factory = vi.fn(() => Promise.resolve(value++));
 
     const result1 = await cache.getOrCreate(
       "key",
@@ -54,7 +56,7 @@ describe("Cache", () => {
     const cache = new Cache();
     await cache.set("key", 42);
 
-    const factory = jest.fn();
+    const factory = vi.fn();
     const result = await cache.getOrCreate(
       "key",
       factory,
@@ -66,7 +68,7 @@ describe("Cache", () => {
 
   it("should support custom expiresAt as number", async () => {
     const cache = new Cache();
-    const factory = jest.fn().mockResolvedValue("bar");
+    const factory = vi.fn().mockResolvedValue("bar");
     const expiresAt = Date.now() + 10;
 
     await cache.getOrCreate(
@@ -89,8 +91,8 @@ describe("Cache", () => {
 
   it("should support custom expiresAt as function", async () => {
     const cache = new Cache();
-    const factory = jest.fn().mockResolvedValue("baz");
-    const expiresAtFn = jest.fn().mockReturnValue(Date.now() + 10);
+    const factory = vi.fn().mockResolvedValue("baz");
+    const expiresAtFn = vi.fn().mockReturnValue(Date.now() + 10);
     await cache.getOrCreate(
       "fn",
       factory,
@@ -112,7 +114,7 @@ describe("Cache", () => {
 
   it("should handle synchronous factory", async () => {
     const cache = new Cache();
-    const factory = jest.fn().mockReturnValue("sync");
+    const factory = vi.fn().mockReturnValue("sync");
     const result = await cache.getOrCreate(
       "sync",
       factory,
@@ -128,7 +130,7 @@ describe("Cache", () => {
     const controller = new AbortController();
     controller.abort();
 
-    const factory = jest
+    const factory = vi
       .fn()
       .mockImplementation(() => Promise.resolve("should not run"));
 
@@ -141,7 +143,7 @@ describe("Cache", () => {
   it("should only run one factory at a time per key (mutex)", async () => {
     let running = false;
     const cache = new Cache();
-    const factory = jest.fn().mockImplementation(async () => {
+    const factory = vi.fn().mockImplementation(async () => {
       if (running) throw new Error("Concurrent call");
       running = true;
       await delay(30);
