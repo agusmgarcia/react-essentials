@@ -29,8 +29,7 @@ export function distinct<TElement>(
 
 export function distinct<TElement>(
   elementOrCompare:
-    | TElement
-    | Func<boolean, [element1: TElement, element2: TElement]>,
+    TElement | Func<boolean, [element1: TElement, element2: TElement]>,
   index?: number,
   array?: ReadonlyArray<TElement>,
 ):

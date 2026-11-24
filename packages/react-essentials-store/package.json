@@ -23,7 +23,7 @@
     "test": "react-essentials-commands-test"
   },
   "dependencies": {
-    "@agusmgarcia/react-essentials-utils": "^0.16.0",
+    "@agusmgarcia/react-essentials-utils": "^0.17.0",
     "use-context-selector": "^2.0.0"
   },
   "peerDependencies": {
@@ -31,14 +31,14 @@
   },
   "devDependencies": {
     "@agusmgarcia/react-essentials-commands": "*",
-    "@redux-devtools/extension": "^3.3.0"
+    "@redux-devtools/extension": "^4.0.1"
   },
   "files": [
     "bin",
     "dist"
   ],
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=22.22.2"
   },
   "publishConfig": {
     "access": "public",

@@ -185,7 +185,7 @@ async function getTemplate(
           bin: undefined,
           engines: {
             ...packageJSON.engines,
-            node: "22.16.0",
+            node: "22.22.2",
           },
           exports: undefined,
           files: undefined,
@@ -200,7 +200,7 @@ async function getTemplate(
             bin: undefined,
             engines: {
               ...packageJSON.engines,
-              node: "22.16.0",
+              node: "22.22.2",
             },
             exports: undefined,
             files: undefined,
@@ -217,9 +217,9 @@ async function getTemplate(
                 ...packageJSON.engines,
                 node:
                   !!packageJSON.engines?.node &&
-                  semver.satisfies("22.16.0", packageJSON.engines.node)
+                  semver.satisfies("22.22.2", packageJSON.engines.node)
                     ? packageJSON.engines.node
-                    : "22.16.0",
+                    : "22.22.2",
               },
               exports: {
                 ".": {
@@ -254,7 +254,7 @@ async function getTemplate(
               bin: undefined,
               engines: {
                 ...packageJSON.engines,
-                node: "22.16.0",
+                node: "22.22.2",
               },
               exports: undefined,
               files: undefined,

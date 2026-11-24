@@ -70,7 +70,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          node-version: 22.16
+          node-version: 22.22.2
 
       - name: Install dependencies for production
         run: npm i --ignore-scripts --no-audit --no-fund --omit=dev
@@ -115,7 +115,7 @@ jobs:
           add_to_json "APP_VERSION" "${{ needs.continuous-integration.outputs.version }}"
           add_to_json "FUNCTIONS_EXTENSION_VERSION" "~4"
           add_to_json "FUNCTIONS_WORKER_RUNTIME" "node"
-          add_to_json "WEBSITE_NODE_DEFAULT_VERSION" "~22.16.0"
+          add_to_json "WEBSITE_NODE_DEFAULT_VERSION" "~22.22.2"
 
           echo "value=${JSON_ARRAY}" >> "$GITHUB_OUTPUT"
         shell: bash

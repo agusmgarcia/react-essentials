@@ -19,15 +19,13 @@ export type BaseSlices = Record<string, GlobalSlice<any, any>>;
  * A function that is called at specified intervals or just once.
  */
 export type IntervalCallback =
-  | Func<void, [signal: AbortSignal]>
-  | AsyncFunc<void, [signal: AbortSignal]>;
+  Func<void, [signal: AbortSignal]> | AsyncFunc<void, [signal: AbortSignal]>;
 
 /**
  * A function that is called just once.
  */
 export type TimeoutCallback =
-  | Func<void, [signal: AbortSignal]>
-  | AsyncFunc<void, [signal: AbortSignal]>;
+  Func<void, [signal: AbortSignal]> | AsyncFunc<void, [signal: AbortSignal]>;
 
 /**
  * Represents a subscription to a slice of state.

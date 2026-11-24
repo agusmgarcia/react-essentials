@@ -7,5 +7,5 @@ export default createFileMiddleware<string>({
 });
 
 function getTemplate(): string {
-  return "22.16";
+  return "22.22.2";
 }

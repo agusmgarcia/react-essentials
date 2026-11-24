@@ -113,11 +113,13 @@ export type Input<TSliceFactories extends BaseSliceFactories> =
  * If the constructor does not require parameters (i.e., its parameter list is empty), the key is omitted.
  */
 export type ParamsOf<TSliceFactories extends BaseSliceFactories> = {
-  [TKey in keyof TSliceFactories as ConstructorParameters<
-    TSliceFactories[TKey]
-  > extends never[]
-    ? never
-    : TKey]: ConstructorParameters<TSliceFactories[TKey]>;
+  [
+    TKey in keyof TSliceFactories as ConstructorParameters<
+      TSliceFactories[TKey]
+    > extends never[]
+      ? never
+      : TKey
+  ]: ConstructorParameters<TSliceFactories[TKey]>;
 };
 
 /**
@@ -150,7 +152,9 @@ export type StateOf<TSliceFactories extends BaseSliceFactories> = {
  * containing only the stateful properties.
  */
 export type ReduxStateOf<TSliceFactories extends BaseSliceFactories> = {
-  [TKey in keyof SlicesOf<TSliceFactories>]: SlicesOf<TSliceFactories>[TKey]["state"];
+  [
+    TKey in keyof SlicesOf<TSliceFactories>
+  ]: SlicesOf<TSliceFactories>[TKey]["state"];
 };
 
 /**

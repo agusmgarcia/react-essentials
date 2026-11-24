@@ -8,7 +8,7 @@ Set of opinionated commands, state manager and utilities for NextJS applications
 
 ## Getting started
 
-Make sure you are using `Node@~22.16.0`. Then execute:
+Make sure you are using `Node@>=22.22.2`. Then execute:
 
 ```bash
 npm i @agusmgarcia/react-essentials-utils

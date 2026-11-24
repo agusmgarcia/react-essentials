@@ -12,8 +12,6 @@ import type Primitive from "./Primitive.types";
  * converted to and from JSON or other serialization formats.
  */
 type Serializable =
-  | Primitive
-  | Array<Serializable>
-  | { [key: string]: Serializable };
+  Primitive | Array<Serializable> | { [key: string]: Serializable };
 
 export default Serializable;

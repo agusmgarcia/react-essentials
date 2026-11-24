@@ -12,10 +12,11 @@
     "test": "turbo run test"
   },
   "devDependencies": {
-    "turbo": "^2.9.18"
+    "turbo": "^2.11.13",
+    "webpack-cli": "^7.3.1"
   },
   "engines": {
-    "node": "22.16.0"
+    "node": "22.22.2"
   },
   "packageManager": "npm@10.9.2",
   "workspaces": [

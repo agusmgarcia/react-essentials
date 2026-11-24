@@ -39,9 +39,7 @@ export default class Cache {
   private async rawSet<TResult>(
     key: string,
     factory:
-      | TResult
-      | Func<TResult>
-      | AsyncFunc<TResult, [signal: AbortSignal]>,
+      TResult | Func<TResult> | AsyncFunc<TResult, [signal: AbortSignal]>,
     byPassExpiration: boolean,
     signal: AbortSignal | undefined,
     expiresAt: number | Func<number, [result: TResult]> | undefined,
@@ -184,9 +182,7 @@ export default class Cache {
   async set<TValue>(
     key: string,
     factoryOrValue:
-      | TValue
-      | Func<TValue>
-      | AsyncFunc<TValue, [signal: AbortSignal]>,
+      TValue | Func<TValue> | AsyncFunc<TValue, [signal: AbortSignal]>,
     signal?: AbortSignal,
     expiresAt?: number | Func<number, [value: TValue]>,
   ): Promise<TValue> {

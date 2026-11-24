@@ -26,7 +26,7 @@ async function getTemplate(
       APP_VERSION: context.version,
       FUNCTIONS_EXTENSION_VERSION: "~4",
       FUNCTIONS_WORKER_RUNTIME: "node",
-      WEBSITE_NODE_DEFAULT_VERSION: "~22.16.0",
+      WEBSITE_NODE_DEFAULT_VERSION: "~22.22.2",
     },
   };
 }
