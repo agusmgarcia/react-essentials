@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.20.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.20.0)
+
+> November 24, 2026
+
+### Features ✅
+
+- **deploy**: add ability to update the dependent libraries
+- **eslint**: add ignore plugins object
+- stop using jest in favour of vitest
+- **eslint**: allow createContext and lazy variable expressions
+
+### Fixes 🎯
+
+- **eslint**: adjust some import patterns
+
+### Chores ⚙️
+
+- bump vulnerable dependencies
+
 ## [v0.19.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.19.0)
 
 > July 6, 2026
@@ -117,8 +136,8 @@ All notable changes to this project will be documented in this file.
 - **createWebpackConfig**: always import for node and web
 - **createWebpackConfig**: stop finding dependencies automatically
 - **createWebpackConfig**: stop discriminating externals
-- rename \_out by outputs
-- rename \_bin by binaries
+- rename _out by outputs
+- rename _bin by binaries
 - start using webpack.config.ts
 
 ### Fixes 🎯
@@ -265,8 +284,8 @@ All notable changes to this project will be documented in this file.
 
 ### Features ✅
 
-- **createNextConfig**: start forwarding all the environments variables that starts with APP\_
-- **release-azure-func.yml**: add ability to upload all the env variables that starts with APP\_
+- **createNextConfig**: start forwarding all the environments variables that starts with APP_
+- **release-azure-func.yml**: add ability to upload all the env variables that starts with APP_
 
 ## [v0.10.1](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.10.1)
 
@@ -288,7 +307,7 @@ All notable changes to this project will be documented in this file.
 
 - **release.yml**: separate jobs in ci and cd
 - **createWebpackConfig**: export a library name per output
-- **createNextConfig**: remove NEXT*PUBLIC* prefix
+- **createNextConfig**: remove NEXT_PUBLIC_ prefix
 
 ### Chores ⚙️
 
@@ -310,7 +329,7 @@ All notable changes to this project will be documented in this file.
 - **release.yml**: reuse workflows
 - **deploy**: add support for external paths
 - **tsconfig.json**: use base configs from commands
-- **createWebpackConfig**: start exporting json files from \_out folder
+- **createWebpackConfig**: start exporting json files from _out folder
 
 ## [v0.8.0](https://github.com/agusmgarcia/react-essentials/tree/@agusmgarcia/react-essentials-commands@v0.8.0)
 
@@ -356,7 +375,7 @@ All notable changes to this project will be documented in this file.
 - **createWebpackConfig**: add react/jsx-runtime as external
 - **args**: stop validating args
 - adjust install process
-- **createJestConfig**: add support for \_bin folder for libs
+- **createJestConfig**: add support for _bin folder for libs
 
 ### Fixes 🎯
 
